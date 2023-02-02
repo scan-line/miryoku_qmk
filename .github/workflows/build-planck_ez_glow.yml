@@ -1,0 +1,8 @@
+name: 'Build planck/ez/glow'
+on:
+  - workflow_dispatch
+jobs:
+  build:
+    uses: ./.github/workflows/main.yml
+    with:
+      keyboard: '["planck/ez/glow"]'
