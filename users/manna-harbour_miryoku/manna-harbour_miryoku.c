@@ -69,9 +69,9 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     NULL
 };
 
-#define LAYER_MASK_NUM (1 << NUM)
-#define LAYER_MASK_SYM (1 << SYM)
-#define LAYER_MASK_MEDIA (1 << MEDIA)
+#define LAYER_MASK_NUM (1 << U_NUM)
+#define LAYER_MASK_SYM (1 << U_SYM)
+#define LAYER_MASK_MEDIA (1 << U_MEDIA)
 
 const key_override_t capsword_key_override = ko_make_basic(MOD_MASK_SHIFT, CW_TOGG, KC_CAPS);
 
