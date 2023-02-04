@@ -88,14 +88,14 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 
 #else
 
-const key_override_t ko1 = ko_make_basic(MOD_MASK_SHIFT, KC_Q, RGB_SPI);
-const key_override_t ko2 = ko_make_basic(MOD_MASK_SHIFT, KC_W, RGB_SPD);
-const key_override_t ko3 = ko_make_basic(0, KC_A, RGB_SPI);
-const key_override_t ko4 = ko_make_basic(0, KC_R, RGB_SPD);
-const key_override_t ko5 = ko_make_with_layers(0, KC_Z, RGB_SPI, ~0);
-const key_override_t ko6 = ko_make_with_layers(0, KC_X, RGB_SPD, ~0);
-const key_override_t ko7 = ko_make_with_layers(0, KC_K, RGB_SPI, 1);
-const key_override_t ko8 = ko_make_with_layers(0, KC_H, RGB_SPD, 1);
+const key_override_t ko1 = ko_make_basic(MOD_MASK_SHIFT, KC_Q, KC_Y);
+const key_override_t ko2 = ko_make_basic(MOD_MASK_SHIFT, KC_W, KC_Y);
+const key_override_t ko3 = ko_make_basic(0, KC_A, KC_Y);
+const key_override_t ko4 = ko_make_basic(0, KC_R, KC_Y);
+const key_override_t ko5 = ko_make_with_layers(0, KC_Z, KC_Y, ~0);
+const key_override_t ko6 = ko_make_with_layers(0, KC_X, KC_Y, ~0);
+const key_override_t ko7 = ko_make_with_layers(0, KC_K, KC_Y, 1);
+const key_override_t ko8 = ko_make_with_layers(0, KC_H, KC_Y, 1);
 
 const key_override_t **key_overrides = (const key_override_t *[]){
     &ko1,
