@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include "quantum.h"
-
 
 #define MIRYOKU_LAYER_MEDIA \
 TD(U_TD_BOOT),     TD(U_TD_U_TAP),    TD(U_TD_U_EXTRA),  TD(U_TD_U_BASE),   U_NA,              RGB_TOG,           RGB_MOD,           RGB_HUI,           RGB_SAI,           RGB_VAI,           \
@@ -21,8 +19,11 @@ KC_TILD,           KC_EXLM,           KC_AT,             KC_HASH,           KC_P
 U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_UNDS,           U_NA,              U_NA,              U_NA,              U_NP,              U_NP
 
 
+// TODO - find out how to use the real SAFE_RANGE 
+#define MY_SAFE_RANGE 0x7E80
+
 enum my_keycodes {
-  U_RGB_OFF = SAFE_RANGE,
+  U_RGB_OFF = MY_SAFE_RANGE,
   U_WIN,
   U_MAC,
   U_LNX,
