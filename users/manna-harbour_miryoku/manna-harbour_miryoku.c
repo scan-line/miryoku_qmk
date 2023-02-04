@@ -23,9 +23,13 @@ enum my_keycodes {
 
 // OS-specific clipboard + modifier swap
 
-enum os_mode_t { OS_MODE_WIN, OS_MODE_MAC, OS_MODE_LNX, };
+typedef enum {
+    OS_MODE_WIN,
+    OS_MODE_MAC,
+    OS_MODE_LNX,
+} os_mode_t;
 
-#define OS_DEFAULT_MODE = OS_MODE_WIN
+#define OS_DEFAULT_MODE OS_MODE_WIN
 
 // Windows clipboard
 #define OS_CLIP_CUT_WIN LCTL(KC_X)
@@ -48,7 +52,14 @@ enum os_mode_t { OS_MODE_WIN, OS_MODE_MAC, OS_MODE_LNX, };
 #define OS_CLIP_UND_LNX KC_UNDO
 #define OS_CLIP_RDO_LNX KC_AGIN
 
-enum os_clip_t { OS_CLIP_CUT, OS_CLIP_CPY, OS_CLIP_PST, OS_CLIP_UND, OS_CLIP_RDO, OS_CLIP_END};
+typdef enum {
+    OS_CLIP_CUT,
+    OS_CLIP_CPY,
+    OS_CLIP_PST,
+    OS_CLIP_UND,
+    OS_CLIP_RDO,
+    OS_CLIP_END,
+} os_clip_t;
 
 const uint16_t PROGMEM os_keys[][OS_CLIP_END] = {
   [OS_MODE_WIN] = { OS_CLIP_CUT_WIN, OS_CLIP_CPY_WIN, OS_CLIP_PST_WIN, OS_CLIP_UND_WIN, OS_CLIP_RDO_WIN, },
@@ -57,7 +68,7 @@ const uint16_t PROGMEM os_keys[][OS_CLIP_END] = {
 };
 
 // TODO - save/restore eeprom
-static enum os_mode_t os_mode = OS_DEFAULT_MODE;
+static os_mode_t os_mode = OS_DEFAULT_MODE;
 
 #endif
 
@@ -147,11 +158,11 @@ bool process_os_mode_key(os_mode_t mode, keyrecord_t *record) {
   return false;
 }
 
-bool process_os_clip_key(os_clip_t index, keyrecord_t *record) {
+bool process_os_clip_key(os_clip_t clip, keyrecord_t *record) {
   if (record->event.pressed) {
-    register_code16(os_keys[os_mode][index]);
+    register_code16(os_keys[os_mode][clip]);
   } else {
-    unregister_code16(os_keys[os_mode][index]);
+    unregister_code16(os_keys[os_mode][clip]);
   }
   return false;
 }
