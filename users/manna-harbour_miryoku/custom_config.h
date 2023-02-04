@@ -20,11 +20,12 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 
 enum my_keycodes {
-  U_RGB_OFF = EZ_SAFE_RANGE,
+  U_RGB_OFF = SAFE_RANGE,
   U_WIN,
   U_MAC,
   U_LNX,
 };
+
 
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_RAINDROPS
 #define RGB_MATRIX_DEFAULT_VAL (RGB_MATRIX_MAXIMUM_BRIGHTNESS / 2)
