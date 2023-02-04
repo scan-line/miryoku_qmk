@@ -19,19 +19,8 @@ KC_TILD,           KC_EXLM,           KC_AT,             KC_HASH,           KC_P
 U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_UNDS,           U_NA,              U_NA,              U_NA,              U_NP,              U_NP
 
 
-// TODO - find out how to use the real SAFE_RANGE 
-#define MY_SAFE_RANGE 0x7E80
-
-enum my_keycodes {
-  U_RGB_OFF = MY_SAFE_RANGE,
-  U_WIN,
-  U_MAC,
-  U_LNX
-};
-
-
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_RAINDROPS
 #define RGB_MATRIX_DEFAULT_VAL (RGB_MATRIX_MAXIMUM_BRIGHTNESS / 2)
-#define RGB_MATRIX_DEFAULT_SPD 16
+// #define RGB_MATRIX_DEFAULT_SPD 16
 
-#define MIRYOKU_CLIPBOARD_WIN
+// #define MIRYOKU_CLIPBOARD_WIN
