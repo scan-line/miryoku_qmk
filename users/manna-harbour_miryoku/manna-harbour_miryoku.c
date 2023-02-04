@@ -8,6 +8,20 @@
 #include "manna-harbour_miryoku.h"
 
 
+#if 1
+
+// Additional keycodes
+
+enum my_keycodes {
+  U_RGB_OFF = SAFE_RANGE,
+  U_WIN,
+  U_MAC,
+  U_LNX,
+};
+
+#endif
+
+
 // Additional Features double tap guard
 
 enum {
