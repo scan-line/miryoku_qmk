@@ -49,9 +49,9 @@ MIRYOKU_LAYER_LIST
 };
 
 
-// shift functions
-
 #if 0
+
+// shift functions
 
 const key_override_t capsword_key_override = ko_make_basic(MOD_MASK_SHIFT, CW_TOGG, KC_CAPS);
 
@@ -60,7 +60,9 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     NULL
 };
 
--- my stuff here
+#else
+
+// modifier functions
 
 #define LAYER_MASK_NUM (1 << U_NUM)
 #define LAYER_MASK_SYM (1 << U_SYM)
@@ -69,47 +71,26 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 const key_override_t capsword_key_override = ko_make_basic(MOD_MASK_SHIFT, CW_TOGG, KC_CAPS);
 
 const key_override_t to_left_paren_num_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
-const key_override_t to_lead_num_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, KC_LEAD, LAYER_MASK_NUM);
-const key_override_t to_lead_sym_key_override = ko_make_with_layers(0, KC_LEFT_PAREN, KC_LEAD, LAYER_MASK_SYM);
+// const key_override_t to_lead_num_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, KC_LEAD, LAYER_MASK_NUM);
+const key_override_t to_lead_num_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, KC_Y, LAYER_MASK_NUM);
 
-const key_override_t to_audio_toggle_media_key_override = ko_make_with_layers(MOD_MASK_CTRL, RGB_TOG, QK_AUDIO_TOGGLE, LAYER_MASK_MEDIA);
-const key_override_t to_rgb_speed_increase_media_key_override = ko_make_with_layers(MOD_MASK_CTRL, RGB_SAI, RGB_SPI, LAYER_MASK_MEDIA);
+// const key_override_t to_audio_toggle_media_key_override = ko_make_with_layers(MOD_MASK_CTRL, RGB_TOG, QK_AUDIO_TOGGLE, LAYER_MASK_MEDIA);
+const key_override_t to_audio_toggle_media_key_override = ko_make_with_layers(MOD_MASK_CTRL, RGB_TOG, KC_Y, LAYER_MASK_MEDIA);
+// const key_override_t to_rgb_speed_increase_media_key_override = ko_make_with_layers(MOD_MASK_CTRL, RGB_SAI, RGB_SPI, LAYER_MASK_MEDIA);
+const key_override_t to_rgb_speed_increase_media_key_override = ko_make_with_layers(MOD_MASK_CTRL, RGB_SAI, KC_Y, LAYER_MASK_MEDIA);
 
 
 const key_override_t **key_overrides = (const key_override_t *[]){
     &capsword_key_override,
     &to_left_paren_num_key_override,
     &to_lead_num_key_override,
-    &to_lead_sym_key_override,
     &to_audio_toggle_media_key_override,
     &to_rgb_speed_increase_media_key_override,
     NULL
 };
 
-#else
-
-const key_override_t ko1 = ko_make_basic(MOD_MASK_SHIFT, KC_Q, KC_Y);
-const key_override_t ko2 = ko_make_basic(MOD_MASK_SHIFT, KC_W, KC_Y);
-const key_override_t ko3 = ko_make_basic(0, KC_A, KC_Y);
-const key_override_t ko4 = ko_make_basic(0, KC_R, KC_Y);
-const key_override_t ko5 = ko_make_with_layers(0, KC_Z, KC_Y, ~0);
-const key_override_t ko6 = ko_make_with_layers(0, KC_X, KC_Y, ~0);
-const key_override_t ko7 = ko_make_with_layers(0, KC_K, KC_Y, 1);
-const key_override_t ko8 = ko_make_with_layers(0, KC_H, KC_Y, 1);
-
-const key_override_t **key_overrides = (const key_override_t *[]){
-    &ko1,
-    &ko2,
-    &ko3,
-    &ko4,
-    &ko5,
-    &ko6,
-    &ko7,
-    &ko8,
-    NULL
-};
-
 #endif
+
 
 // thumb combos
 
