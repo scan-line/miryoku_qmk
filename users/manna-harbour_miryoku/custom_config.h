@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "keycodes.h"
+#include "quantum.h"
 
 
 #define MIRYOKU_LAYER_MEDIA \
