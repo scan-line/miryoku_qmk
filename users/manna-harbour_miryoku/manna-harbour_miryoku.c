@@ -52,7 +52,7 @@ typedef enum {
 #define OS_CLIP_UND_LNX KC_UNDO
 #define OS_CLIP_RDO_LNX KC_AGIN
 
-typdef enum {
+typedef enum {
     OS_CLIP_CUT,
     OS_CLIP_CPY,
     OS_CLIP_PST,
