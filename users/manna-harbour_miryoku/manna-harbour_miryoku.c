@@ -17,6 +17,7 @@ enum my_keycodes {
   U_WIN,
   U_MAC,
   U_LNX,
+  U_SAFE_RANGE,
 };
 
 #endif
