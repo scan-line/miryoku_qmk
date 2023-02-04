@@ -88,15 +88,6 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 
 #else
 
-const key_override_t capsword_key_override = ko_make_basic(MOD_MASK_SHIFT, CW_TOGG, KC_CAPS);
-
-const key_override_t **key_overrides = (const key_override_t *[]){
-    &capsword_key_override,
-    NULL
-};
-
-const key_override_t capsword_key_override = ko_make_basic(MOD_MASK_SHIFT, CW_TOGG, KC_CAPS);
-
 const key_override_t ko1 = ko_make_basic(MOD_MASK_SHIFT, KC_Q, RGB_SPI);
 const key_override_t ko2 = ko_make_basic(MOD_MASK_SHIFT, KC_W, RGB_SPD);
 const key_override_t ko3 = ko_make_basic(0, KC_A, RGB_SPI);
@@ -107,7 +98,6 @@ const key_override_t ko7 = ko_make_with_layers(0, KC_K, RGB_SPI, 1);
 const key_override_t ko8 = ko_make_with_layers(0, KC_H, RGB_SPD, 1);
 
 const key_override_t **key_overrides = (const key_override_t *[]){
-    &capsword_key_override,
     &ko1,
     &ko2,
     &ko3,
