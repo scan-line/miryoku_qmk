@@ -65,23 +65,23 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 // modifier functions
 
 #define LAYER_MASK_NUM (1 << U_NUM)
-#define LAYER_MASK_MEDIA (1 << U_MEDIA)
+// #define LAYER_MASK_MEDIA (1 << U_MEDIA)
 
 const key_override_t capsword_key_override = ko_make_basic(MOD_MASK_SHIFT, CW_TOGG, KC_CAPS);
 
 const key_override_t dot_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
 const key_override_t nine_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, KC_LEAD, LAYER_MASK_NUM);
 
-const key_override_t rgb_tog_key_override = ko_make_with_layers(MOD_MASK_CTRL, RGB_TOG, QK_AUDIO_TOGGLE, LAYER_MASK_MEDIA);
-const key_override_t rgb_hui_key_override = ko_make_with_layers(MOD_MASK_CTRL, RGB_HUI, RGB_SPI, LAYER_MASK_MEDIA);
+// const key_override_t rgb_tog_key_override = ko_make_with_layers(MOD_MASK_CTRL, RGB_TOG, QK_AUDIO_TOGGLE, LAYER_MASK_MEDIA);
+// const key_override_t rgb_hui_key_override = ko_make_with_layers(MOD_MASK_CTRL, RGB_HUI, RGB_SPI, LAYER_MASK_MEDIA);
 
 
 const key_override_t **key_overrides = (const key_override_t *[]){
     &capsword_key_override,
     &dot_key_override,
     &nine_key_override,
-    &rgb_tog_key_override,
-    &rgb_hui_key_override,
+    // &rgb_tog_key_override,
+    // &rgb_hui_key_override,
     NULL
 };
 
