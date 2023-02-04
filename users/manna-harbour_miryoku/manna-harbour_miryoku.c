@@ -20,6 +20,45 @@ enum my_keycodes {
   U_SAFE_RANGE,
 };
 
+
+// OS-specific clipboard + modifier swap
+
+enum os_mode_t { OS_MODE_WIN, OS_MODE_MAC, OS_MODE_LNX, };
+
+#define OS_DEFAULT_MODE = OS_MODE_WIN
+
+// Windows clipboard
+#define OS_CLIP_CUT_WIN LCTL(KC_X)
+#define OS_CLIP_CPY_WIN LCTL(KC_C)
+#define OS_CLIP_PST_WIN LCTL(KC_V)
+#define OS_CLIP_UND_WIN LCTL(KC_Z)
+#define OS_CLIP_RDO_WIN LCTL(KC_Y)
+
+// Mac clipboard
+#define OS_CLIP_CUT_MAC LCMD(KC_X)
+#define OS_CLIP_CPY_MAC LCMD(KC_C)
+#define OS_CLIP_PST_MAC LCMD(KC_V)
+#define OS_CLIP_UND_MAC LCMD(KC_Z)
+#define OS_CLIP_RDO_MAC SCMD(KC_Z)
+
+// Linux clipboard
+#define OS_CLIP_CUT_LNX KC_CUT
+#define OS_CLIP_CPY_LNX KC_COPY
+#define OS_CLIP_PST_LNX KC_PSTE
+#define OS_CLIP_UND_LNX KC_UNDO
+#define OS_CLIP_RDO_LNX KC_AGIN
+
+enum os_clip_t { OS_CLIP_CUT, OS_CLIP_CPY, OS_CLIP_PST, OS_CLIP_UND, OS_CLIP_RDO, OS_CLIP_END};
+
+const uint16_t PROGMEM os_keys[][OS_CLIP_END] = {
+  [OS_MODE_WIN] = { OS_CLIP_CUT_WIN, OS_CLIP_CPY_WIN, OS_CLIP_PST_WIN, OS_CLIP_UND_WIN, OS_CLIP_RDO_WIN, },
+  [OS_MODE_MAC] = { OS_CLIP_CUT_MAC, OS_CLIP_CPY_MAC, OS_CLIP_PST_MAC, OS_CLIP_UND_MAC, OS_CLIP_RDO_MAC, },
+  [OS_MODE_LNX] = { OS_CLIP_CUT_LNX, OS_CLIP_CPY_LNX, OS_CLIP_PST_LNX, OS_CLIP_UND_LNX, OS_CLIP_RDO_LNX, },
+};
+
+// TODO - save/restore eeprom
+static enum os_mode_t os_mode = OS_DEFAULT_MODE;
+
 #endif
 
 
@@ -92,6 +131,53 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     &nine_key_override,
     NULL
 };
+
+
+// Custom key processing
+
+bool process_os_mode_key(os_mode_t mode, keyrecord_t *record) {
+  if (record->event.pressed) {
+    os_mode = mode;
+    if (mode == OS_MODE_MAC) {
+      // process_magic(MAGIC_SWAP_CTL_GUI, record);
+    } else {
+      // process_magic(MAGIC_UNSWAP_CTL_GUI, record);
+    }
+  }
+  return false;
+}
+
+bool process_os_clip_key(os_clip_t index, keyrecord_t *record) {
+  if (record->event.pressed) {
+    register_code16(os_keys[os_mode][index]);
+  } else {
+    unregister_code16(os_keys[os_mode][index]);
+  }
+  return false;
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case U_WIN:
+      return process_os_mode_key(OS_MODE_WIN, record);
+    case U_MAC:
+      return process_os_mode_key(OS_MODE_MAC, record);
+    case U_LNX:
+      return process_os_mode_key(OS_MODE_LNX, record);
+    case KC_CUT:
+      return process_os_clip_key(OS_CLIP_CUT, record);
+    case KC_COPY:
+      return process_os_clip_key(OS_CLIP_CPY, record);
+    case KC_PSTE:
+      return process_os_clip_key(OS_CLIP_PST, record);
+    case KC_UNDO:
+      return process_os_clip_key(OS_CLIP_UND, record);
+    case KC_AGIN:
+      return process_os_clip_key(OS_CLIP_RDO, record);
+    default:
+      return true;
+  }
+}
 
 #endif
 
