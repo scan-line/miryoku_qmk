@@ -1,3 +1,3 @@
-# Copyright 2019 Manna Harbour
-# https://github.com/manna-harbour/miryoku
+# TODO - Copyright
 
+SRC += config.c
