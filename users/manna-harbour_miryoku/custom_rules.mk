@@ -1,3 +1,3 @@
 # TODO - Copyright
 
-SRC += config.c
+SRC += custom.c
