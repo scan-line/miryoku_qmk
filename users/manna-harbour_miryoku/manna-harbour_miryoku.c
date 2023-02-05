@@ -70,6 +70,8 @@ const uint16_t PROGMEM os_keys[][OS_CLIP_END] = {
 // TODO - save/restore eeprom
 static os_mode_t os_mode = OS_DEFAULT_MODE;
 
+extern keymap_config_t keymap_config;
+
 #endif
 
 
@@ -150,9 +152,11 @@ bool process_os_mode_key(os_mode_t mode, keyrecord_t *record) {
   if (record->event.pressed) {
     os_mode = mode;
     if (mode == OS_MODE_MAC) {
-      // process_magic(MAGIC_SWAP_CTL_GUI, record);
+        keymap_config.swap_lctl_lgui = true;
+        keymap_config.swap_rctl_rgui = true;
     } else {
-      // process_magic(MAGIC_UNSWAP_CTL_GUI, record);
+        keymap_config.swap_lctl_lgui = false;
+        keymap_config.swap_rctl_rgui = false;
     }
   }
   return false;
