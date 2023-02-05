@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "quantum_keycodes.h"
 
 enum user_keycodes {
   U_RGB_OFF = SAFE_RANGE,
