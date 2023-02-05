@@ -174,15 +174,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return process_os_mode_key(OS_MODE_MAC, record);
     case U_LNX:
       return process_os_mode_key(OS_MODE_LNX, record);
-    case KC_CUT:
+    case U_CUT:
       return process_os_clip_key(OS_CLIP_CUT, record);
-    case KC_COPY:
+    case U_CPY:
       return process_os_clip_key(OS_CLIP_CPY, record);
-    case KC_PSTE:
+    case U_PST:
       return process_os_clip_key(OS_CLIP_PST, record);
-    case KC_UNDO:
+    case U_UND:
       return process_os_clip_key(OS_CLIP_UND, record);
-    case KC_AGIN:
+    case U_RDO:
       return process_os_clip_key(OS_CLIP_RDO, record);
     default:
       return true;
