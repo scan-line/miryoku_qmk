@@ -121,5 +121,5 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 void keyboard_post_init_user(void) {
   // Replace key overrides with our extended list
-  custom_key_overrides = custom_key_overrides;
+  key_overrides = custom_key_overrides;
 }
