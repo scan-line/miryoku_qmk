@@ -3,8 +3,10 @@
 #pragma once
 
 
-// Using an enum for our keycodes doesn't work here
+// Additional keycodes
+// Defining an enum here (as recommended in qmk docs) does not work
 // This header is included by both c and assembler source
+// and the assembly will fail
 // Steal some unused keycodes instead
 
 #define U_WIN PB_1
