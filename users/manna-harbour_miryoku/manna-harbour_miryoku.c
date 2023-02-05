@@ -154,7 +154,7 @@ bool process_os_mode_key(os_mode_t mode, keyrecord_t *record) {
 
 bool process_os_clip_key(os_clip_t clip, keyrecord_t *record) {
   // Linux keycodes are passed through as-is.
-  if (os_mode == OS_MODE_LINUX) {
+  if (os_mode == OS_MODE_LNX) {
     return true;
   }
   // Windows and Mac keycodes are translated.
