@@ -7,6 +7,7 @@
 
 // Additional keycodes
 
+#if 0
 enum user_keycodes {
   U_RGB_OFF = SAFE_RANGE,
   U_WIN,
@@ -14,6 +15,7 @@ enum user_keycodes {
   U_LNX,
   U_SAFE_RANGE,
 };
+#endif
 
 
 // OS-specific clipboard + modifier swap
