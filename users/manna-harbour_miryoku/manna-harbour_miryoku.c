@@ -12,7 +12,7 @@
 
 // Additional keycodes
 
-enum my_keycodes {
+enum user_keycodes {
   U_RGB_OFF = SAFE_RANGE,
   U_WIN,
   U_MAC,
@@ -45,13 +45,6 @@ typedef enum {
 #define OS_CLIP_UND_MAC LCMD(KC_Z)
 #define OS_CLIP_RDO_MAC SCMD(KC_Z)
 
-// Linux clipboard
-#define OS_CLIP_CUT_LNX KC_CUT
-#define OS_CLIP_CPY_LNX KC_COPY
-#define OS_CLIP_PST_LNX KC_PSTE
-#define OS_CLIP_UND_LNX KC_UNDO
-#define OS_CLIP_RDO_LNX KC_AGIN
-
 typedef enum {
     OS_CLIP_CUT,
     OS_CLIP_CPY,
@@ -61,10 +54,11 @@ typedef enum {
     OS_CLIP_END,
 } os_clip_t;
 
-const uint16_t PROGMEM os_keys[][OS_CLIP_END] = {
+// Windows and Mac only
+// Linux keycodes are left as-is
+const uint16_t PROGMEM os_keycodes[][OS_CLIP_END] = {
   [OS_MODE_WIN] = { OS_CLIP_CUT_WIN, OS_CLIP_CPY_WIN, OS_CLIP_PST_WIN, OS_CLIP_UND_WIN, OS_CLIP_RDO_WIN, },
   [OS_MODE_MAC] = { OS_CLIP_CUT_MAC, OS_CLIP_CPY_MAC, OS_CLIP_PST_MAC, OS_CLIP_UND_MAC, OS_CLIP_RDO_MAC, },
-  [OS_MODE_LNX] = { OS_CLIP_CUT_LNX, OS_CLIP_CPY_LNX, OS_CLIP_PST_LNX, OS_CLIP_UND_LNX, OS_CLIP_RDO_LNX, },
 };
 
 // TODO - save/restore eeprom
@@ -137,10 +131,10 @@ const key_override_t dot_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_D
 const key_override_t nine_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, KC_LEAD, LAYER_MASK_NUM);
 
 const key_override_t **key_overrides = (const key_override_t *[]){
-    &capsword_key_override,
-    &dot_key_override,
-    &nine_key_override,
-    NULL
+  &capsword_key_override,
+  &dot_key_override,
+  &nine_key_override,
+  NULL
 };
 
 
@@ -159,10 +153,15 @@ bool process_os_mode_key(os_mode_t mode, keyrecord_t *record) {
 }
 
 bool process_os_clip_key(os_clip_t clip, keyrecord_t *record) {
+  // Linux keycodes are passed through as-is.
+  if (os_mode == OS_MODE_LINUX) {
+    return true;
+  }
+  // Windows and Mac keycodes are translated.
   if (record->event.pressed) {
-    register_code16(os_keys[os_mode][clip]);
+    register_code16(os_keycodes[os_mode][clip]);
   } else {
-    unregister_code16(os_keys[os_mode][clip]);
+    unregister_code16(os_keycodes[os_mode][clip]);
   }
   return false;
 }
