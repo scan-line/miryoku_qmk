@@ -2,15 +2,14 @@
 
 #pragma once
 
-// #include "quantum_keycodes.h"
 
-enum user_keycodes {
-// U_RGB_OFF = SAFE_RANGE,
-  U_WIN,
-  U_MAC,
-  U_LNX,
-  U_SAFE_RANGE,
-};
+// Using an enum for our keycodes doesn't work here
+// This header is included by both c and assembler source
+// Steal some unused keycodes instead
+
+#define U_WIN PB_1
+#define U_MAC PB_2
+#define U_LNX PB_3
 
 
 #define MIRYOKU_LAYER_MEDIA \
