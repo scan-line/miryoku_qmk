@@ -2,10 +2,10 @@
 
 #pragma once
 
-#include "quantum_keycodes.h"
+// #include "quantum_keycodes.h"
 
 enum user_keycodes {
-  U_RGB_OFF = SAFE_RANGE,
+// U_RGB_OFF = SAFE_RANGE,
   U_WIN,
   U_MAC,
   U_LNX,
