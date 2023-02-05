@@ -23,3 +23,6 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #define RGB_MATRIX_DEFAULT_VAL (RGB_MATRIX_MAXIMUM_BRIGHTNESS / 2)
 // TODO - matrix speed
 // #define RGB_MATRIX_DEFAULT_SPD 16
+
+#define AG_NORM_SONG SONG(NO_SOUND)
+#define AG_SWAP_SONG SONG(NO_SOUND)
