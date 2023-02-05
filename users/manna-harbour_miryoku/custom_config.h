@@ -21,6 +21,5 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_RAINDROPS
 #define RGB_MATRIX_DEFAULT_VAL (RGB_MATRIX_MAXIMUM_BRIGHTNESS / 2)
+// TODO - matrix speed
 // #define RGB_MATRIX_DEFAULT_SPD 16
-
-// #define MIRYOKU_CLIPBOARD_WIN
