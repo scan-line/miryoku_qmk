@@ -54,7 +54,7 @@ static os_mode_t os_mode = OS_DEFAULT_MODE;
 #define LAYER_MASK_NUM (1 << U_NUM)
 
 // Defined in manna-harbour_miryoku.c
-extern const key_override_t capsword_key_override; // = ko_make_basic(MOD_MASK_SHIFT, CW_TOGG, KC_CAPS);
+extern const key_override_t capsword_key_override;
 
 const key_override_t dot_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
 const key_override_t nine_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, KC_LEAD, LAYER_MASK_NUM);
