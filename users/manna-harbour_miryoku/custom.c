@@ -55,6 +55,7 @@ static os_mode_t os_mode = OS_DEFAULT_MODE;
 
 // Defined in manna-harbour_miryoku.c
 extern const key_override_t capsword_key_override;
+extern const key_override_t **key_overrides;
 
 const key_override_t dot_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
 const key_override_t nine_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, KC_LEAD, LAYER_MASK_NUM);
@@ -116,4 +117,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     default:
       return true;
   }
+}
+
+void keyboard_post_init_user(void) {
+  // Replace key overrides with our extended list
+  custom_key_overrides = custom_key_overrides;
 }
