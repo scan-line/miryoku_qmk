@@ -8,9 +8,9 @@
 // OS-specific clipboard + modifier swap
 
 typedef enum {
-    OS_MODE_WIN,
-    OS_MODE_MAC,
-    OS_MODE_LNX,
+  OS_MODE_WIN,
+  OS_MODE_MAC,
+  OS_MODE_LNX,
 } os_mode_t;
 
 #define OS_DEFAULT_MODE OS_MODE_WIN
@@ -30,12 +30,12 @@ typedef enum {
 #define CLIP_RDO_MAC SCMD(KC_Z)
 
 typedef enum {
-    CLIP_CUT,
-    CLIP_CPY,
-    CLIP_PST,
-    CLIP_UND,
-    CLIP_RDO,
-    CLIP_END,
+  CLIP_CUT,
+  CLIP_CPY,
+  CLIP_PST,
+  CLIP_UND,
+  CLIP_RDO,
+  CLIP_END,
 } clip_t;
 
 // Windows and Mac only
