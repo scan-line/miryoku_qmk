@@ -13,8 +13,6 @@ typedef enum {
   OS_MODE_LNX,
 } os_mode_t;
 
-#define OS_DEFAULT_MODE OS_MODE_WIN
-
 // Windows clipboard
 #define CLIP_CUT_WIN LCTL(KC_X)
 #define CLIP_CPY_WIN LCTL(KC_C)
@@ -45,11 +43,23 @@ const uint16_t PROGMEM os_keycodes[][CLIP_END] = {
   [OS_MODE_MAC] = { CLIP_CUT_MAC, CLIP_CPY_MAC, CLIP_PST_MAC, CLIP_UND_MAC, CLIP_RDO_MAC, },
 };
 
-// TODO - save/restore eeprom
-static os_mode_t os_mode = OS_DEFAULT_MODE;
+os_mode_t os_mode = OS_MODE_WIN;
 
 
-// modifier functions
+// Persistent user state
+
+typedef union {
+  uint32_t raw;
+  struct {
+    // For mac mode look for ctl-gui-swap
+    bool os_mode_linux :1;
+  };
+} user_config_t;
+
+user_config_t user_config;
+
+
+// Modifier functions
 
 #define LAYER_MASK_NUM (1 << U_NUM)
 
@@ -68,16 +78,38 @@ const key_override_t **custom_key_overrides = (const key_override_t *[]){
 };
 
 
+// OS mode state
+
+os_mode_t os_mode_get(void)
+{
+  if (user_config.os_mode_linux) {
+    return OS_MODE_LNX
+  } else if (keymap_config.swap_lctl_lgui) {
+    return OS_MODE_MAC;
+  } else {
+    return OS_MODE_WIN;
+  }
+}
+
+void os_mode_set(os_mode_t mode) {
+  os_mode = mode;
+
+  user_config.os_mode_linux = (mode == OS_MODE_LNX);
+  eeconfig_update_user(user_config.raw);
+  
+  if (mode == OS_MODE_MAC) {
+    process_magic(MAGIC_SWAP_CTL_GUI, record);
+  } else {
+    process_magic(MAGIC_UNSWAP_CTL_GUI, record);
+  }
+}
+
+
 // Custom key processing
 
 bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
   if (record->event.pressed) {
-    os_mode = mode;
-    if (mode == OS_MODE_MAC) {
-        process_magic(MAGIC_SWAP_CTL_GUI, record);
-    } else {
-        process_magic(MAGIC_UNSWAP_CTL_GUI, record);
-    }
+    os_mode_set(mode);
   }
   return false;
 }
@@ -119,7 +151,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
 }
 
+
+void eeconfig_init_user(void) {
+  user_config.raw = 0;
+  // Windows mode by default
+  user_config.os_mode_linux = false;
+  eeconfig_update_user(user_config.raw);
+}
+
 void keyboard_post_init_user(void) {
   // Replace key overrides with our extended list
   key_overrides = custom_key_overrides;
+  // Restore user state
+  user_config.raw = eeconfig_read_user();
+  os_mode = os_mode_get();
 }
