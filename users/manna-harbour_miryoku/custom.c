@@ -78,7 +78,7 @@ const key_override_t **custom_key_overrides = (const key_override_t *[]){
 };
 
 
-// OS mode state
+// OS mode persistence
 
 os_mode_t os_mode_get(void)
 {
