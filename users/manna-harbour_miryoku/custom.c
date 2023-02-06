@@ -152,6 +152,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 
+// Initialization
+
 void eeconfig_init_user(void) {
   user_config.raw = 0;
   // Windows mode by default
