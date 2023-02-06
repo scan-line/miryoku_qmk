@@ -16,33 +16,33 @@ typedef enum {
 #define OS_DEFAULT_MODE OS_MODE_WIN
 
 // Windows clipboard
-#define OS_CLIP_CUT_WIN LCTL(KC_X)
-#define OS_CLIP_CPY_WIN LCTL(KC_C)
-#define OS_CLIP_PST_WIN LCTL(KC_V)
-#define OS_CLIP_UND_WIN LCTL(KC_Z)
-#define OS_CLIP_RDO_WIN LCTL(KC_Y)
+#define CLIP_CUT_WIN LCTL(KC_X)
+#define CLIP_CPY_WIN LCTL(KC_C)
+#define CLIP_PST_WIN LCTL(KC_V)
+#define CLIP_UND_WIN LCTL(KC_Z)
+#define CLIP_RDO_WIN LCTL(KC_Y)
 
 // Mac clipboard
-#define OS_CLIP_CUT_MAC LCMD(KC_X)
-#define OS_CLIP_CPY_MAC LCMD(KC_C)
-#define OS_CLIP_PST_MAC LCMD(KC_V)
-#define OS_CLIP_UND_MAC LCMD(KC_Z)
-#define OS_CLIP_RDO_MAC SCMD(KC_Z)
+#define CLIP_CUT_MAC LCMD(KC_X)
+#define CLIP_CPY_MAC LCMD(KC_C)
+#define CLIP_PST_MAC LCMD(KC_V)
+#define CLIP_UND_MAC LCMD(KC_Z)
+#define CLIP_RDO_MAC SCMD(KC_Z)
 
 typedef enum {
-    OS_CLIP_CUT,
-    OS_CLIP_CPY,
-    OS_CLIP_PST,
-    OS_CLIP_UND,
-    OS_CLIP_RDO,
-    OS_CLIP_END,
-} os_clip_t;
+    CLIP_CUT,
+    CLIP_CPY,
+    CLIP_PST,
+    CLIP_UND,
+    CLIP_RDO,
+    CLIP_END,
+} clip_t;
 
 // Windows and Mac only
 // Linux keycodes are left as-is
-const uint16_t PROGMEM os_keycodes[][OS_CLIP_END] = {
-  [OS_MODE_WIN] = { OS_CLIP_CUT_WIN, OS_CLIP_CPY_WIN, OS_CLIP_PST_WIN, OS_CLIP_UND_WIN, OS_CLIP_RDO_WIN, },
-  [OS_MODE_MAC] = { OS_CLIP_CUT_MAC, OS_CLIP_CPY_MAC, OS_CLIP_PST_MAC, OS_CLIP_UND_MAC, OS_CLIP_RDO_MAC, },
+const uint16_t PROGMEM os_keycodes[][CLIP_END] = {
+  [OS_MODE_WIN] = { CLIP_CUT_WIN, CLIP_CPY_WIN, CLIP_PST_WIN, CLIP_UND_WIN, CLIP_RDO_WIN, },
+  [OS_MODE_MAC] = { CLIP_CUT_MAC, CLIP_CPY_MAC, CLIP_PST_MAC, CLIP_UND_MAC, CLIP_RDO_MAC, },
 };
 
 // TODO - save/restore eeprom
@@ -70,7 +70,7 @@ const key_override_t **custom_key_overrides = (const key_override_t *[]){
 
 // Custom key processing
 
-bool process_os_mode_key(os_mode_t mode, keyrecord_t *record) {
+bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
   if (record->event.pressed) {
     os_mode = mode;
     if (mode == OS_MODE_MAC) {
@@ -82,7 +82,7 @@ bool process_os_mode_key(os_mode_t mode, keyrecord_t *record) {
   return false;
 }
 
-bool process_os_clip_key(os_clip_t clip, keyrecord_t *record) {
+bool process_clipcode(clip_t clip, keyrecord_t *record) {
   // Linux keycodes are passed through as-is.
   if (os_mode == OS_MODE_LNX) {
     return true;
@@ -99,21 +99,21 @@ bool process_os_clip_key(os_clip_t clip, keyrecord_t *record) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case U_WIN:
-      return process_os_mode_key(OS_MODE_WIN, record);
+      return process_os_mode(OS_MODE_WIN, record);
     case U_MAC:
-      return process_os_mode_key(OS_MODE_MAC, record);
+      return process_os_mode(OS_MODE_MAC, record);
     case U_LNX:
-      return process_os_mode_key(OS_MODE_LNX, record);
+      return process_os_mode(OS_MODE_LNX, record);
     case U_CUT:
-      return process_os_clip_key(OS_CLIP_CUT, record);
+      return process_clipcode(CLIP_CUT, record);
     case U_CPY:
-      return process_os_clip_key(OS_CLIP_CPY, record);
+      return process_clipcode(CLIP_CPY, record);
     case U_PST:
-      return process_os_clip_key(OS_CLIP_PST, record);
+      return process_clipcode(CLIP_PST, record);
     case U_UND:
-      return process_os_clip_key(OS_CLIP_UND, record);
+      return process_clipcode(CLIP_UND, record);
     case U_RDO:
-      return process_os_clip_key(OS_CLIP_RDO, record);
+      return process_clipcode(CLIP_RDO, record);
     default:
       return true;
   }
