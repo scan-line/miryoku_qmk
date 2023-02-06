@@ -5,47 +5,6 @@
 #include "manna-harbour_miryoku.h"
 
 
-// OS-specific clipboard + modifier swap
-
-typedef enum {
-  OS_MODE_WIN,
-  OS_MODE_MAC,
-  OS_MODE_LNX,
-} os_mode_t;
-
-// Windows clipboard
-#define CLIP_CUT_WIN LCTL(KC_X)
-#define CLIP_CPY_WIN LCTL(KC_C)
-#define CLIP_PST_WIN LCTL(KC_V)
-#define CLIP_UND_WIN LCTL(KC_Z)
-#define CLIP_RDO_WIN LCTL(KC_Y)
-
-// Mac clipboard
-#define CLIP_CUT_MAC LCMD(KC_X)
-#define CLIP_CPY_MAC LCMD(KC_C)
-#define CLIP_PST_MAC LCMD(KC_V)
-#define CLIP_UND_MAC LCMD(KC_Z)
-#define CLIP_RDO_MAC SCMD(KC_Z)
-
-typedef enum {
-  CLIP_CUT,
-  CLIP_CPY,
-  CLIP_PST,
-  CLIP_UND,
-  CLIP_RDO,
-  CLIP_END,
-} clip_t;
-
-// Windows and Mac only
-// Linux keycodes are left as-is
-const uint16_t PROGMEM os_keycodes[][CLIP_END] = {
-  [OS_MODE_WIN] = { CLIP_CUT_WIN, CLIP_CPY_WIN, CLIP_PST_WIN, CLIP_UND_WIN, CLIP_RDO_WIN, },
-  [OS_MODE_MAC] = { CLIP_CUT_MAC, CLIP_CPY_MAC, CLIP_PST_MAC, CLIP_UND_MAC, CLIP_RDO_MAC, },
-};
-
-os_mode_t os_mode = OS_MODE_WIN;
-
-
 // Persistent user state
 
 typedef union {
@@ -78,12 +37,20 @@ const key_override_t **custom_key_overrides = (const key_override_t *[]){
 };
 
 
-// OS mode persistence
+// OS-specific mode
+
+typedef enum {
+  OS_MODE_WIN,
+  OS_MODE_MAC,
+  OS_MODE_LNX,
+} os_mode_t;
+
+os_mode_t os_mode = OS_MODE_WIN;
 
 os_mode_t os_mode_get(void)
 {
   if (user_config.os_mode_linux) {
-    return OS_MODE_LNX
+    return OS_MODE_LNX;
   } else if (keymap_config.swap_lctl_lgui) {
     return OS_MODE_MAC;
   } else {
@@ -91,28 +58,54 @@ os_mode_t os_mode_get(void)
   }
 }
 
-void os_mode_set(os_mode_t mode) {
-  os_mode = mode;
-
-  user_config.os_mode_linux = (mode == OS_MODE_LNX);
-  eeconfig_update_user(user_config.raw);
-  
-  if (mode == OS_MODE_MAC) {
-    process_magic(MAGIC_SWAP_CTL_GUI, record);
-  } else {
-    process_magic(MAGIC_UNSWAP_CTL_GUI, record);
-  }
-}
-
-
-// Custom key processing
-
 bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
   if (record->event.pressed) {
-    os_mode_set(mode);
+    os_mode = mode;
+  
+    user_config.os_mode_linux = (mode == OS_MODE_LNX);
+    eeconfig_update_user(user_config.raw);
+  
+    if (mode == OS_MODE_MAC) {
+      process_magic(MAGIC_SWAP_CTL_GUI, record);
+    } else {
+      process_magic(MAGIC_UNSWAP_CTL_GUI, record);
+    }
   }
   return false;
 }
+
+
+// OS-specific clipboard and undo/redo
+
+// Windows clipboard
+#define CLIP_CUT_WIN LCTL(KC_X)
+#define CLIP_CPY_WIN LCTL(KC_C)
+#define CLIP_PST_WIN LCTL(KC_V)
+#define CLIP_UND_WIN LCTL(KC_Z)
+#define CLIP_RDO_WIN LCTL(KC_Y)
+
+// Mac clipboard
+#define CLIP_CUT_MAC LCMD(KC_X)
+#define CLIP_CPY_MAC LCMD(KC_C)
+#define CLIP_PST_MAC LCMD(KC_V)
+#define CLIP_UND_MAC LCMD(KC_Z)
+#define CLIP_RDO_MAC SCMD(KC_Z)
+
+typedef enum {
+  CLIP_CUT,
+  CLIP_CPY,
+  CLIP_PST,
+  CLIP_UND,
+  CLIP_RDO,
+  CLIP_END,
+} clip_t;
+
+// Windows and Mac only
+// Linux keycodes are left as-is
+const uint16_t PROGMEM os_keycodes[][CLIP_END] = {
+  [OS_MODE_WIN] = { CLIP_CUT_WIN, CLIP_CPY_WIN, CLIP_PST_WIN, CLIP_UND_WIN, CLIP_RDO_WIN, },
+  [OS_MODE_MAC] = { CLIP_CUT_MAC, CLIP_CPY_MAC, CLIP_PST_MAC, CLIP_UND_MAC, CLIP_RDO_MAC, },
+};
 
 bool process_clipcode(clip_t clip, keyrecord_t *record) {
   // Linux keycodes are passed through as-is.
@@ -127,6 +120,9 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
   }
   return false;
 }
+
+
+// Custom key processing
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
@@ -157,7 +153,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 void eeconfig_init_user(void) {
   user_config.raw = 0;
   // Windows mode by default
+  // keymap_config.swap_lctl_lgui defaults to false
   user_config.os_mode_linux = false;
+  
   eeconfig_update_user(user_config.raw);
 }
 
