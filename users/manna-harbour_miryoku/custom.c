@@ -179,7 +179,6 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (!record->event.pressed)
     return;
 
-  uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
   switch (keycode) {
     case RGB_TOG:
       if (rgb_matrix_is_enabled())
