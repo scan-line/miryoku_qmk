@@ -34,4 +34,4 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 #define CG_NORM_SONG SONG(NO_SOUND)
 #define CG_SWAP_SONG SONG(NO_SOUND)
-#define LAYER_SET_SONG AG_SWAP_SONG
+#define LAYER_SET_SONG SONG(AG_SWAP_SOUND)
