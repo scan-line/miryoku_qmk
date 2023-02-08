@@ -177,10 +177,11 @@ bool is_on_target(uint8_t i, uint8_t target, int8_t step) {
 
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
   send_string("user 1\n");
-  if (!record->event.pressed)
-    return;
+  if (!record->event.pressed) {
+    send_string("user 2\n");
+  }
 
-  send_string("user 2\n");
+  send_string("user 3\n");
   switch (keycode) {
     case RGB_TOG:
       if (rgb_matrix_is_enabled())
@@ -190,9 +191,11 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case RGB_MODE_FORWARD:
     case RGB_MODE_REVERSE:
-      send_string("user 3\n");
-      if (is_on_target(rgb_matrix_get_mode(), RGB_MATRIX_DEFAULT_MODE, 1))
+      send_string("user 4\n");
+      if (is_on_target(rgb_matrix_get_mode(), RGB_MATRIX_DEFAULT_MODE, 1)) {
+        send_string("user 3\n");
         PLAY_SONG(on_target_song);
+      }
       break;
     case RGB_HUI:
     case RGB_HUD:
