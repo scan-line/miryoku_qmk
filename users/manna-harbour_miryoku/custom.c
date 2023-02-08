@@ -4,6 +4,13 @@
 
 #include "manna-harbour_miryoku.h"
 
+// Sounds
+
+float layer_set_song[][2] = LAYER_SET_SONG;
+float toggle_on_song[][2] = TOGGLE_ON_SONG;
+float toggle_off_song[][2] = TOGGLE_OFF_SONG;
+float on_target_song[][2] = ON_TARGET_SONG;
+
 
 // Persistent user state
 
@@ -47,8 +54,7 @@ typedef enum {
 
 os_mode_t os_mode = OS_MODE_WIN;
 
-os_mode_t os_mode_get(void)
-{
+os_mode_t os_mode_get(void) {
   if (user_config.os_mode_linux) {
     return OS_MODE_LNX;
   } else if (keymap_config.swap_lctl_lgui) {
@@ -122,12 +128,9 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
 }
 
 
-// Layer indication
+// Layer feedback
 
-float layer_set_song[][2] = LAYER_SET_SONG;
-
-layer_state_t default_layer_state_set_user(layer_state_t state)
-{
+layer_state_t default_layer_state_set_user(layer_state_t state) {
   PLAY_SONG(layer_set_song);
   return state;
 }
@@ -159,6 +162,62 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 
+// Rgb feedback
+
+// Return true if stepped value i (qadd8, qsub8) is on target
+bool is_on_target(uint8_t i, uint8_t target, int8_t step) {
+  uint8_t lower = target - (step / 2);
+  // Wrap around? Floor at 0
+  if (lower > target) lower = 0;
+  uint8_t upper = target + step - 1;
+  // Wrap around? Cap at 0xFF
+  if (upper < target) upper = 127;
+  return (lower <= i && i <= upper);
+}
+
+void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (!record->event.pressed)
+    return;
+
+  uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
+  switch (keycode) {
+    case RGB_TOG:
+      if (rgb_matrix_is_enabled())
+        PLAY_SONG(toggle_on_song);
+      else
+        PLAY_SONG(toggle_off_song)();
+      break;
+    case RGB_MODE_FORWARD:
+    case RGB_MODE_REVERSE:
+      if (is_on_target(rgb_matrix_get_mode(), RGB_MATRIX_DEFAULT_MODE, 1))
+        play_song(on_target_song);
+      break;
+    case RGB_HUI:
+    case RGB_HUD:
+      if (is_on_target(rgb_matrix_get_hue(), RGB_MATRIX_DEFAULT_HUE, RGB_MATRIX_HUE_STEP))
+        play_song(on_target_song);
+      break;
+    case RGB_SAI:
+    case RGB_SAD:
+      if (is_on_target(rgb_matrix_get_sat(), RGB_MATRIX_DEFAULT_SAT, RGB_MATRIX_SAT_STEP))
+        play_song(on_target_song);
+      break;
+    case RGB_VAI:
+    case RGB_VAD:
+      if (is_on_target(rgb_matrix_get_val(), RGB_MATRIX_DEFAULT_VAL, RGB_MATRIX_VAL_STEP))
+        play_song(on_target_song);
+      break;
+    case RGB_SPI:
+    case RGB_SPD:
+      if (is_on_target(rgb_matrix_get_speed(), RGB_MATRIX_DEFAULT_SPD, RGB_MATRIX_SPD_STEP))
+        play_song(on_target_song);
+      break;
+    default:
+      break;
+  }
+}
+
+
 // Initialization
 
 void eeconfig_init_user(void) {
@@ -171,8 +230,9 @@ void eeconfig_init_user(void) {
 }
 
 void keyboard_post_init_user(void) {
-  // Replace key overrides with our extended list
+  // Patch key overrides with our extended list
   key_overrides = custom_key_overrides;
+  
   // Restore user state
   user_config.raw = eeconfig_read_user();
   os_mode = os_mode_get();
