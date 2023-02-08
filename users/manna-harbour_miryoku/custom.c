@@ -185,7 +185,7 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (rgb_matrix_is_enabled())
         PLAY_SONG(toggle_on_song);
       else
-        PLAY_SONG(toggle_off_song)();
+        PLAY_SONG(toggle_off_song);
       break;
     case RGB_MODE_FORWARD:
     case RGB_MODE_REVERSE:
