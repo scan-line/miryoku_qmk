@@ -190,27 +190,27 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
     case RGB_MODE_FORWARD:
     case RGB_MODE_REVERSE:
       if (is_on_target(rgb_matrix_get_mode(), RGB_MATRIX_DEFAULT_MODE, 1))
-        play_song(on_target_song);
+        PLAY_SONG(on_target_song);
       break;
     case RGB_HUI:
     case RGB_HUD:
       if (is_on_target(rgb_matrix_get_hue(), RGB_MATRIX_DEFAULT_HUE, RGB_MATRIX_HUE_STEP))
-        play_song(on_target_song);
+        PLAY_SONG(on_target_song);
       break;
     case RGB_SAI:
     case RGB_SAD:
       if (is_on_target(rgb_matrix_get_sat(), RGB_MATRIX_DEFAULT_SAT, RGB_MATRIX_SAT_STEP))
-        play_song(on_target_song);
+        PLAY_SONG(on_target_song);
       break;
     case RGB_VAI:
     case RGB_VAD:
       if (is_on_target(rgb_matrix_get_val(), RGB_MATRIX_DEFAULT_VAL, RGB_MATRIX_VAL_STEP))
-        play_song(on_target_song);
+        PLAY_SONG(on_target_song);
       break;
     case RGB_SPI:
     case RGB_SPD:
       if (is_on_target(rgb_matrix_get_speed(), RGB_MATRIX_DEFAULT_SPD, RGB_MATRIX_SPD_STEP))
-        play_song(on_target_song);
+        PLAY_SONG(on_target_song);
       break;
     default:
       break;
