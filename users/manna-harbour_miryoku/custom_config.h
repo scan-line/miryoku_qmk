@@ -3,7 +3,8 @@
 #pragma once
 
 
-// Additional keycodes
+// Keycodes
+
 // Defining an enum here (as recommended in qmk docs) does not work
 // This header is included by both c and assembler source
 // and the assembly will fail
@@ -13,6 +14,8 @@
 #define U_MAC PB_2
 #define U_LNX PB_3
 
+
+// Layers
 
 #define MIRYOKU_LAYER_MEDIA \
 TD(U_TD_BOOT),     TD(U_TD_U_TAP),    TD(U_TD_U_EXTRA),  TD(U_TD_U_BASE),   U_NA,              RGB_TOG,           RGB_MOD,           RGB_HUI,           RGB_SAI,           RGB_VAI,           \
@@ -27,11 +30,18 @@ KC_TILD,           KC_EXLM,           KC_AT,             KC_HASH,           KC_P
 U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_UNDS,           U_NA,              U_NA,              U_NA,              U_NP,              U_NP
 
 
-#define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_RAINDROPS
-#define RGB_MATRIX_DEFAULT_VAL (RGB_MATRIX_MAXIMUM_BRIGHTNESS / 2)
-// TODO - matrix speed
-// #define RGB_MATRIX_DEFAULT_SPD 16
+// Sound design
 
+#define LAYER_SET_SONG SONG(AG_SWAP_SOUND)
+#define TOGGLE_ON_SONG SONG(AUDIO_ON_SOUND)
+#define TOGGLE_OFF_SONG SONG(AUDIO_OFF_SOUND)
+#define ON_TARGET_SONG SONG(Q__NOTE(_A4),)
+
+#define AUDIO_ON_SONG TOGGLE_ON_SONG
+#define AUDIO_OFF_SONG TOGGLE_OFF_SONG
 #define CG_NORM_SONG SONG(NO_SOUND)
 #define CG_SWAP_SONG SONG(NO_SOUND)
-#define LAYER_SET_SONG SONG(AG_SWAP_SOUND)
+
+// Settings
+
+#define RGB_TRIGGER_ON_KEYDOWN
