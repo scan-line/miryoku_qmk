@@ -122,6 +122,17 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
 }
 
 
+// Layer indication
+
+float layer_set_song[][2] = LAYER_SET_SONG;
+
+layer_state_t default_layer_state_set_user(layer_state_t state)
+{
+  PLAY_SONG(layer_set_song);
+  return state;
+}
+
+
 // Custom key processing
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
