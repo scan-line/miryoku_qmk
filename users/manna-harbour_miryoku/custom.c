@@ -136,7 +136,10 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 }
 
 
-// Rgb
+// Rgb with feedback
+// Override keys to allow feedback on keydown.
+// (A post_process_record_user would be less intrusive,
+// but is short-circuited on keydown and only called on keyup).
 
 // Return true if stepped value i (qadd8, qsub8) is on target
 bool slider_on_target(uint8_t i, uint8_t target, int8_t step) {
