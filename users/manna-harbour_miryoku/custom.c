@@ -136,33 +136,7 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 }
 
 
-// Custom key processing
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case U_WIN:
-      return process_os_mode(OS_MODE_WIN, record);
-    case U_MAC:
-      return process_os_mode(OS_MODE_MAC, record);
-    case U_LNX:
-      return process_os_mode(OS_MODE_LNX, record);
-    case U_CUT:
-      return process_clipcode(CLIP_CUT, record);
-    case U_CPY:
-      return process_clipcode(CLIP_CPY, record);
-    case U_PST:
-      return process_clipcode(CLIP_PST, record);
-    case U_UND:
-      return process_clipcode(CLIP_UND, record);
-    case U_RDO:
-      return process_clipcode(CLIP_RDO, record);
-    default:
-      return true;
-  }
-}
-
-
-// Rgb feedback
+// Rgb
 
 // Return true if stepped value i (qadd8, qsub8) is on target
 bool slider_on_target(uint8_t i, uint8_t target, int8_t step) {
@@ -183,46 +157,89 @@ bool rotary_on_target(uint8_t i, uint8_t target, int8_t step) {
   return (lower <= delta && delta <= upper);
 }
 
-void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
-  // TODO - wrap rgb keys to get simple audio feedback on key press.
-  // RGB keys send key release events only.
-  if (record->event.pressed)
+void process_u_rgb(uint16_t keycode, keyrecord_t *record) {
+  if (!record->event.pressed)
       return;
 
+  uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
   switch (keycode) {
-    case RGB_TOG:
+    case U_RGB_TOG:
+      rgb_matrix_toggle();
       if (rgb_matrix_is_enabled())
         PLAY_SONG(toggle_on_song);
       else
         PLAY_SONG(toggle_off_song);
       break;
-    case RGB_MODE_FORWARD:
-    case RGB_MODE_REVERSE:
+    case U_RGB_MODE:
+      if (!shifted)
+        rgb_matrix_step();
+      else
+        rgb_matrix_step_reverse();
       if (rgb_matrix_get_mode() == RGB_MATRIX_DEFAULT_MODE)
         PLAY_SONG(detent_song);
       break;
-    case RGB_HUI:
-    case RGB_HUD:
+    case U_RGB_HUI:
+      if (!shifted)
+        rgb_matrix_increase_hue();
+      else
+        rgb_matrix_decrease_hue();
       if (rotary_on_target(rgb_matrix_get_hue(), RGB_MATRIX_DEFAULT_HUE, RGB_MATRIX_HUE_STEP))
         PLAY_SONG(detent_song);
       break;
-    case RGB_SAI:
-    case RGB_SAD:
+    case U_RGB_SAI:
+      if (!shifted)
+        rgb_matrix_increase_sat();
+      else
+        rgb_matrix_decrease_sat();
       if (slider_on_target(rgb_matrix_get_sat(), RGB_MATRIX_DEFAULT_SAT, RGB_MATRIX_SAT_STEP))
         PLAY_SONG(detent_song);
       break;
-    case RGB_VAI:
-    case RGB_VAD:
+    case U_RGB_VAI:
+      if (!shifted)
+        rgb_matrix_increase_val();
+      else
+        rgb_matrix_decrease_val();
       if (slider_on_target(rgb_matrix_get_val(), RGB_MATRIX_DEFAULT_VAL, RGB_MATRIX_VAL_STEP))
         PLAY_SONG(detent_song);
       break;
-    case RGB_SPI:
-    case RGB_SPD:
+    case U_RGB_SPI:
+      if (!shifted)
+        rgb_matrix_increase_speed();
+      else
+        rgb_matrix_decrease_speed();
       if (slider_on_target(rgb_matrix_get_speed(), RGB_MATRIX_DEFAULT_SPD, RGB_MATRIX_SPD_STEP))
         PLAY_SONG(detent_song);
       break;
     default:
       break;
+  }
+}
+
+
+// Custom key processing
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case U_WIN:
+      return process_os_mode(OS_MODE_WIN, record);
+    case U_MAC:
+      return process_os_mode(OS_MODE_MAC, record);
+    case U_LNX:
+      return process_os_mode(OS_MODE_LNX, record);
+    case U_CUT:
+      return process_clipcode(CLIP_CUT, record);
+    case U_CPY:
+      return process_clipcode(CLIP_CPY, record);
+    case U_PST:
+      return process_clipcode(CLIP_PST, record);
+    case U_UND:
+      return process_clipcode(CLIP_UND, record);
+    case U_RDO:
+      return process_clipcode(CLIP_RDO, record);
+    case U_RGB_TOG ... U_RGB_SPI
+      return process_u_rgb(keycode, record)
+    default:
+      return true;
   }
 }
 
