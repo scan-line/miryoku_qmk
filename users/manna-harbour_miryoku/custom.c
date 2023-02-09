@@ -190,7 +190,7 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case RGB_MODE_FORWARD:
     case RGB_MODE_REVERSE:
-      if (is_on_target(rgb_matrix_get_mode(), RGB_MATRIX_DEFAULT_MODE, 1))
+      if (rgb_matrix_get_mode() == RGB_MATRIX_DEFAULT_MODE)
         PLAY_SONG(on_target_song);
       break;
     case RGB_HUI:
