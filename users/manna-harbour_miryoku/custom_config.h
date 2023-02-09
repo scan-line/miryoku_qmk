@@ -13,14 +13,20 @@
 #define U_WIN PB_1
 #define U_MAC PB_2
 #define U_LNX PB_3
+#define U_RGB_TOG PB_4
+#define U_RGB_MOD PB_5
+#define U_RGB_HUI PB_6
+#define U_RGB_SAI PB_7
+#define U_RGB_VAI PB_8
+#define U_RGB_SPI PB_9
 
 
 // Layers
 
 #define MIRYOKU_LAYER_MEDIA \
-TD(U_TD_BOOT),     TD(U_TD_U_TAP),    TD(U_TD_U_EXTRA),  TD(U_TD_U_BASE),   U_NA,              RGB_TOG,           RGB_MOD,           RGB_HUI,           RGB_SAI,           RGB_VAI,           \
+TD(U_TD_BOOT),     TD(U_TD_U_TAP),    TD(U_TD_U_EXTRA),  TD(U_TD_U_BASE),   U_NA,              U_RGB_TOG,         U_RGB_MOD,         U_RGB_HUI,         U_RGB_SAI,         U_RGB_VAI,         \
 KC_LGUI,           KC_LALT,           KC_LCTL,           KC_LSFT,           U_NA,              AU_TOGG,           KC_MPRV,           KC_VOLD,           KC_VOLU,           KC_MNXT,           \
-U_NA,              KC_ALGR,           TD(U_TD_U_FUN),    TD(U_TD_U_MEDIA),  U_NA,              OU_AUTO,           U_WIN,             U_MAC,             U_LNX,             RGB_SPI,           \
+U_NA,              KC_ALGR,           TD(U_TD_U_FUN),    TD(U_TD_U_MEDIA),  U_NA,              OU_AUTO,           U_WIN,             U_MAC,             U_LNX,             U_RGB_SPI,         \
 U_NP,              U_NP,              U_NA,              U_NA,              U_NA,              KC_MSTP,           KC_MPLY,           KC_MUTE,           U_NP,              U_NP
 
 #define MIRYOKU_LAYER_SYM \
@@ -43,8 +49,6 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #define CG_SWAP_SONG SONG(NO_SOUND)
 
 // Settings
-
-#define RGB_TRIGGER_ON_KEYDOWN
 
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_RAINDROPS
 #define RGB_MATRIX_DEFAULT_HUE 0
