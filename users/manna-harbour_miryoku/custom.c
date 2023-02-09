@@ -178,7 +178,7 @@ bool is_on_target(uint8_t i, uint8_t target, int8_t step) {
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
   // TODO - wrap rgb keys to get simple audio feedback on key press.
   // RGB keys send key release events only.
-  if (!record->event.pressed)
+  if (record->event.pressed)
       return;
 
   switch (keycode) {
