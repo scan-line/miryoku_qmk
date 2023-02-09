@@ -167,12 +167,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // Return true if stepped value i (qadd8, qsub8) is on target
 bool slider_on_target(uint8_t i, uint8_t target, int8_t step) {
   uint8_t lower = target - (step / 2);
+  uint8_t upper = lower + step - 1;
   // Wrap around? Floor at 0
   if (lower > target) lower = 0;
-  uint8_t upper = target + step - 1;
   // Wrap around? Cap at 0xFF
   if (upper < target) upper = 127;
   return (lower <= i && i <= upper);
+}
+
+// Return true if stepped value i (with wraparound) is on target
+bool rotary_on_target(uint8_t i, uint8_t target, int8_t step) {
+  uint8_t lower = - (step / 2);
+  uint8_t upper = minus + step - 1;
+  uint8_t delta = i - target;
+  return (lower <= delta && delta <= upper);
 }
 
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -195,7 +203,7 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case RGB_HUI:
     case RGB_HUD:
-      if (slider_on_target(rgb_matrix_get_hue(), RGB_MATRIX_DEFAULT_HUE, RGB_MATRIX_HUE_STEP))
+      if (rotary_on_target(rgb_matrix_get_hue(), RGB_MATRIX_DEFAULT_HUE, RGB_MATRIX_HUE_STEP))
         PLAY_SONG(detent_song);
       break;
     case RGB_SAI:
