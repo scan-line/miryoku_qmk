@@ -9,7 +9,7 @@
 float layer_set_song[][2] = LAYER_SET_SONG;
 float toggle_on_song[][2] = TOGGLE_ON_SONG;
 float toggle_off_song[][2] = TOGGLE_OFF_SONG;
-float on_target_song[][2] = ON_TARGET_SONG;
+float detent_song[][2] = DETENT_SONG;
 
 
 // Persistent user state
@@ -165,7 +165,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // Rgb feedback
 
 // Return true if stepped value i (qadd8, qsub8) is on target
-bool is_on_target(uint8_t i, uint8_t target, int8_t step) {
+bool slider_on_target(uint8_t i, uint8_t target, int8_t step) {
   uint8_t lower = target - (step / 2);
   // Wrap around? Floor at 0
   if (lower > target) lower = 0;
@@ -191,27 +191,27 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
     case RGB_MODE_FORWARD:
     case RGB_MODE_REVERSE:
       if (rgb_matrix_get_mode() == RGB_MATRIX_DEFAULT_MODE)
-        PLAY_SONG(on_target_song);
+        PLAY_SONG(detent_song);
       break;
     case RGB_HUI:
     case RGB_HUD:
-      if (is_on_target(rgb_matrix_get_hue(), RGB_MATRIX_DEFAULT_HUE, RGB_MATRIX_HUE_STEP))
-        PLAY_SONG(on_target_song);
+      if (slider_on_target(rgb_matrix_get_hue(), RGB_MATRIX_DEFAULT_HUE, RGB_MATRIX_HUE_STEP))
+        PLAY_SONG(detent_song);
       break;
     case RGB_SAI:
     case RGB_SAD:
-      if (is_on_target(rgb_matrix_get_sat(), RGB_MATRIX_DEFAULT_SAT, RGB_MATRIX_SAT_STEP))
-        PLAY_SONG(on_target_song);
+      if (slider_on_target(rgb_matrix_get_sat(), RGB_MATRIX_DEFAULT_SAT, RGB_MATRIX_SAT_STEP))
+        PLAY_SONG(detent_song);
       break;
     case RGB_VAI:
     case RGB_VAD:
-      if (is_on_target(rgb_matrix_get_val(), RGB_MATRIX_DEFAULT_VAL, RGB_MATRIX_VAL_STEP))
-        PLAY_SONG(on_target_song);
+      if (slider_on_target(rgb_matrix_get_val(), RGB_MATRIX_DEFAULT_VAL, RGB_MATRIX_VAL_STEP))
+        PLAY_SONG(detent_song);
       break;
     case RGB_SPI:
     case RGB_SPD:
-      if (is_on_target(rgb_matrix_get_speed(), RGB_MATRIX_DEFAULT_SPD, RGB_MATRIX_SPD_STEP))
-        PLAY_SONG(on_target_song);
+      if (slider_on_target(rgb_matrix_get_speed(), RGB_MATRIX_DEFAULT_SPD, RGB_MATRIX_SPD_STEP))
+        PLAY_SONG(detent_song);
       break;
     default:
       break;
