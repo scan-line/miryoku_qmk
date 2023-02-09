@@ -157,11 +157,12 @@ bool rotary_on_target(uint8_t i, uint8_t target, int8_t step) {
   return (lower <= delta && delta <= upper);
 }
 
-void process_u_rgb(uint16_t keycode, keyrecord_t *record) {
+bool process_u_rgb(uint16_t keycode, keyrecord_t *record) {
   if (!record->event.pressed)
-      return;
+      return true;
 
   uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
+  
   switch (keycode) {
     case U_RGB_TOG:
       rgb_matrix_toggle();
@@ -169,7 +170,7 @@ void process_u_rgb(uint16_t keycode, keyrecord_t *record) {
         PLAY_SONG(toggle_on_song);
       else
         PLAY_SONG(toggle_off_song);
-      break;
+      return false;
     case U_RGB_MODE:
       if (!shifted)
         rgb_matrix_step();
@@ -177,7 +178,7 @@ void process_u_rgb(uint16_t keycode, keyrecord_t *record) {
         rgb_matrix_step_reverse();
       if (rgb_matrix_get_mode() == RGB_MATRIX_DEFAULT_MODE)
         PLAY_SONG(detent_song);
-      break;
+      return false;
     case U_RGB_HUI:
       if (!shifted)
         rgb_matrix_increase_hue();
@@ -185,7 +186,7 @@ void process_u_rgb(uint16_t keycode, keyrecord_t *record) {
         rgb_matrix_decrease_hue();
       if (rotary_on_target(rgb_matrix_get_hue(), RGB_MATRIX_DEFAULT_HUE, RGB_MATRIX_HUE_STEP))
         PLAY_SONG(detent_song);
-      break;
+      return false;
     case U_RGB_SAI:
       if (!shifted)
         rgb_matrix_increase_sat();
@@ -193,7 +194,7 @@ void process_u_rgb(uint16_t keycode, keyrecord_t *record) {
         rgb_matrix_decrease_sat();
       if (slider_on_target(rgb_matrix_get_sat(), RGB_MATRIX_DEFAULT_SAT, RGB_MATRIX_SAT_STEP))
         PLAY_SONG(detent_song);
-      break;
+      return false;
     case U_RGB_VAI:
       if (!shifted)
         rgb_matrix_increase_val();
@@ -201,7 +202,7 @@ void process_u_rgb(uint16_t keycode, keyrecord_t *record) {
         rgb_matrix_decrease_val();
       if (slider_on_target(rgb_matrix_get_val(), RGB_MATRIX_DEFAULT_VAL, RGB_MATRIX_VAL_STEP))
         PLAY_SONG(detent_song);
-      break;
+      return false;
     case U_RGB_SPI:
       if (!shifted)
         rgb_matrix_increase_speed();
@@ -209,9 +210,9 @@ void process_u_rgb(uint16_t keycode, keyrecord_t *record) {
         rgb_matrix_decrease_speed();
       if (slider_on_target(rgb_matrix_get_speed(), RGB_MATRIX_DEFAULT_SPD, RGB_MATRIX_SPD_STEP))
         PLAY_SONG(detent_song);
-      break;
+      return false;
     default:
-      break;
+      return true;
   }
 }
 
