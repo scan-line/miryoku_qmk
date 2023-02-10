@@ -16,6 +16,7 @@
 
 // Sounds
 
+float startup_song[][2]   = STARTUP_SONG;
 float layer_set_song[][2] = LAYER_SET_SONG;
 float mode_set_song[][2] = MODE_SET_SONG;
 float toggle_on_song[][2] = TOGGLE_ON_SONG;
@@ -310,4 +311,6 @@ void keyboard_post_init_user(void) {
   // Restore user state
   user_config.raw = eeconfig_read_user();
   os_mode = os_mode_get();
+  
+  PLAY_SONG(startup_song);
 }
