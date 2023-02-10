@@ -51,6 +51,9 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Settings
 
+#define RGBLIGHT_DISABLE_KEYCODES
+#define RGB_MATRIX_DISABLE_KEYCODES
+
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_RAINDROPS
 #define RGB_MATRIX_DEFAULT_HUE 0
 #define RGB_MATRIX_DEFAULT_SAT UINT8_MAX
