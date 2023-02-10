@@ -38,6 +38,8 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Sound design
 
+#define AUDIO_INIT_DELAY
+
 #define LAYER_SET_SONG SONG(AG_SWAP_SOUND)
 #define MODE_SET_SONG SONG(AG_NORM_SOUND)
 #define TOGGLE_ON_SONG SONG(AUDIO_ON_SOUND)
@@ -49,7 +51,8 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #define CG_NORM_SONG SONG(NO_SOUND)
 #define CG_SWAP_SONG SONG(NO_SOUND)
 
-// Settings
+
+// Lighting design
 
 #define RGBLIGHT_DISABLE_KEYCODES
 #define RGB_MATRIX_DISABLE_KEYCODES
