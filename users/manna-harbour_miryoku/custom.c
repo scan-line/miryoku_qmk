@@ -7,6 +7,7 @@
 // Sounds
 
 float layer_set_song[][2] = LAYER_SET_SONG;
+float mode_set_song[][2] = MODE_SET_SONG;
 float toggle_on_song[][2] = TOGGLE_ON_SONG;
 float toggle_off_song[][2] = TOGGLE_OFF_SONG;
 float detent_song[][2] = DETENT_SONG;
@@ -76,6 +77,8 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
     } else {
       process_magic(MAGIC_UNSWAP_CTL_GUI, record);
     }
+
+    PLAY_SONG(mode_set_song);
   }
   return false;
 }
