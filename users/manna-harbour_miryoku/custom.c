@@ -155,14 +155,6 @@ bool slider_on_target(uint8_t i, uint8_t target, int8_t step) {
   return (lower <= i && i <= upper);
 }
 
-// Return true if stepped value i (with wraparound) is on target
-bool rotary_on_target(uint8_t i, uint8_t target, int8_t step) {
-  int8_t delta = target - i;
-  int8_t lower = - (step / 2);
-  int8_t upper = lower + step - 1;
-  return lower <= delta || delta <= upper;
-}
-
 bool process_rgb_toggle(keyrecord_t *record) {
   if (!record->event.pressed)
       return true;
@@ -201,7 +193,7 @@ bool process_rgb_hue(keyrecord_t *record) {
   else
     rgb_matrix_decrease_hue();
   
-  if (rotary_on_target(rgb_matrix_get_hue(), RGB_MATRIX_DEFAULT_HUE, RGB_MATRIX_HUE_STEP))
+  if (rgb_matrix_get_hue() == RGB_MATRIX_DEFAULT_HUE)
     PLAY_SONG(detent_song);
   return false;
 }
