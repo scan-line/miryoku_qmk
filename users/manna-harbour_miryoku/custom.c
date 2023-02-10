@@ -157,10 +157,11 @@ bool slider_on_target(uint8_t i, uint8_t target, int8_t step) {
 
 // Return true if stepped value i (with wraparound) is on target
 bool rotary_on_target(uint8_t i, uint8_t target, int8_t step) {
-  uint8_t lower = - (step / 2);
-  uint8_t upper = lower + step - 1;
-  uint8_t delta = i - target;
-  return (lower <= delta && delta <= upper);
+  uint_t delta1 = target - i;
+  uint_t delta2 = i - target;
+  uint_t lower = (step / 2);
+  uint_t upper = step - (step / 2) - 1;
+  return delta1 <= lower || delta2 <= upper;
 }
 
 bool process_rgb_tog(keyrecord_t *record) {
