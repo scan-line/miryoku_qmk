@@ -16,7 +16,7 @@
 
 // Sounds
 
-float startup_song[][2]   = STARTUP_SONG;
+float startup_song[][2]   = SONG(STARTUP_SOUND);
 float layer_set_song[][2] = LAYER_SET_SONG;
 float mode_set_song[][2] = MODE_SET_SONG;
 float toggle_on_song[][2] = TOGGLE_ON_SONG;
