@@ -158,7 +158,7 @@ bool slider_on_target(uint8_t i, uint8_t target, int8_t step) {
 // Return true if stepped value i (with wraparound) is on target
 bool rotary_on_target(uint8_t i, uint8_t target, int8_t step) {
   uint8_t lower = - (step / 2);
-  uint8_t upper = minus + step - 1;
+  uint8_t upper = lower + step - 1;
   uint8_t delta = i - target;
   return (lower <= delta && delta <= upper);
 }
