@@ -164,7 +164,7 @@ bool rotary_on_target(uint8_t i, uint8_t target, int8_t step) {
   return delta1 <= lower || delta2 <= upper;
 }
 
-bool process_rgb_tog(keyrecord_t *record) {
+bool process_rgb_toggle(keyrecord_t *record) {
   if (!record->event.pressed)
       return true;
   
@@ -241,6 +241,7 @@ bool process_rgb_speed(keyrecord_t *record) {
   if (!record->event.pressed)
       return true;
   
+  uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
   if (!shifted)
     rgb_matrix_increase_speed();
   else
@@ -274,7 +275,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return process_clipcode(CLIP_RDO, record);
     case U_RGB_TOG:
       return process_rgb_toggle(record);
-    case U_RGB_MODE:
+    case U_RGB_MOD:
       return process_rgb_mode(record);
     case U_RGB_HUI:
       return process_rgb_hue(record);
