@@ -151,7 +151,7 @@ bool slider_on_target(uint8_t i, uint8_t target, int8_t step) {
   // Wrap around? Floor at 0
   if (lower > target) lower = 0;
   // Wrap around? Cap at 0xFF
-  if (upper < target) upper = 127;
+  if (upper < target) upper = 255;
   return (lower <= i && i <= upper);
 }
 
