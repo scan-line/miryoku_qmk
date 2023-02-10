@@ -160,7 +160,7 @@ bool rotary_on_target(uint8_t i, uint8_t target, int8_t step) {
   int8_t delta = target - i;
   int8_t lower = - (step / 2);
   int8_t upper = lower + step - 1;
-  return lower <= delta || delta2 <= upper;
+  return lower <= delta || delta <= upper;
 }
 
 bool process_rgb_toggle(keyrecord_t *record) {
