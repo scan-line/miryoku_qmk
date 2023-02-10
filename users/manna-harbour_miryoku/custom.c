@@ -4,6 +4,16 @@
 
 #include "manna-harbour_miryoku.h"
 
+
+// Qmk definitions
+
+// Duplicated from rgb_matrix.c
+#if !defined(RGB_MATRIX_MAXIMUM_BRIGHTNESS) || RGB_MATRIX_MAXIMUM_BRIGHTNESS > UINT8_MAX
+#    undef RGB_MATRIX_MAXIMUM_BRIGHTNESS
+#    define RGB_MATRIX_MAXIMUM_BRIGHTNESS UINT8_MAX
+#endif
+
+
 // Sounds
 
 float layer_set_song[][2] = LAYER_SET_SONG;
