@@ -16,7 +16,7 @@
 
 // Sounds
 
-float test_song[][2] = SONG(STARTUP_SOUND, W__NOTE(_REST), STARTUP_SOUND);
+float test_song[][2] = SONG(E__NOTE(_E6), E__NOTE(_A6), ED_NOTE(_E7), W__NOTE(_REST), E__NOTE(_E6), E__NOTE(_A6), ED_NOTE(_E7),);
 float layer_set_song[][2] = LAYER_SET_SONG;
 float mode_set_song[][2] = MODE_SET_SONG;
 float toggle_on_song[][2] = TOGGLE_ON_SONG;
