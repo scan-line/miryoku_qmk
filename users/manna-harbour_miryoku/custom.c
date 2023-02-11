@@ -156,13 +156,13 @@ void show_layer(layer_state_t state) {
 }
 
 layer_state_t default_layer_state_set_user(layer_state_t state) {
-  show_layer(state | layer_state);
+  show_layer(state|layer_state);
   PLAY_SONG(layer_set_song);
   return state;
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-  custom_show_layer(state | default_layer_state);
+  show_layer(state|default_layer_state);
   return state;
 }
 
