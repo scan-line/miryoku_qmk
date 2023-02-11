@@ -7,7 +7,13 @@
 
 // Feedback
 
-layer_state_t layer_state_set_user(layer_state_t state) {
+void eeconfig_init_user2(void) {
+  // Turn down the initial led level from 4 to 1.
+  keyboard_config.led_level = 1;
+  eeconfig_update_kb(keyboard_config.raw);
+}
+
+layer_state_t layer_state_set_user2(layer_state_t state) {
   planck_ez_left_led_off();
   planck_ez_right_led_off();
   uint8_t layer = biton32(state);
