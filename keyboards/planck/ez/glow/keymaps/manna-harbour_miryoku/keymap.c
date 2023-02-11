@@ -32,7 +32,7 @@ layer_state_t layer_state_set_user2(layer_state_t state) {
       planck_ez_left_led_on();
       break;
     case U_MOUSE:
-      send_string(" mpise ");
+      send_string(" mouse ");
       planck_ez_left_led_on();
       break;
     case U_MEDIA:
