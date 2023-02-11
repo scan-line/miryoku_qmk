@@ -7,16 +7,15 @@
 
 // Feedback
 
-void eeconfig_init_user2(void) {
+void config_eeconfig_init(void) {
   // Turn the initial led level down from 4 to 1.
   keyboard_config.led_level = 1;
   eeconfig_update_kb(keyboard_config.raw);
 }
 
-layer_state_t layer_state_set_user2(layer_state_t state) {
+void config_show_layer(uint8_t layer) {
   planck_ez_left_led_off();
   planck_ez_right_led_off();
-  uint8_t layer = get_highest_layer(state);
   switch (layer) {
     case U_BASE:
     case U_EXTRA:
@@ -41,5 +40,3 @@ layer_state_t layer_state_set_user2(layer_state_t state) {
     }
     return state;
 }
-
-  // Turn the initial led level down from 4 to 1.
