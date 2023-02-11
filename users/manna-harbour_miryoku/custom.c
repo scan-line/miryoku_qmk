@@ -157,6 +157,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
   uint8_t layer = get_highest_layer(state);
   send_string(" layer change\n");
   custom_show_layer(layer);
+  return state;
 }
 
 
