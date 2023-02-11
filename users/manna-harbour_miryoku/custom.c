@@ -148,7 +148,7 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
   return state;
 }
 
-__attribute__((weak)) layer_state_set_user2(layer_state_t state) {
+__attribute__((weak)) layer_state_t layer_state_set_user2(layer_state_t state) {
   return state;
 }
 
