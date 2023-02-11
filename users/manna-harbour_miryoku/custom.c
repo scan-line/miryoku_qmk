@@ -149,26 +149,29 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    planck_ez_left_led_off();
-    planck_ez_right_led_off();
-    uint8_t layer = biton32(state);
-    switch (layer) {
-        case MEDIA:
-        case NAV:
-        case MOUSE:
-            planck_ez_left_led_on();
-            break;
-        case SYM:
-        case NUM:
-        case FUN:
-            planck_ez_right_led_on();
-            break;
-        case SETTINGS:
-            planck_ez_right_led_on();
-            planck_ez_left_led_on();
-            break;
-        default:
-            break;
+  planck_ez_left_led_off();
+  planck_ez_right_led_off();
+  uint8_t layer = biton32(state);
+  switch (layer) {
+    default:
+    case BASE:
+    case EXTRA:
+    case TAP:
+      break;
+    case NAV:
+    case MOUSE:
+    case MEDIA:
+      planck_ez_left_led_on();
+      break;
+    case NUM:
+    case SYM:
+    case FUN:
+      planck_ez_right_led_on();
+      break;
+    case BUTTON:
+      planck_ez_left_led_on();
+      planck_ez_right_led_on();
+      break;
     }
     return state;
 }
