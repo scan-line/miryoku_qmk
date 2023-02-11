@@ -148,10 +148,6 @@ __attribute__((weak)) void custom_show_layer(uint8_t layer) {
 
 void show_layer(layer_state_t state) {
   uint8_t layer = get_highest_layer(state);
-  send_string(" show layer ");
-  char c = 'A' + layer;
-  send_char(c);
-  send_string("\n");
   custom_show_layer(layer);
 }
 
