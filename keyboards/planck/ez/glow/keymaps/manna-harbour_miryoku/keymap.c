@@ -38,5 +38,4 @@ void custom_show_layer(uint8_t layer) {
     default:
       break;
     }
-    return state;
 }
