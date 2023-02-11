@@ -148,37 +148,13 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
   return state;
 }
 
-__attribute__((weak)) layer_state_t layer_state_set_user2(layer_state_t state) {
+__attribute__((weak)) void custom_show_layer(uint8_t layer)(layer_state_t state) {
   return state;
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-  planck_ez_left_led_off();
-  planck_ez_right_led_off();
   uint8_t layer = get_highest_layer(state);
-  switch (layer) {
-    case U_BASE:
-    case U_EXTRA:
-    case U_TAP:
-      break;
-    case U_NAV:
-    case U_MOUSE:
-    case U_MEDIA:
-      planck_ez_left_led_on();
-      break;
-    case U_NUM:
-    case U_SYM:
-    case U_FUN:
-      planck_ez_right_led_on();
-      break;
-    case U_BUTTON:
-      planck_ez_left_led_on();
-      planck_ez_right_led_on();
-      break;
-    default:
-      break;
-    }
-    return state;
+  custom_show_layer(state);
 }
 
 
@@ -328,7 +304,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // Initialization
 
-__attribute__((weak)) void eeconfig_init_user2(void) {
+__attribute__((weak)) void custom_eeconfig_init(void) {
 }
 
 void eeconfig_init_user(void) {
@@ -338,7 +314,7 @@ void eeconfig_init_user(void) {
   user_config.os_mode_linux = false;
   
   eeconfig_update_user(user_config.raw);
-  eeconfig_init_user2();
+  custom_eeconfig_init();
 }
 
 void keyboard_post_init_user(void) {
