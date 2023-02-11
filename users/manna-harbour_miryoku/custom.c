@@ -147,7 +147,7 @@ __attribute__((weak)) void custom_show_layer(uint8_t layer) {
 }
 
 layer_state_t default_layer_state_set_user(layer_state_t state) {
-  uint8_t layer = get_highest_layer(state);
+  // uint8_t layer = get_highest_layer(state);
   send_string(" default layer change\n");
   PLAY_SONG(layer_set_song);
   return state;
