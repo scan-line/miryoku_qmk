@@ -324,6 +324,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // Initialization
 
+__attribute__((weak)) void eeconfig_init_user2(void) {
+}
+
 void eeconfig_init_user(void) {
   user_config.raw = 0;
   // Windows mode by default
@@ -331,6 +334,7 @@ void eeconfig_init_user(void) {
   user_config.os_mode_linux = false;
   
   eeconfig_update_user(user_config.raw);
+  eeconfig_init_user2();
 }
 
 void keyboard_post_init_user(void) {
