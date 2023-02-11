@@ -7,13 +7,13 @@
 
 // Feedback
 
-void config_eeconfig_init(void) {
+void custom_eeconfig_init(void) {
   // Turn the initial led level down from 4 to 1.
   keyboard_config.led_level = 1;
   eeconfig_update_kb(keyboard_config.raw);
 }
 
-void config_show_layer(uint8_t layer) {
+void custom_show_layer(uint8_t layer) {
   planck_ez_left_led_off();
   planck_ez_right_led_off();
   switch (layer) {
