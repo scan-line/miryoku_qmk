@@ -148,11 +148,37 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
   return state;
 }
 
+layer_state_t layer_state_set_user(layer_state_t state) {
+    planck_ez_left_led_off();
+    planck_ez_right_led_off();
+    uint8_t layer = biton32(state);
+    switch (layer) {
+        case MEDIA:
+        case NAV:
+        case MOUSE:
+            planck_ez_left_led_on();
+            break;
+        case SYM:
+        case NUM:
+        case FUN:
+            planck_ez_right_led_on();
+            break;
+        case SETTINGS:
+            planck_ez_right_led_on();
+            planck_ez_left_led_on();
+            break;
+        default:
+            break;
+    }
+    return state;
+}
 
-// Rgb with feedback
+
+// Rgb feedback
+
 // Override keys to allow feedback on keydown.
-// (A post_process_record_user would be less intrusive,
-// but is short-circuited on keydown and only called on keyup).
+// (A post_process_record_user implementation is simpler, but fails.)
+// (The user function is called on keyup but not on keydown following a return-false.)
 
 // Return true if stepped value i (qadd8, qsub8) is on target
 bool slider_on_target(uint8_t i, uint8_t target, int8_t step) {
