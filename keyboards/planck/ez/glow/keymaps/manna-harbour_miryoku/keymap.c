@@ -8,7 +8,7 @@
 // Feedback
 
 void eeconfig_init_user2(void) {
-  // Turn down the initial led level from 4 to 1.
+  // Turn the initial led level down from 4 to 1.
   keyboard_config.led_level = 1;
   eeconfig_update_kb(keyboard_config.raw);
 }
