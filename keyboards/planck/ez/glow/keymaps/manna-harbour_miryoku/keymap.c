@@ -11,8 +11,8 @@
 
 bool left_led_free = true;
 bool right_led_free = true;
-uint8_t flash_tick_count = 0;
-deferred_token flash_token = INVALID_DEFERRED_TOKEN;
+uint8_t flash_led_tick_count = 0;
+deferred_token flash_led_token = INVALID_DEFERRED_TOKEN;
 
 void left_led_on(void) {
   left_led_free = false;
@@ -35,9 +35,9 @@ void right_led_off(void) {
 }
 
 uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
-  ++flash_tick_count;
+  ++flash_led_tick_count;
   
-  switch (flash_tick_count) {
+  switch (flash_led_tick_count) {
     case 1:
     case 3:
     case 5:
@@ -61,14 +61,14 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
 
 void flash_led(void) {
   // Halt any flash in progress.
-  if (flash_token != INVALID_DEFERRED_TOKEN) {
-    cancel_deferred_exec(flash_token);
-    flash_token = INVALID_DEFERRED_TOKEN;
+  if (flash_led_token != INVALID_DEFERRED_TOKEN) {
+    cancel_deferred_exec(flash_led_token);
+    flash_led_token = INVALID_DEFERRED_TOKEN;
   }
 
   // Start new flash.
-  flash_count = 0;
-  flash_token = defer_exec(FLASH_LED_TICK, flash_led_callback, NULL);
+  flash_led_tick_count = 0;
+  flash_led_token = defer_exec(FLASH_LED_TICK, flash_led_callback, NULL);
 }
 
 
@@ -105,7 +105,7 @@ void custom_show_layer(uint8_t layer) {
     }
 }
 
-void custom_show_layer(uint8_t layer) {
+void custom_show_default_layer(uint8_t layer) {
   flash_led();
 }
 
