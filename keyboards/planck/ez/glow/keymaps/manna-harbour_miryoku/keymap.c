@@ -11,7 +11,8 @@
 
 bool left_led_free = true;
 bool right_led_free = true;
-bool flash_led_running = false;
+deferred_token flash_token = INVALID_DEFERRED_TOKEN;
+uint8_t flash_tick_count = 0;
 
 void left_led_on(void) {
   left_led_free = false;
@@ -34,18 +35,9 @@ void right_led_off(void) {
 }
 
 uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
-  uint8_t* count = (flash_led_task*)arg;
+  ++flash_tick_count;
   
-  ++*count;
-  
-  switch (*count) {
-    case 2:
-    case 4:
-      if (left_led_free)
-        planck_ez_left_led_on();
-      if (right_led_free)
-        planck_ez_right_led_on();          
-      return FLASH_LED_TICK;
+  switch (flash_tick_count) {
     case 1:
     case 3:
     case 5:
@@ -54,29 +46,29 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
       if (right_led_free)
         planck_ez_right_led_off();          
       return FLASH_LED_TICK;
+    case 2:
+    case 4:
+      if (left_led_free)
+        planck_ez_left_led_on();
+      if (right_led_free)
+        planck_ez_right_led_on();          
+      return FLASH_LED_TICK;
     default:
-      flash_led = false;
+      flash_token = INVALID_DEFERRED_TOKEN;
       return 0;
   }
 }
 
 void flash_led(void) {
-  static count = 0;
-  static deferred_token token = INVALID_DEFERRED_TOKEN;
-
   // Halt any flash in progress.
-  if (flash_led_running) {
-    cancel_deferred_exec(token);
-    flash_led_running = false;
+  if (flash_token != INVALID_DEFERRED_TOKEN) {
+    cancel_deferred_exec(flash_token);
+    flash_token = INVALID_DEFERRED_TOKEN;
   }
 
   // Start new flash.
-  count = 0;
-  flash_led_running = true;
-  token = defer_exec(FLASH_LED_TICK, flash_led_callback, &count);
-  if (token == INVALID_DEFERRED_TOKEN) {
-    flash_led_running = false;
-  }
+  flash_count = 0;
+  flash_token = defer_exec(FLASH_LED_TICK, flash_led_callback, NULL);
 }
 
 
