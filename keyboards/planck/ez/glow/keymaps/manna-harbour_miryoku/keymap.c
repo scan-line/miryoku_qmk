@@ -7,25 +7,28 @@
 
 // Flash leds
 
+#define FLASH_LED_TICK 300
+
 typedef struct {
-  uint32_t tick;
   uint8_t count;
   bool running;
 } flash_led_task;
 
 uint32_t flash_led_callback(uint32_t trigger_time, void *cb_arg) {
   flash_led_task* task = (flash_led_task*)cb_arg;
+  
   ++task->count;
+  
   switch (task->count) {
     case 2:
     case 4:
       planck_ez_left_led_on();
-      return 2*task->tick;
+      return 2*FLASH_LED_TICK;
     case 1:
     case 3:
     case 5:
       planck_ez_left_led_off();
-      return task->tick;
+      return FLASH_LED_TICK;
     default:
       planck_ez_left_led_off();
       task->running = false;
@@ -33,8 +36,8 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *cb_arg) {
   }
 }
 
-void flash_led() {
-  static flash_led_task task = {300, 0, false};
+void flash_led(void) {
+  static flash_led_task task = {0, false};
   static deferred_token token = INVALID_DEFERRED_TOKEN;
 
   // Halt any flash pattern in progress.
@@ -44,8 +47,9 @@ void flash_led() {
   }
 
   // Start new flash pattern.
-  task = {300, 0, true};
-  token = defer_exec(task.tick, flash_led_callback, (cb_arg*)&task);
+  task.count = 0;
+  task.running = true;
+  token = defer_exec(FLASH_LED_TICK, flash_led_callback, &task);
 }
 
 
