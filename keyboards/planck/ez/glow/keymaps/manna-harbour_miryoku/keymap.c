@@ -82,6 +82,9 @@ void custom_show_layer(uint8_t layer) {
     }
 }
 
+void custom_show_layer(uint8_t layer) {
+}
+
 
 // Initialization
 
