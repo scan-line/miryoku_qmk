@@ -55,12 +55,6 @@ void flash_led(void) {
 
 // Feedback
 
-void custom_eeconfig_init(void) {
-  // Turn the initial led level down from 4 to 1.
-  keyboard_config.led_level = 1;
-  eeconfig_update_kb(keyboard_config.raw);
-}
-
 void custom_show_layer(uint8_t layer) {
   planck_ez_left_led_off();
   planck_ez_right_led_off();
@@ -73,7 +67,6 @@ void custom_show_layer(uint8_t layer) {
     case U_MOUSE:
     case U_MEDIA:
       planck_ez_left_led_on();
-      flash_led();
       break;
     case U_NUM:
     case U_SYM:
@@ -87,4 +80,13 @@ void custom_show_layer(uint8_t layer) {
     default:
       break;
     }
+}
+
+
+// Initialization
+
+void custom_eeconfig_init(void) {
+  // Turn the initial led level down from 4 to 1.
+  keyboard_config.led_level = 1;
+  eeconfig_update_kb(keyboard_config.raw);
 }
