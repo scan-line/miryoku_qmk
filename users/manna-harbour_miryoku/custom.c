@@ -127,11 +127,11 @@ const uint16_t PROGMEM os_keycodes[][CLIP_END] = {
 };
 
 bool process_clipcode(clip_t clip, keyrecord_t *record) {
-  // Linux keycodes are passed through as-is.
+  // Linux keycodes are passed through as-is
   if (os_mode == OS_MODE_LNX) {
     return true;
   }
-  // Windows and Mac keycodes are translated.
+  // Windows and Mac keycodes are translated
   if (record->event.pressed) {
     register_code16(os_keycodes[os_mode][clip]);
   } else {
@@ -174,9 +174,9 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 
 // Rgb feedback
 
-// Override keys to allow feedback on keydown.
-// (A post_process_record_user implementation is simpler, but fails.)
-// (The user function is called on keyup but not on keydown following a return-false.)
+// Override keys to allow feedback on keydown
+// (A post_process_record_user implementation is simpler, but fails)
+// (The user function is called on keyup but not on keydown following a return-false)
 
 // Return true if stepped value i (qadd8, qsub8) is on target
 bool slider_on_target(uint8_t i, uint8_t target, int8_t step) {
