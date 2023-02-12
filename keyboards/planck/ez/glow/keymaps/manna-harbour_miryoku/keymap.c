@@ -11,8 +11,8 @@
 
 bool left_led_free = true;
 bool right_led_free = true;
-deferred_token flash_token = INVALID_DEFERRED_TOKEN;
 uint8_t flash_tick_count = 0;
+deferred_token flash_token = INVALID_DEFERRED_TOKEN;
 
 void left_led_on(void) {
   left_led_free = false;
