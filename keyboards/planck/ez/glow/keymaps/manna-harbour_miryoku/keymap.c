@@ -7,7 +7,7 @@
 
 // Flash leds
 
-#define FLASH_LED_TICK 300
+#define FLASH_LED_TICK 100
 
 typedef struct {
   uint8_t count;
@@ -23,7 +23,7 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *cb_arg) {
     case 2:
     case 4:
       planck_ez_right_led_on();
-      return 2*FLASH_LED_TICK;
+      return FLASH_LED_TICK;
     case 1:
     case 3:
     case 5:
