@@ -146,19 +146,28 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
 __attribute__((weak)) void custom_show_layer(uint8_t layer) {
 }
 
+__attribute__((weak)) void custom_show_default_layer(uint8_t layer) {
+}
+
 void show_layer(layer_state_t state) {
   uint8_t layer = get_highest_layer(state);
   custom_show_layer(layer);
 }
 
-layer_state_t default_layer_state_set_user(layer_state_t state) {
-  show_layer(state|layer_state);
-  PLAY_SONG(layer_set_song);
-  return state;
+void show_default_layer(layer_state_t state) {
+  uint8_t layer = get_highest_layer(state);
+  custom_show_default_layer(layer);
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
   show_layer(state|default_layer_state);
+  return state;
+}
+
+layer_state_t default_layer_state_set_user(layer_state_t state) {
+  show_default_layer(state);
+  show_layer(state|layer_state);
+  PLAY_SONG(layer_set_song);
   return state;
 }
 
