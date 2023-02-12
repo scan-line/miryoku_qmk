@@ -22,15 +22,15 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *cb_arg) {
   switch (task->count) {
     case 2:
     case 4:
-      planck_ez_left_led_on();
+      planck_ez_right_led_on();
       return 2*FLASH_LED_TICK;
     case 1:
     case 3:
     case 5:
-      planck_ez_left_led_off();
+      planck_ez_right_led_off();
       return FLASH_LED_TICK;
     default:
-      planck_ez_left_led_off();
+      planck_ez_right_led_off();
       task->running = false;
       return 0;
   }
