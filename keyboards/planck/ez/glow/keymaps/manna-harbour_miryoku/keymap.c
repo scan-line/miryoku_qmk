@@ -9,27 +9,27 @@
 
 #define FLASH_LED_TICK 100
 
-bool left_led_available = true;
-bool right_led_available = true;
+bool left_led_free = true;
+bool right_led_free = true;
 bool flash_led_running = false;
 
 void left_led_on(void) {
-  left_led_available = false;
+  left_led_free = false;
   planck_ez_left_led_on();
 }
 
 void left_led_off(void) {
-  left_led_available = true;
+  left_led_free = true;
   planck_ez_left_led_off();
 }
 
 void right_led_on(void) {
-  right_led_available = false;
+  right_led_free = false;
   planck_ez_right_led_on();
 }
 
 void right_led_off(void) {
-  right_led_available = true;
+  right_led_free = true;
   planck_ez_right_led_off();
 }
 
@@ -41,17 +41,17 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
   switch (*count) {
     case 2:
     case 4:
-      if (left_led_available)
+      if (left_led_free)
         planck_ez_left_led_on();
-      if (right_led_available)
+      if (right_led_free)
         planck_ez_right_led_on();          
       return FLASH_LED_TICK;
     case 1:
     case 3:
     case 5:
-      if (left_led_available)
+      if (left_led_free)
         planck_ez_left_led_off();
-      if (right_led_available)
+      if (right_led_free)
         planck_ez_right_led_off();          
       return FLASH_LED_TICK;
     default:
