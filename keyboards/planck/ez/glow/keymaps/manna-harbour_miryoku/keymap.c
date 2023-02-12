@@ -40,32 +40,38 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
   switch (flash_led_tick_count) {
     case 1:
     case 3:
+      // Turn on
       if (left_led_free)
         planck_ez_left_led_on();
       if (right_led_free)
         planck_ez_right_led_on();          
       return FLASH_LED_TICK;
     case 2:
-    case 4:
+      // Turn off
       if (left_led_free)
         planck_ez_left_led_off();
       if (right_led_free)
         planck_ez_right_led_off();          
       return FLASH_LED_TICK;
     default:
+      // Turn off and stop
+      if (left_led_free)
+        planck_ez_left_led_off();
+      if (right_led_free)
+        planck_ez_right_led_off();          
       flash_led_token = INVALID_DEFERRED_TOKEN;
       return 0;
   }
 }
 
 void flash_led(void) {
-  // Halt any flash in progress.
+  // Halt any flash in progress
   if (flash_led_token != INVALID_DEFERRED_TOKEN) {
     cancel_deferred_exec(flash_led_token);
     flash_led_token = INVALID_DEFERRED_TOKEN;
   }
 
-  // Start new flash.
+  // Start new flash
   flash_led_tick_count = 0;
   flash_led_token = defer_exec(FLASH_LED_TICK, flash_led_callback, NULL);
 }
@@ -112,7 +118,7 @@ void custom_show_default_layer(uint8_t layer) {
 // Initialization
 
 void custom_eeconfig_init(void) {
-  // Turn the initial led level down from 4 to 1.
+  // Turn the initial led level down from 4 to 1
   keyboard_config.led_level = 1;
   eeconfig_update_kb(keyboard_config.raw);
 }
