@@ -40,21 +40,20 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
   switch (flash_led_tick_count) {
     case 1:
     case 3:
-    case 5:
-      if (left_led_free)
-        planck_ez_left_led_off();
-      if (right_led_free)
-        planck_ez_right_led_off();          
-      return FLASH_LED_TICK;
-    case 2:
-    case 4:
       if (left_led_free)
         planck_ez_left_led_on();
       if (right_led_free)
         planck_ez_right_led_on();          
       return FLASH_LED_TICK;
+    case 2:
+    case 4:
+      if (left_led_free)
+        planck_ez_left_led_off();
+      if (right_led_free)
+        planck_ez_right_led_off();          
+      return FLASH_LED_TICK;
     default:
-      flash_token = INVALID_DEFERRED_TOKEN;
+      flash_led_token = INVALID_DEFERRED_TOKEN;
       return 0;
   }
 }
