@@ -5,21 +5,40 @@
 #include "manna-harbour_miryoku.h"
 
 
-// Flash leds
+// "Tooth" led management
 
 #define FLASH_LED_TICK 100
 
-typedef struct {
-  uint8_t count;
-  bool running;
-} flash_led_task;
+bool left_led_on = false;
+bool right_led_on = false;
+bool flash_led = false;
 
-uint32_t flash_led_callback(uint32_t trigger_time, void *cb_arg) {
-  flash_led_task* task = (flash_led_task*)cb_arg;
+void left_led_on() {
+  left_led = true;
+  planck_ez_left_led_on();
+}
+
+void left_led_off() {
+  left_led = false;
+  planck_ez_left_led_off();
+}
+
+void right_led_on(void) {
+  right_led = true;
+  planck_ez_right_led_on();
+}
+
+void right_led_off(void) {
+  right_led = false;
+  planck_ez_right_led_off();
+}
+
+uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
+  uint8_t* count = (flash_led_task*)arg;
   
-  ++task->count;
+  ++*count;
   
-  switch (task->count) {
+  switch (*count) {
     case 2:
     case 4:
       planck_ez_right_led_on();
@@ -31,58 +50,66 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *cb_arg) {
       return FLASH_LED_TICK;
     default:
       planck_ez_right_led_off();
-      task->running = false;
+      flash_led = false;
       return 0;
   }
 }
 
 void flash_led(void) {
-  static flash_led_task task = {0, false};
+  static count = 0;
   static deferred_token token = INVALID_DEFERRED_TOKEN;
 
-  // Halt any flash pattern in progress.
-  if (task.running) {
+  // Halt any flash in progress.
+  if (flash_led) {
     cancel_deferred_exec(token);
-    task.running = false;
+    flash_led = false;
   }
 
-  // Start new flash pattern.
-  task.count = 0;
-  task.running = true;
-  token = defer_exec(FLASH_LED_TICK, flash_led_callback, &task);
+  // Start new flash.
+  count = 0;
+  flash_led = true;
+  token = defer_exec(FLASH_LED_TICK, flash_led_callback, &count);
+  if (token == INVALID_DEFERRED_TOKEN) {
+    flash_led = false;
+  }
 }
 
 
 // Feedback
 
 void custom_show_layer(uint8_t layer) {
-  planck_ez_left_led_off();
-  planck_ez_right_led_off();
   switch (layer) {
     case U_BASE:
     case U_EXTRA:
     case U_TAP:
+      left_led_off();
+      right_led_off();
       break;
     case U_NAV:
     case U_MOUSE:
     case U_MEDIA:
-      planck_ez_left_led_on();
+      left_led_on();
+      right_led_off();
       break;
     case U_NUM:
     case U_SYM:
     case U_FUN:
-      planck_ez_right_led_on();
+      left_led_off();
+      right_led_on();
       break;
     case U_BUTTON:
-      planck_ez_left_led_on();
-      planck_ez_right_led_on();
+      left_led_on();
+      right_led_on();
       break;
     default:
+      left_led_off();
+      right_led_off();
       break;
     }
 }
 
 void custom_show_layer(uint8_t layer) {
+  flash_led();
 }
 
 
