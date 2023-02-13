@@ -105,7 +105,7 @@ void suspend_wakeup_init_user(void) {
 
 // Feedback
 
-void custom_show_layer(uint8_t layer) {
+void show_layer_custom(uint8_t layer) {
   switch (layer) {
     case U_BASE:
     case U_EXTRA:
@@ -136,14 +136,14 @@ void custom_show_layer(uint8_t layer) {
     }
 }
 
-void custom_show_default_layer(uint8_t layer) {
+void show_default_layer_custom(uint8_t layer) {
   flash_led();
 }
 
 
 // Initialization
 
-void custom_eeconfig_init(void) {
+void eeconfig_init_custom(void) {
   // Turn the initial led level down from 4 to 1
   keyboard_config.led_level = 1;
   eeconfig_update_kb(keyboard_config.raw);
