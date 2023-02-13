@@ -14,6 +14,28 @@
 #endif
 
 
+// Callbacks
+
+__attribute__((weak)) void custom_show_layer(uint8_t layer) {
+}
+
+__attribute__((weak)) void custom_show_default_layer(uint8_t layer) {
+}
+
+__attribute__((weak)) void custom_show_mode(uint16_t keycode) {
+}
+
+__attribute__((weak)) void custom_show_toggle(uint16_t keycode, bool set) {
+}
+
+__attribute__((weak)) void custom_show_value(uint16_t keycode, uint16_t value, bool detent) {
+}
+
+__attribute__((weak)) void custom_eeconfig_init(void) {
+}
+
+
+
 // Sounds
 
 float layer_set_song[][2] = LAYER_SET_SONG;
@@ -151,12 +173,6 @@ const char* layer_name(uint8_t layer) {
     default:
       return "Unknown";
   }
-}
-
-__attribute__((weak)) void custom_show_layer(uint8_t layer) {
-}
-
-__attribute__((weak)) void custom_show_default_layer(uint8_t layer) {
 }
 
 void show_layer(layer_state_t state) {
@@ -327,9 +343,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 
 // Initialization
-
-__attribute__((weak)) void custom_eeconfig_init(void) {
-}
 
 void eeconfig_init_user(void) {
   user_config.raw = 0;
