@@ -16,22 +16,22 @@
 
 // Callbacks
 
-__attribute__((weak)) void custom_show_mode(uint16_t keycode) {
+__attribute__((weak)) void show_mode_custom(uint16_t keycode) {
 }
 
-__attribute__((weak)) void custom_show_layer(uint8_t layer) {
+__attribute__((weak)) void show_layer_custom(uint8_t layer) {
 }
 
-__attribute__((weak)) void custom_show_default_layer(uint8_t layer) {
+__attribute__((weak)) void show_default_layer_custom(uint8_t layer) {
 }
 
-__attribute__((weak)) void custom_show_toggle(uint16_t keycode, bool set) {
+__attribute__((weak)) void show_toggle_custom(uint16_t keycode, bool set) {
 }
 
-__attribute__((weak)) void custom_show_value(uint16_t keycode, uint16_t value, bool detent) {
+__attribute__((weak)) void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
 }
 
-__attribute__((weak)) void custom_eeconfig_init(void) {
+__attribute__((weak)) void eeconfig_init_custom(void) {
 }
 
 
@@ -176,12 +176,12 @@ const char* layer_name(uint8_t layer) {
 
 void show_layer(layer_state_t state) {
   uint8_t layer = get_highest_layer(state);
-  custom_show_layer(layer);
+  show_layer_custom(layer);
 }
 
 void show_default_layer(layer_state_t state) {
   uint8_t layer = get_highest_layer(state);
-  custom_show_default_layer(layer);
+  show_default_layer_custom(layer);
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
@@ -350,7 +350,7 @@ void eeconfig_init_user(void) {
   user_config.os_mode_linux = false;
   
   eeconfig_update_user(user_config.raw);
-  custom_eeconfig_init();
+  eeconfig_init_custom();
 }
 
 void keyboard_post_init_user(void) {
