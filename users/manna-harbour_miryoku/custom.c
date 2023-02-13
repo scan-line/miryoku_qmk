@@ -174,8 +174,7 @@ const char* layer_name(uint8_t layer) {
   }
 }
 
-void show_layer(layer_state_t state) {
-  uint8_t layer = get_highest_layer(state);
+void show_layer(uint8_t layer) {
   show_layer_custom(layer);
 }
 
@@ -185,13 +184,15 @@ void show_default_layer(layer_state_t state) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-  show_layer(state|default_layer_state);
+  uint8_t layer = get_highest_layer(state|default_layer_state);
+  show_layer(layer);
   return state;
 }
 
 layer_state_t default_layer_state_set_user(layer_state_t state) {
   show_default_layer(state);
-  show_layer(state|layer_state);
+  uint8_t layer = get_highest_layer(state|default_layer_state);
+  show_layer(layer);
   PLAY_SONG(layer_set_song);
   return state;
 }
