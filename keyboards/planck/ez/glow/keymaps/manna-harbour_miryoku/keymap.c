@@ -22,7 +22,8 @@ struct {
 
 void left_led_on(void) {
   led.left_on = true;
-  planck_ez_left_led_on();
+  if (!led.suspended)
+    planck_ez_left_led_on();
 }
 
 void left_led_off(void) {
@@ -32,7 +33,8 @@ void left_led_off(void) {
 
 void right_led_on(void) {
   led.right_on = true;
-  planck_ez_right_led_on();
+  if (!led.suspended)
+    planck_ez_right_led_on();
 }
 
 void right_led_off(void) {
