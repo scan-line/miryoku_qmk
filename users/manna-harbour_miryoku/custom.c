@@ -16,13 +16,13 @@
 
 // Callbacks
 
+__attribute__((weak)) void custom_show_mode(uint16_t keycode) {
+}
+
 __attribute__((weak)) void custom_show_layer(uint8_t layer) {
 }
 
 __attribute__((weak)) void custom_show_default_layer(uint8_t layer) {
-}
-
-__attribute__((weak)) void custom_show_mode(uint16_t keycode) {
 }
 
 __attribute__((weak)) void custom_show_toggle(uint16_t keycode, bool set) {
@@ -37,8 +37,8 @@ __attribute__((weak)) void custom_eeconfig_init(void) {
 
 // Sounds
 
-float layer_set_song[][2] = LAYER_SET_SONG;
 float mode_set_song[][2] = MODE_SET_SONG;
+float layer_set_song[][2] = LAYER_SET_SONG;
 float toggle_on_song[][2] = TOGGLE_ON_SONG;
 float toggle_off_song[][2] = TOGGLE_OFF_SONG;
 float detent_song[][2] = DETENT_SONG;
