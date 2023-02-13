@@ -10,8 +10,8 @@
 #define FLASH_LED_TICK 100
 
 struct {
-  bool left_on;
-  bool right_on;
+  bool left;
+  bool right;
   bool suspended;
 } led;
 
@@ -21,31 +21,31 @@ struct {
 } led_flash = {INVALID_DEFERRED_TOKEN};
 
 void left_led_on(void) {
-  led.left_on = true;
+  led.left = true;
   if (!led.suspended)
     planck_ez_left_led_on();
 }
 
 void left_led_off(void) {
-  led.left_on = false;
+  led.left = false;
   planck_ez_left_led_off();
 }
 
 void right_led_on(void) {
-  led.right_on = true;
+  led.right = true;
   if (!led.suspended)
     planck_ez_right_led_on();
 }
 
 void right_led_off(void) {
-  led.right_on = false;
+  led.right = false;
   planck_ez_right_led_off();
 }
 
 uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
   // Flash unused leds
-  bool flash_left = !led.left_on;
-  bool flash_right = !led.right_on;
+  bool flash_left = !led.left;
+  bool flash_right = !led.right;
   
   ++led_flash.tick;
   switch (led_flash.tick) {
@@ -96,9 +96,9 @@ void suspend_power_down_user(void) {
 
 void suspend_wakeup_init_user(void) {
   led.suspended = false;
-  if (led.left_on)
+  if (led.left)
     planck_ez_left_led_on();
-  if (led.right_on)
+  if (led.right)
     planck_ez_right_led_on();
 }
 
