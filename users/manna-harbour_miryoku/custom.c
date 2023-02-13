@@ -179,7 +179,7 @@ void show_layer(uint8_t layer) {
 }
 
 void show_default_layer(layer_state_t state) {
-  uint8_t layer = get_highest_layer(state);
+  PLAY_SONG(layer_set_song);
   show_default_layer_custom(layer);
 }
 
@@ -190,10 +190,10 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 layer_state_t default_layer_state_set_user(layer_state_t state) {
-  show_default_layer(state);
+  uint8_t default_layer = get_highest_layer(state);
+  show_default_layer(default_layer);
   uint8_t layer = get_highest_layer(state|default_layer_state);
   show_layer(layer);
-  PLAY_SONG(layer_set_song);
   return state;
 }
 
