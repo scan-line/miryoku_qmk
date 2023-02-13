@@ -113,8 +113,8 @@ bool process_os_mode(uint16_t keycode, os_mode_t mode, keyrecord_t *record) {
     } else {
       process_magic(MAGIC_UNSWAP_CTL_GUI, record);
     }
-
-    PLAY_SONG(mode_set_song);
+    
+    show_mode(keycode);
   }
   return false;
 }
