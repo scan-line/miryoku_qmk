@@ -143,7 +143,7 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
 
 // Layer feedback
 
-layer_name(uint8_t layer) {
+const char* layer_name(uint8_t layer) {
   switch(layer) {
 #   define MIRYOKU_X(LAYER, STRING) case U_##LAYER: return STRING;
       MIRYOKU_LAYER_LIST
