@@ -38,8 +38,8 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Sound design
 
-#define LAYER_SET_SONG SONG(AG_SWAP_SOUND)
 #define MODE_SET_SONG SONG(AG_NORM_SOUND)
+#define LAYER_SET_SONG SONG(AG_SWAP_SOUND)
 #define TOGGLE_ON_SONG SONG(AUDIO_ON_SOUND)
 #define TOGGLE_OFF_SONG SONG(AUDIO_OFF_SOUND)
 #define DETENT_SONG SONG(Q__NOTE(_A4),)
