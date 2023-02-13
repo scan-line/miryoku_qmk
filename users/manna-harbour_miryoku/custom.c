@@ -96,7 +96,12 @@ os_mode_t os_mode_get(void) {
   }
 }
 
-bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
+show_mode(uint16_t keycode) {
+  PLAY_SONG(mode_set_song);
+  show_mode_custom(keycode);
+}
+
+bool process_os_mode(uint16_t keycode, os_mode_t mode, keyrecord_t *record) {
   if (record->event.pressed) {
     os_mode = mode;
   
@@ -309,11 +314,11 @@ bool process_rgb_speed(keyrecord_t *record) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case U_WIN:
-      return process_os_mode(OS_MODE_WIN, record);
+      return process_os_mode(keycode, OS_MODE_WIN, record);
     case U_MAC:
-      return process_os_mode(OS_MODE_MAC, record);
+      return process_os_mode(keycode, OS_MODE_MAC, record);
     case U_LNX:
-      return process_os_mode(OS_MODE_LNX, record);
+      return process_os_mode(keycode, OS_MODE_LNX, record);
     case U_CUT:
       return process_clipcode(CLIP_CUT, record);
     case U_CPY:
