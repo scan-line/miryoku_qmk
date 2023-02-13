@@ -9,71 +9,95 @@
 
 #define FLASH_LED_TICK 100
 
-bool left_led_free = true;
-bool right_led_free = true;
-uint8_t flash_led_tick_count = 0;
-deferred_token flash_led_token = INVALID_DEFERRED_TOKEN;
+struct {
+  bool left_on;
+  bool right_on;
+  bool suspended;
+} led;
+
+struct {
+  deferred_token token = INVALID_DEFERRED_TOKEN;
+  uint8_t tick;
+} led_flash = {INVALID_DEFERRED_TOKEN};
 
 void left_led_on(void) {
-  left_led_free = false;
+  led.left_on = true;
   planck_ez_left_led_on();
 }
 
 void left_led_off(void) {
-  left_led_free = true;
+  led.left_on = false;
   planck_ez_left_led_off();
 }
 
 void right_led_on(void) {
-  right_led_free = false;
+  led.right_on = true;
   planck_ez_right_led_on();
 }
 
 void right_led_off(void) {
-  right_led_free = true;
+  led.right_on = false;
   planck_ez_right_led_off();
 }
 
 uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
-  ++flash_led_tick_count;
+  // Flash unused leds
+  bool flash_left = !led.left_on;
+  bool flash_right = !led.right_on;
   
-  switch (flash_led_tick_count) {
+  ++led_flash.tick;
+  switch (led_flash.tick) {
     case 1:
     case 3:
       // Turn on
-      if (left_led_free)
+      if (flash_left)
         planck_ez_left_led_on();
-      if (right_led_free)
+      if (flash_right)
         planck_ez_right_led_on();          
       return FLASH_LED_TICK;
     case 2:
       // Turn off
-      if (left_led_free)
+      if (flash_left)
         planck_ez_left_led_off();
-      if (right_led_free)
+      if (flash_right)
         planck_ez_right_led_off();          
       return FLASH_LED_TICK;
     default:
       // Turn off and stop
-      if (left_led_free)
+      if (flash_left || led.suspended)
         planck_ez_left_led_off();
-      if (right_led_free)
+      if (flash_right || led.suspended)
         planck_ez_right_led_off();          
-      flash_led_token = INVALID_DEFERRED_TOKEN;
+      led_flash.token = INVALID_DEFERRED_TOKEN;
       return 0;
   }
 }
 
 void flash_led(void) {
   // Halt any flash in progress
-  if (flash_led_token != INVALID_DEFERRED_TOKEN) {
-    cancel_deferred_exec(flash_led_token);
-    flash_led_token = INVALID_DEFERRED_TOKEN;
+  if (led_flash.token != INVALID_DEFERRED_TOKEN) {
+    cancel_deferred_exec(led_flash.token);
+    led_flash.token = INVALID_DEFERRED_TOKEN;
   }
 
   // Start new flash
-  flash_led_tick_count = 0;
-  flash_led_token = defer_exec(FLASH_LED_TICK, flash_led_callback, NULL);
+  led_flash.tick = 0;
+  led_flash.token = defer_exec(FLASH_LED_TICK, flash_led_callback, NULL);
+}
+
+void suspend_power_down_user(void) {
+  // May be run multiple times on suspend
+  led.suspended = true;
+  planck_ez_left_led_off();
+  planck_ez_right_led_off();
+}
+
+void suspend_wakeup_init_user(void) {
+  led.suspended = false;
+  if (led.left_on)
+    planck_ez_left_led_on();
+  if (led.right_on)
+    planck_ez_right_led_on();
 }
 
 
