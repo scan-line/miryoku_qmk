@@ -35,7 +35,6 @@ __attribute__((weak)) void custom_eeconfig_init(void) {
 }
 
 
-
 // Sounds
 
 float layer_set_song[][2] = LAYER_SET_SONG;
