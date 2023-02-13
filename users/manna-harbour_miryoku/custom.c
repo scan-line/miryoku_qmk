@@ -96,7 +96,7 @@ os_mode_t os_mode_get(void) {
   }
 }
 
-show_mode(uint16_t keycode) {
+void show_mode(uint16_t keycode) {
   PLAY_SONG(mode_set_song);
   show_mode_custom(keycode);
 }
@@ -183,7 +183,7 @@ void show_layer(uint8_t layer) {
   show_layer_custom(layer);
 }
 
-void show_default_layer(layer_state_t state) {
+void show_default_layer(uint8_t layer) {
   PLAY_SONG(layer_set_song);
   show_default_layer_custom(layer);
 }
@@ -197,7 +197,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 layer_state_t default_layer_state_set_user(layer_state_t state) {
   uint8_t default_layer = get_highest_layer(state);
   show_default_layer(default_layer);
-  uint8_t layer = get_highest_layer(state|default_layer_state);
+  uint8_t layer = get_highest_layer(state|layer_state);
   show_layer(layer);
   return state;
 }
