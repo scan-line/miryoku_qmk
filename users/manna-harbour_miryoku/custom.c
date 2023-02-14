@@ -320,6 +320,23 @@ bool process_rgb_speed(keyrecord_t *record) {
 }
 
 
+// Audio
+
+bool process_aud_toggle(keyrecord_t *record) {
+  if (!record->event.pressed)
+      return true;
+  
+    if (is_audio_on()) {
+        show_toggle(QK_AUDIO_TOGGLE, false);
+        audio_off();
+    } else {
+        audio_on();
+        show_toggle(QK_AUDIO_TOGGLE, true);
+    }
+  return false;
+}
+
+
 // Key processing
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -352,6 +369,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return process_rgb_val(record);
     case U_RGB_SPI:
       return process_rgb_speed(record);
+    case U_AUD_TOG:
+      return process_aud_toggle(record);
     default:
       return true;
   }
