@@ -231,14 +231,14 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 // (A post_process_record_user implementation is simpler, but fails)
 // (The user function is called on keyup but not on keydown following a return-false)
 
-// Return true if stepped value i (qadd8, qsub8) is on target
-bool slider_on_target(uint8_t i, uint8_t target, int8_t step) {
-  uint8_t lower = target - (step / 2);
+// Return true if stepped value i (qadd8, qsub8) is on detent
+bool slider_on_detent(uint8_t i, uint8_t detent, int8_t step) {
+  uint8_t lower = detent - (step / 2);
   uint8_t upper = lower + step - 1;
   // Wrap around? Floor at 0
-  if (lower > target) lower = 0;
+  if (lower > detent) lower = 0;
   // Wrap around? Cap at 0xFF
-  if (upper < target) upper = 255;
+  if (upper < detent) upper = 255;
   return (lower <= i && i <= upper);
 }
 
@@ -299,7 +299,7 @@ bool process_rgb_sat(keyrecord_t *record) {
     rgb_matrix_decrease_sat();
   
   uint8_t sat = rgb_matrix_get_sat();
-  bool detent = slider_on_target(sat, RGB_MATRIX_DEFAULT_SAT, RGB_MATRIX_SAT_STEP);
+  bool detent = slider_on_detent(sat, RGB_MATRIX_DEFAULT_SAT, RGB_MATRIX_SAT_STEP);
   show_value(RGB_SAI, sat, detent);
   return false;
 }
@@ -315,7 +315,7 @@ bool process_rgb_val(keyrecord_t *record) {
     rgb_matrix_decrease_val();
   
   uint8_t val = rgb_matrix_get_val();
-  bool detent = slider_on_target(val, RGB_MATRIX_DEFAULT_VAL, RGB_MATRIX_VAL_STEP);
+  bool detent = slider_on_detent(val, RGB_MATRIX_DEFAULT_VAL, RGB_MATRIX_VAL_STEP);
   show_value(RGB_VAI, val, detent);
   return false;
 }
@@ -331,7 +331,7 @@ bool process_rgb_speed(keyrecord_t *record) {
     rgb_matrix_decrease_speed();
   
   uint8_t spd = rgb_matrix_get_speed();
-  bool detent = slider_on_target(spd, RGB_MATRIX_DEFAULT_SPD, RGB_MATRIX_SPD_STEP);
+  bool detent = slider_on_detent(spd, RGB_MATRIX_DEFAULT_SPD, RGB_MATRIX_SPD_STEP);
   show_value(RGB_SPI, spd, detent);
   return false;
 }
