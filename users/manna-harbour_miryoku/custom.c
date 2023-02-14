@@ -230,11 +230,7 @@ bool process_rgb_toggle(keyrecord_t *record) {
       return true;
   
   rgb_matrix_toggle();
-  
-  if (rgb_matrix_is_enabled())
-    PLAY_SONG(toggle_on_song);
-  else
-    PLAY_SONG(toggle_off_song);
+  show_toggle(RGB_TOG, rgb_matrix_is_enabled());
   return false;
 }
 
