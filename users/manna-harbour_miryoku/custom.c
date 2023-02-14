@@ -344,7 +344,7 @@ bool process_audio_toggle(keyrecord_t *record) {
     return false;
   
   // Show toggle in the on state
-  if (is_audio_on()) {
+  if (audio_is_on()) {
       show_toggle(QK_AUDIO_TOGGLE, false);
       audio_off();
   } else {
