@@ -121,29 +121,31 @@ os_mode_t os_mode_get(void) {
 }
 
 bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
-  if (record->event.pressed) {
-    os_mode = mode;
+  if (!record->event.pressed)
+    return false;
   
-    user_config.os_mode_linux = (mode == OS_MODE_LNX);
-    eeconfig_update_user(user_config.raw);
+  os_mode = mode;
   
-    if (mode == OS_MODE_MAC)
-      process_magic(MAGIC_SWAP_CTL_GUI, record);
-    else
-      process_magic(MAGIC_UNSWAP_CTL_GUI, record);
-    
-    switch(mode) {
-      case OS_MODE_WIN:
-        show_mode(U_WIN);
-        break;
-      case OS_MODE_MAC:
-        show_mode(U_MAC);
-        break;
-      case OS_MODE_LNX:
-        show_mode(U_LNX);
-        break;
-      default:
-        break;
+  user_config.os_mode_linux = (mode == OS_MODE_LNX);
+  eeconfig_update_user(user_config.raw);
+  
+  if (mode == OS_MODE_MAC)
+    process_magic(MAGIC_SWAP_CTL_GUI, record);
+  else
+    process_magic(MAGIC_UNSWAP_CTL_GUI, record);
+  
+  switch(mode) {
+    case OS_MODE_WIN:
+      show_mode(U_WIN);
+      break;
+    case OS_MODE_MAC:
+      show_mode(U_MAC);
+      break;
+    case OS_MODE_LNX:
+      show_mode(U_LNX);
+      break;
+    default:
+      break;
   }
   return false;
 }
@@ -241,7 +243,7 @@ bool slider_on_detent(uint8_t i, uint8_t detent, int8_t step) {
 
 bool process_rgb_toggle(keyrecord_t *record) {
   if (!record->event.pressed)
-      return true;
+    return false;
   
   if (rgb_matrix_is_enabled()) {
     show_toggle(RGB_TOG, false);
@@ -255,7 +257,7 @@ bool process_rgb_toggle(keyrecord_t *record) {
 
 bool process_rgb_mode(keyrecord_t *record) {
   if (!record->event.pressed)
-      return true;
+    return false;
   
   uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
   if (!shifted)
@@ -271,7 +273,7 @@ bool process_rgb_mode(keyrecord_t *record) {
 
 bool process_rgb_hue(keyrecord_t *record) {
   if (!record->event.pressed)
-      return true;
+    return false;
   
   uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
   if (!shifted)
@@ -287,7 +289,7 @@ bool process_rgb_hue(keyrecord_t *record) {
 
 bool process_rgb_sat(keyrecord_t *record) {
   if (!record->event.pressed)
-      return true;
+    return false;
   
   uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
   if (!shifted)
@@ -303,7 +305,7 @@ bool process_rgb_sat(keyrecord_t *record) {
 
 bool process_rgb_val(keyrecord_t *record) {
   if (!record->event.pressed)
-      return true;
+    return false;
   
   uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
   if (!shifted)
@@ -319,7 +321,7 @@ bool process_rgb_val(keyrecord_t *record) {
 
 bool process_rgb_speed(keyrecord_t *record) {
   if (!record->event.pressed)
-      return true;
+    return false;
   
   uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
   if (!shifted)
@@ -338,7 +340,7 @@ bool process_rgb_speed(keyrecord_t *record) {
 
 bool process_aud_toggle(keyrecord_t *record) {
   if (!record->event.pressed)
-      return true;
+    return false;
   
     if (is_audio_on()) {
         show_toggle(QK_AUDIO_TOGGLE, false);
