@@ -48,13 +48,18 @@ void show_default_layer(uint8_t layer) {
   show_default_layer_custom(layer);
 }
 
-__attribute__((weak)) void show_toggle_custom(uint16_t keycode, bool set) {
+__attribute__((weak)) void show_toggle_custom(uint16_t keycode, bool value) {
+}
+
+void show_toggle(uint16_t keycode, bool value) {
+  if (value)
+    PLAY_SONG(toggle_on_song);
+  else
+    PLAY_SONG(toggle_off_song);
+  show_toggle_custom(keycode, value);
 }
 
 __attribute__((weak)) void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
-}
-
-__attribute__((weak)) void eeconfig_init_custom(void) {
 }
 
 
@@ -348,6 +353,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 
 // Initialization
+
+__attribute__((weak)) void eeconfig_init_custom(void) {
+}
 
 void eeconfig_init_user(void) {
   user_config.raw = 0;
