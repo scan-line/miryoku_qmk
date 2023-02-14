@@ -62,6 +62,13 @@ void show_toggle(uint16_t keycode, bool value) {
 __attribute__((weak)) void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
 }
 
+void show_value(uint16_t keycode, uint16_t value, bool detent) {
+  if (detent) {
+    PLAY_SONG(detent_song);
+  }
+  show_value_custom(keycode, value, detent);
+}
+
 
 // Persistent user state
 
@@ -259,8 +266,9 @@ bool process_rgb_mode(keyrecord_t *record) {
   else
     rgb_matrix_step_reverse();
   
-  if (rgb_matrix_get_mode() == RGB_MATRIX_DEFAULT_MODE)
-    PLAY_SONG(detent_song);
+  uint8_t mode = rgb_matrix_get_mode();
+  bool detent = (mode == RGB_MATRIX_DEFAULT_MODE);
+  show_value(RGB_MOD, mode, detent);
   return false;
 }
 
@@ -274,8 +282,9 @@ bool process_rgb_hue(keyrecord_t *record) {
   else
     rgb_matrix_decrease_hue();
   
-  if (rgb_matrix_get_hue() == RGB_MATRIX_DEFAULT_HUE)
-    PLAY_SONG(detent_song);
+  uint8_t hue = rgb_matrix_get_hue();
+  bool detent = (hue == RGB_MATRIX_DEFAULT_HUE);
+  show_value(RGB_HUI, hue, detent);
   return false;
 }
 
@@ -289,8 +298,9 @@ bool process_rgb_sat(keyrecord_t *record) {
   else
     rgb_matrix_decrease_sat();
   
-  if (slider_on_target(rgb_matrix_get_sat(), RGB_MATRIX_DEFAULT_SAT, RGB_MATRIX_SAT_STEP))
-    PLAY_SONG(detent_song);
+  uint8_t sat = rgb_matrix_get_sat();
+  bool detent = slider_on_target(sat, RGB_MATRIX_DEFAULT_SAT, RGB_MATRIX_SAT_STEP);
+  show_value(RGB_SAI, sat, detent);
   return false;
 }
 
@@ -304,8 +314,9 @@ bool process_rgb_val(keyrecord_t *record) {
   else
     rgb_matrix_decrease_val();
   
-  if (slider_on_target(rgb_matrix_get_val(), RGB_MATRIX_DEFAULT_VAL, RGB_MATRIX_VAL_STEP))
-    PLAY_SONG(detent_song);
+  uint8_t val = rgb_matrix_get_val();
+  bool detent = slider_on_target(val, RGB_MATRIX_DEFAULT_VAL, RGB_MATRIX_VAL_STEP);
+  show_value(RGB_VAI, val, detent);
   return false;
 }
 
@@ -319,8 +330,9 @@ bool process_rgb_speed(keyrecord_t *record) {
   else
     rgb_matrix_decrease_speed();
   
-  if (slider_on_target(rgb_matrix_get_speed(), RGB_MATRIX_DEFAULT_SPD, RGB_MATRIX_SPD_STEP))
-    PLAY_SONG(detent_song);
+  uint8_t spd = rgb_matrix_get_speed();
+  bool detent = slider_on_target(spd, RGB_MATRIX_DEFAULT_SPD, RGB_MATRIX_SPD_STEP);
+  show_value(RGB_SPI, spd, detent);
   return false;
 }
 
