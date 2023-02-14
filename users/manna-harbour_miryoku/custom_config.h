@@ -19,13 +19,14 @@
 #define U_RGB_SAI PB_7
 #define U_RGB_VAI PB_8
 #define U_RGB_SPI PB_9
+#define U_AUD_TOG PB_10
 
 
 // Layers
 
 #define MIRYOKU_LAYER_MEDIA \
 TD(U_TD_BOOT),     TD(U_TD_U_TAP),    TD(U_TD_U_EXTRA),  TD(U_TD_U_BASE),   U_NA,              U_RGB_TOG,         U_RGB_MOD,         U_RGB_HUI,         U_RGB_SAI,         U_RGB_VAI,         \
-KC_LGUI,           KC_LALT,           KC_LCTL,           KC_LSFT,           U_NA,              AU_TOGG,           KC_MPRV,           KC_VOLD,           KC_VOLU,           KC_MNXT,           \
+KC_LGUI,           KC_LALT,           KC_LCTL,           KC_LSFT,           U_NA,              U_AUD_TOG          KC_MPRV,           KC_VOLD,           KC_VOLU,           KC_MNXT,           \
 U_NA,              KC_ALGR,           TD(U_TD_U_FUN),    TD(U_TD_U_MEDIA),  U_NA,              OU_AUTO,           U_WIN,             U_MAC,             U_LNX,             U_RGB_SPI,         \
 U_NP,              U_NP,              U_NA,              U_NA,              U_NA,              KC_MSTP,           KC_MPLY,           KC_MUTE,           U_NP,              U_NP
 
@@ -46,8 +47,8 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 #define AUDIO_INIT_DELAY
 
-#define AUDIO_ON_SONG TOGGLE_ON_SONG
-#define AUDIO_OFF_SONG TOGGLE_OFF_SONG
+#define AUDIO_ON_SONG SONG(NO_SOUND)
+#define AUDIO_OFF_SONG SONG(NO_SOUND)
 #define CG_NORM_SONG SONG(NO_SOUND)
 #define CG_SWAP_SONG SONG(NO_SOUND)
 
