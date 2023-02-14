@@ -14,15 +14,29 @@
 #endif
 
 
-// Callbacks
+// Feedback
 
 __attribute__((weak)) void show_mode_custom(uint16_t keycode) {
+}
+
+void show_mode(uint16_t keycode) {
+  PLAY_SONG(mode_set_song);
+  show_mode_custom(keycode);
 }
 
 __attribute__((weak)) void show_layer_custom(uint8_t layer) {
 }
 
+void show_layer(uint8_t layer) {
+  show_layer_custom(layer);
+}
+
 __attribute__((weak)) void show_default_layer_custom(uint8_t layer) {
+}
+
+void show_default_layer(uint8_t layer) {
+  PLAY_SONG(layer_set_song);
+  show_default_layer_custom(layer);
 }
 
 __attribute__((weak)) void show_toggle_custom(uint16_t keycode, bool set) {
@@ -96,11 +110,6 @@ os_mode_t os_mode_get(void) {
   }
 }
 
-void show_mode(uint16_t keycode) {
-  PLAY_SONG(mode_set_song);
-  show_mode_custom(keycode);
-}
-
 bool process_os_mode(uint16_t keycode, os_mode_t mode, keyrecord_t *record) {
   if (record->event.pressed) {
     os_mode = mode;
@@ -167,7 +176,7 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
 }
 
 
-// Layer feedback
+// Layers
 
 const char* layer_name(uint8_t layer) {
   switch(layer) {
@@ -177,15 +186,6 @@ const char* layer_name(uint8_t layer) {
     default:
       return "Unknown";
   }
-}
-
-void show_layer(uint8_t layer) {
-  show_layer_custom(layer);
-}
-
-void show_default_layer(uint8_t layer) {
-  PLAY_SONG(layer_set_song);
-  show_default_layer_custom(layer);
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
@@ -203,7 +203,7 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 }
 
 
-// Rgb feedback
+// Rgb
 
 // Override keys to allow feedback on keydown
 // (A post_process_record_user implementation is simpler, but fails)
@@ -309,7 +309,7 @@ bool process_rgb_speed(keyrecord_t *record) {
 }
 
 
-// Custom key processing
+// Key processing
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
