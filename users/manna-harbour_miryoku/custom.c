@@ -143,6 +143,7 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
         show_mode(U_LNX);
         break;
       default:
+        break;
   }
   return false;
 }
