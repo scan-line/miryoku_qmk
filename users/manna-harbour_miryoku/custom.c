@@ -63,9 +63,8 @@ __attribute__((weak)) void show_value_custom(uint16_t keycode, uint16_t value, b
 }
 
 void show_value(uint16_t keycode, uint16_t value, bool detent) {
-  if (detent) {
+  if (detent)
     PLAY_SONG(detent_song);
-  }
   show_value_custom(keycode, value, detent);
 }
 
@@ -113,13 +112,12 @@ typedef enum {
 os_mode_t os_mode = OS_MODE_WIN;
 
 os_mode_t os_mode_get(void) {
-  if (user_config.os_mode_linux) {
+  if (user_config.os_mode_linux)
     return OS_MODE_LNX;
-  } else if (keymap_config.swap_lctl_lgui) {
+  else if (keymap_config.swap_lctl_lgui)
     return OS_MODE_MAC;
-  } else {
+  else
     return OS_MODE_WIN;
-  }
 }
 
 bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
@@ -129,11 +127,10 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
     user_config.os_mode_linux = (mode == OS_MODE_LNX);
     eeconfig_update_user(user_config.raw);
   
-    if (mode == OS_MODE_MAC) {
+    if (mode == OS_MODE_MAC)
       process_magic(MAGIC_SWAP_CTL_GUI, record);
-    } else {
+    else
       process_magic(MAGIC_UNSWAP_CTL_GUI, record);
-    }
     
     switch(mode) {
       case OS_MODE_WIN:
@@ -185,15 +182,14 @@ const uint16_t PROGMEM os_keycodes[][CLIP_END] = {
 
 bool process_clipcode(clip_t clip, keyrecord_t *record) {
   // Linux keycodes are passed through as-is
-  if (os_mode == OS_MODE_LNX) {
+  if (os_mode == OS_MODE_LNX)
     return true;
-  }
+
   // Windows and Mac keycodes are translated
-  if (record->event.pressed) {
+  if (record->event.pressed)
     register_code16(os_keycodes[os_mode][clip]);
-  } else {
+  else
     unregister_code16(os_keycodes[os_mode][clip]);
-  }
   return false;
 }
 
