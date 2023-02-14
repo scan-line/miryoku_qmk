@@ -245,6 +245,7 @@ bool process_rgb_toggle(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
   
+  // Show toggle in the on state
   if (rgb_matrix_is_enabled()) {
     show_toggle(RGB_TOG, false);
     rgb_matrix_disable();
@@ -338,17 +339,18 @@ bool process_rgb_speed(keyrecord_t *record) {
 
 // Audio
 
-bool process_aud_toggle(keyrecord_t *record) {
+bool process_audio_toggle(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
   
-    if (is_audio_on()) {
-        show_toggle(QK_AUDIO_TOGGLE, false);
-        audio_off();
-    } else {
-        audio_on();
-        show_toggle(QK_AUDIO_TOGGLE, true);
-    }
+  // Show toggle in the on state
+  if (is_audio_on()) {
+      show_toggle(QK_AUDIO_TOGGLE, false);
+      audio_off();
+  } else {
+      audio_on();
+      show_toggle(QK_AUDIO_TOGGLE, true);
+  }
   return false;
 }
 
@@ -386,7 +388,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case U_RGB_SPI:
       return process_rgb_speed(record);
     case U_AUD_TOG:
-      return process_aud_toggle(record);
+      return process_audio_toggle(record);
     default:
       return true;
   }
