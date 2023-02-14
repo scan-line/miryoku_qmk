@@ -346,7 +346,8 @@ bool process_audio_toggle(keyrecord_t *record) {
   // Show toggle in the on state
   if (audio_is_on()) {
       show_toggle(QK_AUDIO_TOGGLE, false);
-      // Turn audio off after the sound has finished
+      // Wait for the show_toggle sound to finish
+      // (the wait inside audio_off is not enough)
       wait_ms(100);
       audio_off();
   } else {
