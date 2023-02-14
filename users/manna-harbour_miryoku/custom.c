@@ -14,6 +14,15 @@
 #endif
 
 
+// Sounds
+
+float mode_set_song[][2] = MODE_SET_SONG;
+float layer_set_song[][2] = LAYER_SET_SONG;
+float toggle_on_song[][2] = TOGGLE_ON_SONG;
+float toggle_off_song[][2] = TOGGLE_OFF_SONG;
+float detent_song[][2] = DETENT_SONG;
+
+
 // Feedback
 
 __attribute__((weak)) void show_mode_custom(uint16_t keycode) {
@@ -47,15 +56,6 @@ __attribute__((weak)) void show_value_custom(uint16_t keycode, uint16_t value, b
 
 __attribute__((weak)) void eeconfig_init_custom(void) {
 }
-
-
-// Sounds
-
-float mode_set_song[][2] = MODE_SET_SONG;
-float layer_set_song[][2] = LAYER_SET_SONG;
-float toggle_on_song[][2] = TOGGLE_ON_SONG;
-float toggle_off_song[][2] = TOGGLE_OFF_SONG;
-float detent_song[][2] = DETENT_SONG;
 
 
 // Persistent user state
