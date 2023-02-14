@@ -239,8 +239,13 @@ bool process_rgb_toggle(keyrecord_t *record) {
   if (!record->event.pressed)
       return true;
   
-  rgb_matrix_toggle();
-  show_toggle(RGB_TOG, rgb_matrix_is_enabled());
+  if (rgb_matrix_is_enabled()) {
+    show_toggle(RGB_TOG, false);
+    rgb_matrix_disable();
+  } else {
+    rgb_matrix_enable();
+    show_toggle(RGB_TOG, true);
+  }
   return false;
 }
 
