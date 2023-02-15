@@ -17,7 +17,7 @@ struct {
 
 struct {
   deferred_token token;
-  uint8_t* pattern;
+  const uint8_t* pattern;
   bool on;
 } led_flash = {INVALID_DEFERRED_TOKEN};
 
