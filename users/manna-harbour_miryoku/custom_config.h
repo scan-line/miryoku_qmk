@@ -39,6 +39,8 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Sound design
 
+#ifdef AUDIO_ENABLE
+
 #define MODE_SET_SONG SONG(AG_NORM_SOUND)
 #define LAYER_SET_SONG SONG(AG_SWAP_SOUND)
 #define TOGGLE_ON_SONG SONG(AUDIO_ON_SOUND)
@@ -51,6 +53,8 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #define AUDIO_OFF_SONG SONG(NO_SOUND)
 #define CG_NORM_SONG SONG(NO_SOUND)
 #define CG_SWAP_SONG SONG(NO_SOUND)
+
+#endif
 
 
 // Lighting design
