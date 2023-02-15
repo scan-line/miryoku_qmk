@@ -7,7 +7,7 @@
 
 // "Tooth" led management
 
-#define FLASH_LED_TICK 50
+#define FLASH_LED_TICK 100
 
 struct {
   bool left;
@@ -115,9 +115,9 @@ void suspend_wakeup_init_user(void) {
 // Feedback
 
 // On/off timings - must end in 0
-const uint8_t mode_flash[] = {20, 0};
-const uint8_t default_layer_flash[] = {2, 2, 2, 0};
-const uint8_t toggle_on_flash[] = {20, 0};
+const uint8_t mode_flash[] = {10, 0};
+const uint8_t default_layer_flash[] = {1, 1, 1, 0};
+const uint8_t toggle_on_flash[] = {10, 0};
 const uint8_t toggle_off_flash[] = {0};
 const uint8_t detent_flash[] = {1, 0};
 
