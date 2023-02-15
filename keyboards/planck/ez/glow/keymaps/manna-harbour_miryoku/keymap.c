@@ -48,7 +48,7 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
   bool flash_left = !led.left;
   bool flash_right = !led.right;
   
-  uint_t duration = *led_flash.pattern;
+  uint8_t duration = *led_flash.pattern * FLASH_LED_TICK;
   if (duration == 0) {
     // End of array
     // Turn off and stop
@@ -57,7 +57,7 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
     if (flash_right || led.suspended)
       planck_ez_right_led_off();          
     led_flash.token = INVALID_DEFERRED_TOKEN;
-    return 0;
+    return duration;
   }
 
   if (led_flash.on) {
@@ -76,8 +76,8 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
   
   // Next state
   led_flash.on = !led_flash.on;
-  ++led_flash.duration;
-  return duration * FLASH_LED_TICK;
+  ++led_flash.pattern;
+  return duration;
 }
 
 void flash_led(const uint8_t* pattern) {
@@ -93,7 +93,6 @@ void flash_led(const uint8_t* pattern) {
   led_flash.token = defer_exec(FLASH_LED_TICK, flash_led_callback, NULL);
 }
 
-flash_led(double_blink);
 void suspend_power_down_user(void) {
   // May be run multiple times on suspend
   led.suspended = true;
