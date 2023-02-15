@@ -59,6 +59,8 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Lighting design
 
+#ifdef RGB_MATRIX_ENABLE
+
 #define RGBLIGHT_DISABLE_KEYCODES
 #define RGB_MATRIX_DISABLE_KEYCODES
 
@@ -118,3 +120,5 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 // #undef ENABLE_RGB_MATRIX_MULTISPLASH
 #undef ENABLE_RGB_MATRIX_SOLID_SPLASH
 #undef ENABLE_RGB_MATRIX_SOLID_MULTISPLASH
+
+#endif
