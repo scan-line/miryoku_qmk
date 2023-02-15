@@ -16,10 +16,10 @@ struct {
 } led;
 
 struct {
-  deferred_token token;
   const uint8_t* pattern;
   bool on;
-} led_flash = {INVALID_DEFERRED_TOKEN};
+  bool done;
+} led_flash;
 
 void left_led_on(void) {
   led.left = true;
@@ -56,7 +56,7 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
       planck_ez_left_led_off();
     if (flash_right || led.suspended)
       planck_ez_right_led_off();          
-    led_flash.token = INVALID_DEFERRED_TOKEN;
+    led_flash.done = true;
     return duration;
   }
 
@@ -81,16 +81,19 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
 }
 
 void flash_led(const uint8_t* pattern) {
+  static deferred_token token = INVALID_DEFERRED_TOKEN;
+
   // Halt any flash in progress
-  if (led_flash.token != INVALID_DEFERRED_TOKEN) {
-    cancel_deferred_exec(led_flash.token);
-    led_flash.token = INVALID_DEFERRED_TOKEN;
+  if (!led_flash.done) {
+    cancel_deferred_exec(token);
+    token = INVALID_DEFERRED_TOKEN;
   }
 
   // Start new flash
   led_flash.pattern = pattern;
   led_flash.on = true;
-  led_flash.token = defer_exec(FLASH_LED_TICK, flash_led_callback, NULL);
+  led_flash.done = false;
+  token = defer_exec(FLASH_LED_TICK, flash_led_callback, NULL);
 }
 
 void suspend_power_down_user(void) {
