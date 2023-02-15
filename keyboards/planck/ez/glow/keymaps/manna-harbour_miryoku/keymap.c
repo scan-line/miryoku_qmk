@@ -112,8 +112,16 @@ void suspend_wakeup_init_user(void) {
 
 // Feedback
 
-const uint8_t double_flash[] = {1, 1, 1, 0};
-const uint8_t long_flash[] = {3, 0};
+// On/off timings - must end in 0
+const uint8_t mode_flash[] = {3, 0};
+const uint8_t default_layer_flash[] = {1, 1, 1, 0};
+const uint8_t toggle_on_flash[] = {1, 1, 2, 0};
+const uint8_t toggle_off_flash[] = {2, 1, 1, 0};
+const uint8_t detent_flash[] = {1, 0};
+
+void show_mode_custom(uint16_t keycode) {
+  flash_led(mode_flash);
+}
 
 void show_layer_custom(uint8_t layer) {
   switch (layer) {
@@ -147,7 +155,19 @@ void show_layer_custom(uint8_t layer) {
 }
 
 void show_default_layer_custom(uint8_t layer) {
-  flash_led(double_flash);
+  flash_led(default_layer_flash);
+}
+
+void show_toggle_custom(uint16_t keycode, bool value) {
+  if (value)
+    flash_led(toggle_on_flash);
+  else
+    flash_led(toggle_off_flash);
+}
+
+void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
+  if (detent)
+    flash_led(detent_flash);
 }
 
 
