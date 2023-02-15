@@ -16,11 +16,19 @@
 
 // Sounds
 
+#ifdef AUDIO_ENABLE
+
 float mode_set_song[][2] = MODE_SET_SONG;
 float layer_set_song[][2] = LAYER_SET_SONG;
 float toggle_on_song[][2] = TOGGLE_ON_SONG;
 float toggle_off_song[][2] = TOGGLE_OFF_SONG;
 float detent_song[][2] = DETENT_SONG;
+
+#else
+
+#define PLAY_SONG(song)
+
+#endif
 
 
 // Feedback
@@ -339,6 +347,8 @@ bool process_rgb_speed(keyrecord_t *record) {
 
 // Audio
 
+#ifdef AUDIO_ENABLE
+
 bool process_audio_toggle(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
@@ -356,6 +366,8 @@ bool process_audio_toggle(keyrecord_t *record) {
   }
   return false;
 }
+
+#endif
 
 
 // Key processing
@@ -390,8 +402,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return process_rgb_val(record);
     case U_RGB_SPI:
       return process_rgb_speed(record);
+#ifdef AUDIO_ENABLE
     case U_AUD_TOG:
       return process_audio_toggle(record);
+#endif
     default:
       return true;
   }
