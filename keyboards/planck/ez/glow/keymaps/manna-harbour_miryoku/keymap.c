@@ -114,7 +114,7 @@ void suspend_wakeup_init_user(void) {
 // On/off timings - must end in 0
 const uint8_t mode_flash[] = {3, 0};
 const uint8_t default_layer_flash[] = {1, 1, 1, 0};
-const uint8_t toggle_on_flash[] = {1, 1, 1, 0};
+const uint8_t toggle_on_flash[] = {3, 0};
 const uint8_t detent_flash[] = {1, 0};
 
 void show_mode_custom(uint16_t keycode) {
