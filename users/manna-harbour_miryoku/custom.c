@@ -234,6 +234,8 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 
 // Rgb
 
+#ifdef RGB_MATRIX_ENABLE
+
 // Override keys to allow feedback on keydown
 // (A post_process_record_user implementation is simpler, but fails)
 // (The user function is called on keyup but not on keydown following a return-false)
@@ -344,6 +346,8 @@ bool process_rgb_speed(keyrecord_t *record) {
   return false;
 }
 
+#endif
+
 
 // Audio
 
@@ -390,6 +394,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return process_clipcode(CLIP_UND, record);
     case U_RDO:
       return process_clipcode(CLIP_RDO, record);
+#ifdef RGB_MATRIX_ENABLE
     case U_RGB_TOG:
       return process_rgb_toggle(record);
     case U_RGB_MOD:
@@ -402,6 +407,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return process_rgb_val(record);
     case U_RGB_SPI:
       return process_rgb_speed(record);
+#endif
 #ifdef AUDIO_ENABLE
     case U_AUD_TOG:
       return process_audio_toggle(record);
