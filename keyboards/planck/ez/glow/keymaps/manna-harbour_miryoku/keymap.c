@@ -7,7 +7,7 @@
 
 // "Tooth" led management
 
-#define FLASH_LED_TICK 100
+#define FLASH_LED_TICK 50
 
 struct {
   bool left;
@@ -17,7 +17,8 @@ struct {
 
 struct {
   deferred_token token;
-  uint8_t tick;
+  uint8_t* pattern;
+  bool on;
 } led_flash = {INVALID_DEFERRED_TOKEN};
 
 void left_led_on(void) {
@@ -47,35 +48,39 @@ uint32_t flash_led_callback(uint32_t trigger_time, void *arg) {
   bool flash_left = !led.left;
   bool flash_right = !led.right;
   
-  ++led_flash.tick;
-  switch (led_flash.tick) {
-    case 1:
-    case 3:
-      // Turn on
-      if (flash_left)
-        planck_ez_left_led_on();
-      if (flash_right)
-        planck_ez_right_led_on();          
-      return FLASH_LED_TICK;
-    case 2:
-      // Turn off
-      if (flash_left)
-        planck_ez_left_led_off();
-      if (flash_right)
-        planck_ez_right_led_off();          
-      return FLASH_LED_TICK;
-    default:
-      // Turn off and stop
-      if (flash_left || led.suspended)
-        planck_ez_left_led_off();
-      if (flash_right || led.suspended)
-        planck_ez_right_led_off();          
-      led_flash.token = INVALID_DEFERRED_TOKEN;
-      return 0;
+  uint_t duration = *led_flash.pattern;
+  if (duration == 0) {
+    // End of array
+    // Turn off and stop
+    if (flash_left || led.suspended)
+      planck_ez_left_led_off();
+    if (flash_right || led.suspended)
+      planck_ez_right_led_off();          
+    led_flash.token = INVALID_DEFERRED_TOKEN;
+    return 0;
   }
+
+  if (led_flash.on) {
+    // Turn on
+    if (flash_left)
+      planck_ez_left_led_on();
+    if (flash_right)
+      planck_ez_right_led_on();          
+  } else {
+    // Turn off
+    if (flash_left)
+      planck_ez_left_led_off();
+    if (flash_right)
+      planck_ez_right_led_off();          
+  }
+  
+  // Next state
+  led_flash.on = !led_flash.on;
+  ++led_flash.duration;
+  return duration * FLASH_LED_TICK;
 }
 
-void flash_led(void) {
+void flash_led(const uint8_t* pattern) {
   // Halt any flash in progress
   if (led_flash.token != INVALID_DEFERRED_TOKEN) {
     cancel_deferred_exec(led_flash.token);
@@ -83,10 +88,12 @@ void flash_led(void) {
   }
 
   // Start new flash
-  led_flash.tick = 0;
+  led_flash.pattern = pattern;
+  led_flash.on = true;
   led_flash.token = defer_exec(FLASH_LED_TICK, flash_led_callback, NULL);
 }
 
+flash_led(double_blink);
 void suspend_power_down_user(void) {
   // May be run multiple times on suspend
   led.suspended = true;
@@ -104,6 +111,9 @@ void suspend_wakeup_init_user(void) {
 
 
 // Feedback
+
+const uint8_t double_flash[] = {1, 1, 1, 0};
+const uint8_t long_flash[] = {3, 0};
 
 void show_layer_custom(uint8_t layer) {
   switch (layer) {
@@ -137,7 +147,7 @@ void show_layer_custom(uint8_t layer) {
 }
 
 void show_default_layer_custom(uint8_t layer) {
-  flash_led();
+  flash_led(double_flash);
 }
 
 
