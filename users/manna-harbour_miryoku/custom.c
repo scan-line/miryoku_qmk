@@ -7,6 +7,7 @@
 
 // Qmk definitions
 
+// Required by RGB_MATRIX_DEFAULT_VAL
 // Duplicated from rgb_matrix.c
 #if !defined(RGB_MATRIX_MAXIMUM_BRIGHTNESS) || RGB_MATRIX_MAXIMUM_BRIGHTNESS > UINT8_MAX
 #    undef RGB_MATRIX_MAXIMUM_BRIGHTNESS
