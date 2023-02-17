@@ -71,4 +71,4 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 // Configure QMK
 
 // For windows remote desktop
-#define TAP_CODE_DELAY 0
+#define TAP_CODE_DELAY 100
