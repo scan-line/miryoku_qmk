@@ -66,3 +66,9 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #ifdef RGB_MATRIX_ENABLE
 #  define RGB_MATRIX_DISABLE_KEYCODES
 #endif
+
+
+// Configure QMK
+
+// For windows remote desktop
+#define TAP_CODE_DELAY 0
