@@ -63,3 +63,9 @@ KC_NO,  K20,  K21,  K22,  K23,  K24,         K25,  K26,  K27,  K28,  K29,  KC_NO
 #undef ENABLE_RGB_MATRIX_SOLID_SPLASH
 
 #define ENABLE_RGB_MATRIX_RAINDROPS
+
+
+// Configure QMK
+// (for space)
+
+#define NO_ACTION_ONESHOT
