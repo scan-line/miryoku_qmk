@@ -413,6 +413,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case U_AUD_TOG:
       return process_audio_toggle(record);
 #endif
+    case KC_LEAD:
+      // Placeholder for leader key sequences
+      return false;
     default:
       return true;
   }
