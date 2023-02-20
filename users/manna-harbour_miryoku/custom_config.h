@@ -73,4 +73,4 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // For windows remote desktop
 // especially cut/copy/paste and left/right parenthesis
-#define TAP_CODE_DELAY 100
+#define TAP_CODE_DELAY 50
