@@ -375,6 +375,17 @@ bool process_audio_toggle(keyrecord_t *record) {
 #endif
 
 
+// Leader sequences
+
+#ifdef LEADER_ENABLE
+
+bool process_leader(keyrecord_t *record) {
+  // Placeholder for leader key sequences
+  return false;
+}
+
+#endif
+
 // Key processing
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -414,8 +425,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return process_audio_toggle(record);
 #endif
     case KC_LEAD:
-      // Placeholder for leader key sequences
+#ifdef LEADER_ENABLE
+      return process_leader(record);
+#else
       return false;
+#endif
     default:
       return true;
   }
