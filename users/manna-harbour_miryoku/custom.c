@@ -430,11 +430,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case U_AUD_TOG:
       return process_audio_toggle(record);
 #endif
-#ifndef LEADER_ENABLE
-    case KC_LEAD:
+// #ifndef LEADER_ENABLE
+    case QK_LEADER:
       // Suppress leader key if no leader sequences
       return false;
-#endif
+// #endif
     default:
       return true;
   }
