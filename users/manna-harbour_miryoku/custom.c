@@ -162,20 +162,6 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
 
 // OS-specific clipboard and undo/redo
 
-// Windows clipboard
-#define CLIP_CUT_WIN LCTL(KC_X)
-#define CLIP_CPY_WIN LCTL(KC_C)
-#define CLIP_PST_WIN LCTL(KC_V)
-#define CLIP_UND_WIN LCTL(KC_Z)
-#define CLIP_RDO_WIN LCTL(KC_Y)
-
-// Mac clipboard
-#define CLIP_CUT_MAC LCMD(KC_X)
-#define CLIP_CPY_MAC LCMD(KC_C)
-#define CLIP_PST_MAC LCMD(KC_V)
-#define CLIP_UND_MAC LCMD(KC_Z)
-#define CLIP_RDO_MAC SCMD(KC_Z)
-
 typedef enum {
   CLIP_CUT,
   CLIP_CPY,
@@ -185,24 +171,36 @@ typedef enum {
   CLIP_END,
 } clip_t;
 
-// Windows and Mac only
-// Linux keycodes are left as-is
-const uint16_t PROGMEM os_keycodes[][CLIP_END] = {
-  [OS_MODE_WIN] = { CLIP_CUT_WIN, CLIP_CPY_WIN, CLIP_PST_WIN, CLIP_UND_WIN, CLIP_RDO_WIN, },
-  [OS_MODE_MAC] = { CLIP_CUT_MAC, CLIP_CPY_MAC, CLIP_PST_MAC, CLIP_UND_MAC, CLIP_RDO_MAC, },
-};
+// Windows os keycodes (without ctrl)
+const uint16_t PROGMEM os_win_keycodes[] =
+  { KC_X, KC_C, KC_V, KC_Z, KC_Y, };
+// Mac os keycodes
+const uint16_t PROGMEM os_mac_keycodes[] =
+  { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_Z), SCMD(KC_Z), };
+// Linux os keycodes are left as-is
 
 bool process_clipcode(clip_t clip, keyrecord_t *record) {
+  if (os_mode == OS_MODE_WIN) {
+    // Windows keycodes are translated
+    // with additional delay for Remote Desktop
+    if (record->event.pressed) {
+      register_code16(os_win_keycodes[clip]);
+    } else {
+      unregister_code16(os_win_keycodes[clip]);
+    }
+  }
+  
+  if (os_mode == OS_MODE_MAC) {
+    // Mac keycodes are translated
+    if (record->event.pressed)
+      register_code16(os_mac_keycodes[clip]);
+    else
+      unregister_code16(os_mac_keycodes[clip]);
+    return false;
+  }
+  
   // Linux keycodes are passed through as-is
-  if (os_mode == OS_MODE_LNX)
-    return true;
-
-  // Windows and Mac keycodes are translated
-  if (record->event.pressed)
-    register_code16(os_keycodes[os_mode][clip]);
-  else
-    unregister_code16(os_keycodes[os_mode][clip]);
-  return false;
+  return true;
 }
 
 
