@@ -73,3 +73,6 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 // For windows remote desktop
 // especially cut/copy/paste and left/right parenthesis
 #define TAP_CODE_DELAY 100
+// Leader sequence timing
+#define LEADER_TIMEOUT 250
+#define LEADER_PER_KEY_TIMING
