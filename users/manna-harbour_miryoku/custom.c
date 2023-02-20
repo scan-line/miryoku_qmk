@@ -100,7 +100,7 @@ extern const key_override_t capsword_key_override;
 extern const key_override_t **key_overrides;
 
 const key_override_t dot_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
-const key_override_t nine_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, U_LEADER, LAYER_MASK_NUM);
+const key_override_t nine_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM);
 
 const key_override_t **custom_key_overrides = (const key_override_t *[]){
   &capsword_key_override,
@@ -430,6 +430,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case U_AUD_TOG:
       return process_audio_toggle(record);
 #endif
+    case U_USER:
+      // Placeholder
+      return false;
     default:
       return true;
   }
