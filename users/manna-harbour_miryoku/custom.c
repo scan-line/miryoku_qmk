@@ -194,6 +194,7 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
       unregister_code16(KC_RCTL);
       wait_ms(TAP_CODE_DELAY);
     }
+    return false;
   }
   
   if (os_mode == OS_MODE_MAC) {
