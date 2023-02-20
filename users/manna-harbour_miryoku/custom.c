@@ -379,9 +379,15 @@ bool process_audio_toggle(keyrecord_t *record) {
 
 #ifdef LEADER_ENABLE
 
-bool process_leader(keyrecord_t *record) {
-  // Placeholder for leader key sequences
-  return false;
+LEADER_EXTERNS();
+
+void matrix_scan_user(void) {
+  LEADER_DICTIONARY() {
+    leading = false;
+    leader_end();
+
+    // Placeholder for leader key sequences
+  }
 }
 
 #endif
@@ -424,10 +430,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case U_AUD_TOG:
       return process_audio_toggle(record);
 #endif
+#ifndef LEADER_ENABLE
     case KC_LEAD:
-#ifdef LEADER_ENABLE
-      return process_leader(record);
-#else
+      // Suppress leader key if no leader sequences
       return false;
 #endif
     default:
