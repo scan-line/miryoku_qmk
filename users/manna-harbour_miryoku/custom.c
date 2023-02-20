@@ -184,9 +184,15 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
     // Windows keycodes are translated
     // with additional delay for Remote Desktop
     if (record->event.pressed) {
+      register_code16(KC_RCTL);
+      wait_ms(TAP_CODE_DELAY);
       register_code16(os_win_keycodes[clip]);
+      wait_ms(TAP_CODE_DELAY);
     } else {
       unregister_code16(os_win_keycodes[clip]);
+      wait_ms(TAP_CODE_DELAY);
+      unregister_code16(KC_RCTL);
+      wait_ms(TAP_CODE_DELAY);
     }
   }
   
