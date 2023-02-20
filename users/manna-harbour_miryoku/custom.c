@@ -172,27 +172,23 @@ typedef enum {
 } clip_t;
 
 // Windows os keycodes (without ctrl)
-const uint16_t PROGMEM os_win_keycodes[] =
-  { KC_X, KC_C, KC_V, KC_Z, KC_Y, };
+const uint16_t PROGMEM os_win_keycodes[] = { KC_X, KC_C, KC_V, KC_Z, KC_Y, };
 // Mac os keycodes
-const uint16_t PROGMEM os_mac_keycodes[] =
-  { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_Z), SCMD(KC_Z), };
+const uint16_t PROGMEM os_mac_keycodes[] = { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_Z), SCMD(KC_Z), };
 // Linux os keycodes are left as-is
 
 bool process_clipcode(clip_t clip, keyrecord_t *record) {
   if (os_mode == OS_MODE_WIN) {
     // Windows keycodes are translated
-    // with additional delay for Remote Desktop
     if (record->event.pressed) {
+      // Right control avoids interaction with Miryoku left control
       register_code16(KC_RCTL);
+      // Add delay for Remote Desktop
       wait_ms(TAP_CODE_DELAY);
       register_code16(os_win_keycodes[clip]);
-      // wait_ms(TAP_CODE_DELAY);
     } else {
       unregister_code16(os_win_keycodes[clip]);
-      // wait_ms(TAP_CODE_DELAY);
       unregister_code16(KC_RCTL);
-      // wait_ms(TAP_CODE_DELAY);
     }
     return false;
   }
