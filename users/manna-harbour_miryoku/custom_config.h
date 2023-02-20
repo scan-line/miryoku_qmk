@@ -69,15 +69,6 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #endif
 
 
-// Leader sequences
-
-#ifdef LEADER_ENABLE
-#  define U_LEADER QK_LEADER
-#else
-#  define U_LEADER KC_NO
-#endif
-
-
 // Configure QMK
 
 // For windows remote desktop
