@@ -99,9 +99,29 @@ user_config_t user_config;
 extern const key_override_t capsword_key_override;
 extern const key_override_t **key_overrides;
 
+bool dot_key_function(bool key_down, void *context) {
+  if (key_down) {
+    register_code16(KC_LPAREN);
+  } else {
+    unregister_code16(KC_LPAREN);
+  }
+  return false;
+}
+
+const key_override_t dot_key_override = {
+  .trigger_mods       = MOD_MASK_SHIFT,
+  .layers             = LAYER_MASK_NUM,
+  .suppressed_mods    = MOD_MASK_SHIFT,
+  .options            = ko_options_default,
+  .negative_mod_mask  = 0,
+  .custom_action      = dot_key_function,
+  .context            = NULL,
+  .trigger            = KC_DOT,
+  .replacement        = KC_NO,
+  .enabled            = NULL
+};
+
 // const key_override_t dot_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
-const key_override_t dot_key_override = ko_make_with_layers_negmods_and_options(
-  MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM, 0, ko_option_no_unregister_on_other_key_down);
 const key_override_t nine_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM);
 
 
