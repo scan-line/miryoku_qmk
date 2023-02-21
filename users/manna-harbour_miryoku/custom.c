@@ -172,7 +172,7 @@ typedef enum {
 } clip_t;
 
 // Windows os keycodes
-const uint16_t PROGMEM os_win_keycodes[] = { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_Z), LCMD(KC_Y), };
+const uint16_t PROGMEM os_win_keycodes[] = { LCTL(KC_X), LCTL(KC_C), LCTL(KC_V), LCTL(KC_Z), LCTL(KC_Y), };
 // Mac os keycodes
 const uint16_t PROGMEM os_mac_keycodes[] = { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_Z), SCMD(KC_Z), };
 // Linux os keycodes are left as-is
