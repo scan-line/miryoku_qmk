@@ -100,7 +100,10 @@ extern const key_override_t capsword_key_override;
 extern const key_override_t **key_overrides;
 
 const key_override_t dot_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
-const key_override_t nine_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM);
+// const key_override_t nine_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM);
+const key_override_t nine_key_override = ko_make_with_layers_negmods_and_options(
+  MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM, 0, ko_option_no_unregister_on_other_key_down);
+
 
 const key_override_t **custom_key_overrides = (const key_override_t *[]){
   &capsword_key_override,
