@@ -182,15 +182,14 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
   if (os_mode == OS_MODE_WIN) {
     uint16_t keycode = os_win_keycodes[clip];
     uint8_t mods = QK_MODS_GET_MODS(keycode);
-    uint8_t basecode = QK_MODS_GET_BASIC_KEYCODE(keycode);
     if (record->event.pressed) {
-      register_mods(mods);
+      register_weak_mods(mods);
       // Add delay for Windows Remote Desktop
       wait_ms(TAP_CODE_DELAY);
-      register_code(basecode);
+      register_code(keycode);
     } else {
-      unregister_code(basecode);
-      unresister_mods(mods);
+      unregister_code(keycode);
+      unregister_weak_mods(mods);
     }
     return false;
   }
