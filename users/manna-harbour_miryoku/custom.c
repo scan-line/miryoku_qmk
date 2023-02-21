@@ -181,7 +181,8 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
   if (os_mode == OS_MODE_WIN) {
     // Windows keycodes are translated
     if (record->event.pressed) {
-      // Right control avoids interaction with Miryoku left control
+      // Miryoku uses left control
+      // Use right control to avoid side effects
       register_code16(KC_RCTL);
       // Add delay for Remote Desktop
       wait_ms(TAP_CODE_DELAY);
