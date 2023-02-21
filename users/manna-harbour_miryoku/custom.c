@@ -101,9 +101,9 @@ extern const key_override_t **key_overrides;
 
 bool dot_key_function(bool key_down, void *context) {
   if (key_down) {
-    register_code16(KC_LPAREN);
+    register_code16(KC_LEFT_PAREN);
   } else {
-    unregister_code16(KC_LPAREN);
+    unregister_code16(KC_LEFT_PAREN);
   }
   return false;
 }
