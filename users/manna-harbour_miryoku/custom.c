@@ -171,31 +171,34 @@ typedef enum {
   CLIP_END,
 } clip_t;
 
-// Windows os keycodes (without ctrl)
-const uint16_t PROGMEM os_win_keycodes[] = { KC_X, KC_C, KC_V, KC_Z, KC_Y, };
+// Windows os keycodes
+const uint16_t PROGMEM os_win_keycodes[] = { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_Z), LCMD(KC_Y), };
 // Mac os keycodes
 const uint16_t PROGMEM os_mac_keycodes[] = { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_Z), SCMD(KC_Z), };
 // Linux os keycodes are left as-is
 
 bool process_clipcode(clip_t clip, keyrecord_t *record) {
+  // Windows keycodes are translated
   if (os_mode == OS_MODE_WIN) {
-    // Windows keycodes are translated
+    uint16_t keycode = os_win_keycodes[clip];
+    uint8_t mods = QK_MODS_GET_MODS(keycode);
+    uint8_t basecode = QK_MODS_GET_BASIC_KEYCODE(keycode);
     if (record->event.pressed) {
-      // Miryoku uses left control
-      // Use right control to avoid side effects
-      register_code16(KC_RCTL);
-      // Add delay for Remote Desktop
+      add_mods(mods);
+      send_keyboard_report();
+      // Add delay for Windows Remote Desktop
       wait_ms(TAP_CODE_DELAY);
-      register_code16(os_win_keycodes[clip]);
+      register_code(basecode);
     } else {
-      unregister_code16(os_win_keycodes[clip]);
-      unregister_code16(KC_RCTL);
+      unregister_code(basecode);
+      del_mods(mods);
+      send_keyboard_report();
     }
     return false;
   }
   
+  // Mac keycodes are translated
   if (os_mode == OS_MODE_MAC) {
-    // Mac keycodes are translated
     if (record->event.pressed)
       register_code16(os_mac_keycodes[clip]);
     else
