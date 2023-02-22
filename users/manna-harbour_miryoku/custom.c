@@ -128,6 +128,7 @@ bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
 
 void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
   const uint8_t layer = read_source_layers_cache(record->event.key);
+  // Beware - record->event.pressed may be false
 
   if (keycode == KC_DOT && layer == U_NUM) {
     register_code16((!shifted) ? KC_DOT : KC_LEFT_PAREN);
