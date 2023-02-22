@@ -100,8 +100,6 @@ extern void set_weak_override_mods(uint8_t mods);
 // Defined in manna-harbour_miryoku.c
 extern const key_override_t capsword_key_override;
 extern const key_override_t **key_overrides;
-// Defined later
-bool process_user_key(bool pressed);
 
 bool key_override_tap(bool key_down, void *context) {
   uint16_t keycode = (intptr_t)context;
@@ -115,33 +113,24 @@ bool key_override_tap(bool key_down, void *context) {
   return false;
 }
 
-bool key_override_user(bool key_down, void *context) {
-  // Tap to prevent autorepeat
-  if (key_down) {
-    process_user_key(true);
-    process_user_key(false);
-  }
-  return false;
-}
-
 // Customized ko_make_with_layers
 // Removes auto-repeat on keypress
-#define user_make_with_action(trigger_mods_, trigger_key, replacement_key, layer_mask, action)  \
-    ((const key_override_t){                                                                    \
-        .trigger_mods                           = (trigger_mods_),                              \
-        .layers                                 = (layer_mask),                                 \
-        .suppressed_mods                        = (trigger_mods_),                              \
-        .options                                = ko_options_default,                           \
-        .negative_mod_mask                      = 0,                                            \
-        .custom_action                          = action,                                       \
-        .context                                = (void*)(intptr_t)replacement_key,             \
-        .trigger                                = (trigger_key),                                \
-        .replacement                            = (KC_NO),                                      \
-        .enabled                                = NULL                                          \
+#define user_make_with_layers(trigger_mods_, trigger_key, replacement_key, layer_mask)      \
+    ((const key_override_t){                                                                \
+        .trigger_mods                           = (trigger_mods_),                          \
+        .layers                                 = (layer_mask),                             \
+        .suppressed_mods                        = (trigger_mods_),                          \
+        .options                                = ko_options_default,                       \
+        .negative_mod_mask                      = 0,                                        \
+        .custom_action                          = key_override_tap,                         \
+        .context                                = (void*)(intptr_t)replacement_key,         \
+        .trigger                                = (trigger_key),                            \
+        .replacement                            = (KC_NO),                                  \
+        .enabled                                = NULL                                      \
     })
 
-const key_override_t dot_key_override = user_make_with_action(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM, key_override_tap);
-const key_override_t nine_key_override = user_make_with_action(MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM, key_override_user);
+const key_override_t dot_key_override = user_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM );
+const key_override_t nine_key_override = user_make_with_layers(MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM );
 
 const key_override_t **custom_key_overrides = (const key_override_t *[]){
   &capsword_key_override,
@@ -175,10 +164,7 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
   }
   
   if (keycode == KC_9 && layer == U_NUM) {
-    if (!shifted)
-      register_code16(KC_9);
-    else
-      process_user_key(true);
+    register_code16((!shifted) ? KC_9 : KC_USER);
     return;
   }
 
@@ -197,10 +183,7 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
   }
   
   if (keycode == KC_9 && layer == U_NUM) {
-    if (!shifted)
-      unregister_code16(KC_9);
-    else
-      process_user_key(false);
+    unregister_code16((!shifted) ? KC_9 : KC_USER);
     return;
   }
 
@@ -481,18 +464,6 @@ bool process_audio_toggle(keyrecord_t *record) {
 #endif
 
 
-// User key
-
-bool process_user_key(bool pressed) {
-  // Placeholder - make key visible
-  if (pressed)
-    register_code16(KC_QUESTION);
-  else
-    unregister_code16(KC_QUESTION);
-  return false;
-}
-
-
 // Key processing
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -531,8 +502,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case U_AUD_TOG:
       return process_audio_toggle(record);
 #endif
-    case U_USER:
-      return process_user_key(record->event.pressed);
     default:
       return true;
   }
