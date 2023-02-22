@@ -114,8 +114,10 @@ bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
 
   // Add, even where auto-shifted by default
   // For consistency with autoshift_press/release_user
+  
   if (keycode == KC_DOT && layer == U_NUM)
     return true;
+  
   if (keycode == KC_9 && layer == U_NUM)
     return true;
 
@@ -129,8 +131,12 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
     register_code16((!shifted) ? KC_DOT : KC_LEFT_PAREN);
     return;
   }
+  
   if (keycode == KC_9 && layer == U_NUM) {
-    register_code16((!shifted) ? KC_9 : KC_EXCLAIM);
+    if (!shifted)
+      register_code16(KC_9);
+    else
+      process_record_user(U_USER, record);
     return;
   }
 
@@ -147,8 +153,12 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
     unregister_code16((!shifted) ? KC_DOT : KC_LEFT_PAREN);
     return;
   }
+  
   if (keycode == KC_9 && layer == U_NUM) {
-    unregister_code16((!shifted) ? KC_9 : KC_EXCLAIM);
+    if (!shifted)
+      unregister_code16(KC_9);
+    else
+      process_record_user(U_USER, record);
     return;
   }
 
