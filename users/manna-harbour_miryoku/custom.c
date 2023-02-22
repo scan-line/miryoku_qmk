@@ -106,7 +106,8 @@ bool key_override_tap(bool key_down, void *context) {
   uint16_t keycode = (intptr_t)context;
   // Tap to prevent autorepeat
   if (key_down)
-    tap_code16(keycode);
+    // tap_code16(keycode);
+    tap_code16(KC_LEFT_PAREN);
   return false;
 }
 
