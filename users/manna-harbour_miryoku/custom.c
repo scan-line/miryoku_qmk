@@ -112,9 +112,11 @@ const key_override_t **custom_key_overrides = (const key_override_t *[]){
 bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
   const uint8_t layer = read_source_layers_cache(record->event.key);
 
-  // The dot key is auto-shifted by default
-  // Add for consistency with autoshift_press/release_user
+  // Add, even where auto-shifted by default
+  // For consistency with autoshift_press/release_user
   if (keycode == KC_DOT && layer == U_NUM)
+    return true;
+  if (keycode == KC_9 && layer == U_NUM)
     return true;
 
   return false;
@@ -125,6 +127,10 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
 
   if (keycode == KC_DOT && layer == U_NUM) {
     register_code16((!shifted) ? KC_DOT : KC_LEFT_PAREN);
+    return;
+  }
+  if (keycode == KC_9 && layer == U_NUM) {
+    register_code16((!shifted) ? KC_9 : U_USER);
     return;
   }
 
@@ -139,6 +145,10 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
 
   if (keycode == KC_DOT && layer == U_NUM) {
     unregister_code16((!shifted) ? KC_DOT : KC_LEFT_PAREN);
+    return;
+  }
+  if (keycode == KC_9 && layer == U_NUM) {
+    unregister_code16((!shifted) ? KC_9 : U_USER);
     return;
   }
 
