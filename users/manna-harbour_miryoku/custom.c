@@ -126,18 +126,18 @@ bool key_override_user(bool key_down, void *context) {
 
 // Customized ko_make_with_layers
 // Removes auto-repeat on keypress
-#define user_make_with_action(trigger_mods_, trigger_key, replacement_key, layer_mask, action) \
-    ((const key_override_t){                                                                \
-        .trigger_mods                           = (trigger_mods_),                          \
-        .layers                                 = (layer_mask),                             \
-        .suppressed_mods                        = (trigger_mods_),                          \
-        .options                                = ko_options_default,                       \
-        .negative_mod_mask                      = 0,                                        \
-        .custom_action                          = action,                                   \
-        .context                                = (void*)(intptr_t)replacement_key,         \
-        .trigger                                = (trigger_key),                            \
-        .replacement                            = (KC_NO),                                  \
-        .enabled                                = NULL                                      \
+#define user_make_with_action(trigger_mods_, trigger_key, replacement_key, layer_mask, action)  \
+    ((const key_override_t){                                                                    \
+        .trigger_mods                           = (trigger_mods_),                              \
+        .layers                                 = (layer_mask),                                 \
+        .suppressed_mods                        = (trigger_mods_),                              \
+        .options                                = ko_options_default,                           \
+        .negative_mod_mask                      = 0,                                            \
+        .custom_action                          = action,                                       \
+        .context                                = (void*)(intptr_t)replacement_key,             \
+        .trigger                                = (trigger_key),                                \
+        .replacement                            = (KC_NO),                                      \
+        .enabled                                = NULL                                          \
     })
 
 const key_override_t dot_key_override = user_make_with_action(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM, key_override_tap);
