@@ -442,11 +442,15 @@ bool process_audio_toggle(keyrecord_t *record) {
 // User key
 
 bool process_user_key(keyrecord_t *record) {
+  SEND_STRING("uu");
   // Placeholder - make key visible
-  if (record->event.pressed)
+  if (record->event.pressed) {
+    SEND_STRING("p");
     register_code16(KC_QUESTION);
-  else
+  } else {
+    SEND_STRING("r");
     unregister_code16(KC_QUESTION);
+  }
   return false;
 }
 
@@ -490,7 +494,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return process_audio_toggle(record);
 #endif
     case U_USER:
-      SEND_STRING("user");
       return process_user_key(record);
     default:
       return true;
