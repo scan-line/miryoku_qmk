@@ -164,7 +164,7 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
   }
   
   if (keycode == KC_9 && layer == U_NUM) {
-    register_code16((!shifted) ? KC_9 : KC_USER);
+    register_code16((!shifted) ? KC_9 : U_USER);
     return;
   }
 
@@ -183,7 +183,7 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
   }
   
   if (keycode == KC_9 && layer == U_NUM) {
-    unregister_code16((!shifted) ? KC_9 : KC_USER);
+    unregister_code16((!shifted) ? KC_9 : U_USER);
     return;
   }
 
