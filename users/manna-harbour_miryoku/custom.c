@@ -433,10 +433,10 @@ bool process_audio_toggle(keyrecord_t *record) {
 
 bool process_user_key(keyrecord_t *record) {
   // Placeholder - make key visible
-  if (record->event.pressed)
-    register_code16(KC_QUESTION);
-  else
-    unregister_code16(KC_QUESTION);
+  if (record->event.pressed) {
+    tap_code16(KC_QUESTION);
+    tap_code16(KC_U);
+  }
   return false;
 }
 
