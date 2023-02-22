@@ -91,7 +91,7 @@ typedef union {
 user_config_t user_config;
 
 
-// Modifier functions
+// Shift and Auto Shift overrides
 
 #define LAYER_MASK_NUM (1 << U_NUM)
 
@@ -108,6 +108,46 @@ const key_override_t **custom_key_overrides = (const key_override_t *[]){
   &nine_key_override,
   NULL
 };
+
+bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
+  const uint8_t layer = read_source_layers_cache(record->event.key);
+
+  // The dot key is auto-shifted by default
+  // Add for consistency with autoshift_press/release_user
+  if (keycode == KC_DOT && layer == U_NUM) {
+    return true;
+
+  return false;
+}
+
+void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
+  const uint8_t layer = read_source_layers_cache(record->event.key);
+
+  if (keycode == KC_DOT && layer == U_NUM) {
+    register_code16((!shifted) ? KC_DOT : KC_LEFT_PAREN);
+    return;
+  }
+
+  if (shifted)
+    add_weak_mods(MOD_BIT(KC_LSFT));
+  // & 0xFF gets the Tap key for Tap Holds, required when using Retro Shift
+  register_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
+}
+
+void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
+  const uint8_t layer = read_source_layers_cache(record->event.key);
+
+  if (keycode == KC_DOT && layer == U_NUM) {
+    unregister_code16((!shifted) ? KC_DOT : KC_LEFT_PAREN);
+    return;
+  }
+
+  // & 0xFF gets the Tap key for Tap Holds, required when using Retro Shift
+  // The IS_RETRO check isn't really necessary here, always using
+  // keycode & 0xFF would be fine.
+  unregister_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
+  // Clearing mods is handled by caller
+}
 
 
 // OS-specific mode
