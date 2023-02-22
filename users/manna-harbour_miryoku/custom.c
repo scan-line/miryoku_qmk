@@ -136,7 +136,8 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
     if (!shifted)
       register_code16(KC_9);
     else
-      process_record_user(U_USER, record);
+      SEND_STRING("abc");
+      // process_record_user(U_USER, record);
     return;
   }
 
@@ -158,7 +159,8 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
     if (!shifted)
       unregister_code16(KC_9);
     else
-      process_record_user(U_USER, record);
+      SEND_STRING("abc");
+      // process_record_user(U_USER, record);
     return;
   }
 
