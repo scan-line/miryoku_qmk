@@ -114,7 +114,7 @@ bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
 
   // The dot key is auto-shifted by default
   // Add for consistency with autoshift_press/release_user
-  if (keycode == KC_DOT && layer == U_NUM) {
+  if (keycode == KC_DOT && layer == U_NUM)
     return true;
 
   return false;
@@ -287,10 +287,12 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 bool slider_on_detent(uint8_t i, uint8_t detent, int8_t step) {
   uint8_t lower = detent - (step / 2);
   uint8_t upper = lower + step - 1;
-  // Wrap around? Floor at 0
-  if (lower > detent) lower = 0;
-  // Wrap around? Cap at 0xFF
-  if (upper < detent) upper = 255;
+  // Wrap around? floor at 0
+  if (lower > detent)
+    lower = 0;
+  // Wrap around? cap at 0xFF
+  if (upper < detent)
+    upper = 255;
   return (lower <= i && i <= upper);
 }
 
