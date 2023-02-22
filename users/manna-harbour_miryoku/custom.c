@@ -429,22 +429,17 @@ bool process_audio_toggle(keyrecord_t *record) {
 #endif
 
 
-// Leader sequences
+// User key
 
-#ifdef LEADER_ENABLE
-
-LEADER_EXTERNS();
-
-void matrix_scan_user(void) {
-  LEADER_DICTIONARY() {
-    leading = false;
-    leader_end();
-
-    // Placeholder for leader key sequences
-  }
+bool process_user_key(keyrecord_t *record) {
+  // Placeholder - make key visible
+  if (record->event.pressed)
+    register_code16(KC_QUESTION);
+  else
+    unregister_code16(KC_QUESTION);
+  return false;
 }
 
-#endif
 
 // Key processing
 
@@ -485,8 +480,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return process_audio_toggle(record);
 #endif
     case U_USER:
-      // Placeholder
-      return false;
+      return process_user_key(record);
     default:
       return true;
   }
