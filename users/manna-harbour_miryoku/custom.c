@@ -100,6 +100,8 @@ extern void set_weak_override_mods(uint8_t mods);
 // Defined in manna-harbour_miryoku.c
 extern const key_override_t capsword_key_override;
 extern const key_override_t **key_overrides;
+// Defined later
+bool process_user_key(bool pressed);
 
 bool key_override_tap(bool key_down, void *context) {
   uint16_t keycode = (intptr_t)context;
@@ -113,19 +115,23 @@ bool key_override_tap(bool key_down, void *context) {
   return false;
 }
 
-const key_override_t dot_key_override = {
-  .trigger_mods       = MOD_MASK_SHIFT,
-  .layers             = LAYER_MASK_NUM,
-  .suppressed_mods    = MOD_MASK_SHIFT,
-  .options            = ko_options_default,
-  .negative_mod_mask  = 0,
-  .custom_action      = key_override_tap,
-  .context            = (void*)(intptr_t)KC_LEFT_PAREN,
-  .trigger            = KC_DOT,
-  .replacement        = KC_NO,
-  .enabled            = NULL
-};
+// Customized ko_make_with_layers
+// Removes auto-repeat on keypress
+#define user_make_with_layers(trigger_mods_, trigger_key, replacement_key, layer_mask)      \
+    ((const key_override_t){                                                                \
+        .trigger_mods                           = (trigger_mods_),                          \
+        .layers                                 = (layer_mask),                             \
+        .suppressed_mods                        = (trigger_mods_),                          \
+        .options                                = ko_options_default,                       \
+        .negative_mod_mask                      = 0,                                        \
+        .custom_action                          = key_override_tap,                         \
+        .context                                = (void*)(intptr_t)replacement_key,         \
+        .trigger                                = (trigger_key),                            \
+        .replacement                            = (KC_NO),                                  \
+        .enabled                                = NULL                                      \
+    })
 
+const key_override_t dot_key_override = user_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
 const key_override_t nine_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM);
 
 const key_override_t **custom_key_overrides = (const key_override_t *[]){
@@ -134,8 +140,6 @@ const key_override_t **custom_key_overrides = (const key_override_t *[]){
   &nine_key_override,
   NULL
 };
-
-bool process_user_key(bool pressed);
 
 bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
   const uint8_t layer = read_source_layers_cache(record->event.key);
