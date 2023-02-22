@@ -99,22 +99,19 @@ user_config_t user_config;
 extern const key_override_t capsword_key_override;
 extern const key_override_t **key_overrides;
 
-const key_override_t dot_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
+// const key_override_t dot_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
 const key_override_t nine_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM);
 
-#if 0
+#if 1
 bool key_override_tap(bool key_down, void *context) {
   // uint16_t keycode = (intptr_t)context;
   uint16_t keycode = KC_LEFT_PAREN;
+
   // Tap to prevent autorepeat
-  // if (key_down)
-  //   tap_code16(keycode);
   if (key_down) {
     uint8_t mods = QK_MODS_GET_MODS(keycode);
-    ?? process_key_override uses set_weak_override_mods
-    register_weak_mods(mods);
+    set_weak_override_mods(mods);
     tap_code(keycode);
-    unregister_weak_mods(mods);
   }
   return false;
 }
