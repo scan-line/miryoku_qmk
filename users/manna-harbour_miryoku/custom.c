@@ -109,6 +109,8 @@ const key_override_t **custom_key_overrides = (const key_override_t *[]){
   NULL
 };
 
+bool process_user_key(bool pressed);
+
 bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
   const uint8_t layer = read_source_layers_cache(record->event.key);
 
@@ -136,7 +138,7 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
     if (!shifted)
       register_code16(KC_9);
     else
-      process_record_user(U_USER, record);
+      process_user_key(true);
     return;
   }
 
@@ -158,7 +160,7 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
     if (!shifted)
       unregister_code16(KC_9);
     else
-      process_record_user(U_USER, record);
+      process_user_key(false);
     return;
   }
 
@@ -441,16 +443,12 @@ bool process_audio_toggle(keyrecord_t *record) {
 
 // User key
 
-bool process_user_key(keyrecord_t *record) {
-  SEND_STRING("uu");
+bool process_user_key(bool pressed) {
   // Placeholder - make key visible
-  if (record->event.pressed) {
-    SEND_STRING("p");
+  if (pressed)
     register_code16(KC_QUESTION);
-  } else {
-    SEND_STRING("r");
+  else
     unregister_code16(KC_QUESTION);
-  }
   return false;
 }
 
@@ -494,7 +492,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return process_audio_toggle(record);
 #endif
     case U_USER:
-      return process_user_key(record);
+      return process_user_key(record->event.pressed);
     default:
       return true;
   }
