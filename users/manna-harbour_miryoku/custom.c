@@ -103,7 +103,7 @@ extern const key_override_t **key_overrides;
 const key_override_t nine_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM);
 
 bool key_override_tap(bool key_down, void *context) {
-  uint16_t keycode = (intptr_t)context;
+  // uint16_t keycode = (intptr_t)context;
   // Tap to prevent autorepeat
   if (key_down)
     // tap_code16(keycode);
