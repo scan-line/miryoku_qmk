@@ -107,8 +107,8 @@ const key_override_t nine_key_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_
 extern void set_weak_override_mods(uint8_t mods);
 
 bool key_override_tap(bool key_down, void *context) {
-  // uint16_t keycode = (intptr_t)context;
-  uint16_t keycode = KC_LEFT_PAREN;
+  uint16_t keycode = (intptr_t)context;
+  // uint16_t keycode = KC_LEFT_PAREN;
 
   // Tap to prevent autorepeat
   if (key_down) {
