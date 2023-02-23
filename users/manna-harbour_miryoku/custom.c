@@ -15,6 +15,20 @@
 #endif
 
 
+// Persistent user state
+
+typedef union {
+  uint32_t raw;
+  struct {
+    // Set if in linux mode
+    // See also ctl-gui-swap for mac mode / windows mode
+    bool os_mode_linux :1;
+  };
+} user_config_t;
+
+user_config_t user_config;
+
+
 // Sounds
 
 #ifdef AUDIO_ENABLE
@@ -78,121 +92,30 @@ void show_value(uint16_t keycode, uint16_t value, bool detent) {
 }
 
 
-// Persistent user state
+// Layers
 
-typedef union {
-  uint32_t raw;
-  struct {
-    // Set if in linux mode
-    // See also ctl-gui-swap for mac mode / windows mode
-    bool os_mode_linux :1;
-  };
-} user_config_t;
-
-user_config_t user_config;
-
-
-// Shift and Auto Shift overrides
-
-#define LAYER_MASK_NUM (1 << U_NUM)
-
-// Defined in action_util.c
-extern void set_weak_override_mods(uint8_t mods);
-// Defined in manna-harbour_miryoku.c
-extern const key_override_t capsword_key_override;
-extern const key_override_t **key_overrides;
-
-bool key_override_tap(bool key_down, void *context) {
-  uint16_t keycode = (intptr_t)context;
-
-  // Tap to prevent autorepeat
-  if (key_down) {
-    uint8_t mods = QK_MODS_GET_MODS(keycode);
-    set_weak_override_mods(mods);
-    tap_code(keycode);
+const char* layer_name(uint8_t layer) {
+  switch(layer) {
+#   define MIRYOKU_X(LAYER, STRING) case U_##LAYER: return STRING;
+      MIRYOKU_LAYER_LIST
+#   undef MIRYOKU_X
+    default:
+      return "Unknown";
   }
-  return false;
 }
 
-// Customized ko_make_with_layers
-// Removes auto-repeat on keypress
-#define user_make_with_layers(trigger_mods_, trigger_key, replacement_key, layer_mask)  \
-  ((const key_override_t){                                    \
-    .trigger_mods       = (trigger_mods_),                    \
-    .layers             = (layer_mask),                       \
-    .suppressed_mods    = (trigger_mods_),                    \
-    .options            = ko_options_default,                 \
-    .negative_mod_mask  = 0,                                  \
-    .custom_action      = key_override_tap,                   \
-    .context            = (void*)(intptr_t)replacement_key,   \
-    .trigger            = (trigger_key),                      \
-    .replacement        = (KC_NO),                            \
-    .enabled            = NULL                                \
-  })
-
-const key_override_t dot_key_override = user_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM );
-const key_override_t nine_key_override = user_make_with_layers(MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM );
-
-const key_override_t **custom_key_overrides = (const key_override_t *[]){
-  &capsword_key_override,
-  &dot_key_override,
-  &nine_key_override,
-  NULL
-};
-
-bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
-  const uint8_t layer = read_source_layers_cache(record->event.key);
-
-  // Add, even where auto-shifted by default
-  // For consistency with autoshift_press/release_user
-  
-  if (keycode == KC_DOT && layer == U_NUM)
-    return true;
-  
-  if (keycode == KC_9 && layer == U_NUM)
-    return true;
-
-  return false;
+layer_state_t layer_state_set_user(layer_state_t state) {
+  const uint8_t layer = get_highest_layer(state|default_layer_state);
+  show_layer(layer);
+  return state;
 }
 
-void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
-  const uint8_t layer = read_source_layers_cache(record->event.key);
-  // Beware - record->event.pressed may be false
-
-  if (keycode == KC_DOT && layer == U_NUM) {
-    register_code16((!shifted) ? KC_DOT : KC_LEFT_PAREN);
-    return;
-  }
-  
-  if (keycode == KC_9 && layer == U_NUM) {
-    register_code16((!shifted) ? KC_9 : U_USER);
-    return;
-  }
-
-  if (shifted)
-    add_weak_mods(MOD_BIT(KC_LSFT));
-  // & 0xFF gets the Tap key for Tap Holds, required when using Retro Shift
-  register_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
-}
-
-void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
-  const uint8_t layer = read_source_layers_cache(record->event.key);
-
-  if (keycode == KC_DOT && layer == U_NUM) {
-    unregister_code16((!shifted) ? KC_DOT : KC_LEFT_PAREN);
-    return;
-  }
-  
-  if (keycode == KC_9 && layer == U_NUM) {
-    unregister_code16((!shifted) ? KC_9 : U_USER);
-    return;
-  }
-
-  // & 0xFF gets the Tap key for Tap Holds, required when using Retro Shift
-  // The IS_RETRO check isn't really necessary here, always using
-  // keycode & 0xFF would be fine.
-  unregister_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
-  // Clearing mods is handled by caller
+layer_state_t default_layer_state_set_user(layer_state_t state) {
+  const uint8_t default_layer = get_highest_layer(state);
+  show_default_layer(default_layer);
+  const uint8_t layer = get_highest_layer(state|layer_state);
+  show_layer(layer);
+  return state;
 }
 
 
@@ -295,31 +218,29 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
 }
 
 
-// Layers
+// Audio
 
-const char* layer_name(uint8_t layer) {
-  switch(layer) {
-#   define MIRYOKU_X(LAYER, STRING) case U_##LAYER: return STRING;
-      MIRYOKU_LAYER_LIST
-#   undef MIRYOKU_X
-    default:
-      return "Unknown";
+#ifdef AUDIO_ENABLE
+
+bool process_audio_toggle(keyrecord_t *record) {
+  if (!record->event.pressed)
+    return false;
+  
+  // Show toggle in the on state
+  if (audio_is_on()) {
+      show_toggle(QK_AUDIO_TOGGLE, false);
+      // Wait for the show_toggle sound to finish
+      // (the wait inside audio_off is not enough)
+      wait_ms(100);
+      audio_off();
+  } else {
+      audio_on();
+      show_toggle(QK_AUDIO_TOGGLE, true);
   }
+  return false;
 }
 
-layer_state_t layer_state_set_user(layer_state_t state) {
-  const uint8_t layer = get_highest_layer(state|default_layer_state);
-  show_layer(layer);
-  return state;
-}
-
-layer_state_t default_layer_state_set_user(layer_state_t state) {
-  const uint8_t default_layer = get_highest_layer(state);
-  show_default_layer(default_layer);
-  const uint8_t layer = get_highest_layer(state|layer_state);
-  show_layer(layer);
-  return state;
-}
+#endif
 
 
 // Rgb
@@ -441,31 +362,6 @@ bool process_rgb_speed(keyrecord_t *record) {
 #endif
 
 
-// Audio
-
-#ifdef AUDIO_ENABLE
-
-bool process_audio_toggle(keyrecord_t *record) {
-  if (!record->event.pressed)
-    return false;
-  
-  // Show toggle in the on state
-  if (audio_is_on()) {
-      show_toggle(QK_AUDIO_TOGGLE, false);
-      // Wait for the show_toggle sound to finish
-      // (the wait inside audio_off is not enough)
-      wait_ms(100);
-      audio_off();
-  } else {
-      audio_on();
-      show_toggle(QK_AUDIO_TOGGLE, true);
-  }
-  return false;
-}
-
-#endif
-
-
 // Key processing
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -507,6 +403,110 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     default:
       return true;
   }
+}
+
+
+// Shift and Auto Shift overrides
+
+#define LAYER_MASK_NUM (1 << U_NUM)
+
+// Defined in action_util.c
+extern void set_weak_override_mods(uint8_t mods);
+// Defined in manna-harbour_miryoku.c
+extern const key_override_t capsword_key_override;
+extern const key_override_t **key_overrides;
+
+bool key_override_tap(bool key_down, void *context) {
+  uint16_t keycode = (intptr_t)context;
+
+  // Tap to prevent autorepeat
+  if (key_down) {
+    uint8_t mods = QK_MODS_GET_MODS(keycode);
+    set_weak_override_mods(mods);
+    tap_code(keycode);
+  }
+  return false;
+}
+
+// Customized ko_make_with_layers
+// Removes auto-repeat on keypress
+#define user_ko_make(trigger_mods_, trigger_key, replacement_key, layer_mask)  \
+  ((const key_override_t){                                    \
+    .trigger_mods       = (trigger_mods_),                    \
+    .layers             = (layer_mask),                       \
+    .suppressed_mods    = (trigger_mods_),                    \
+    .options            = ko_options_default,                 \
+    .negative_mod_mask  = 0,                                  \
+    .custom_action      = key_override_tap,                   \
+    .context            = (void*)(intptr_t)replacement_key,   \
+    .trigger            = (trigger_key),                      \
+    .replacement        = (KC_NO),                            \
+    .enabled            = NULL                                \
+  })
+
+const key_override_t dot_key_override = user_ko_make(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM );
+const key_override_t nine_key_override = user_ko_make(MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM );
+
+const key_override_t **custom_key_overrides = (const key_override_t *[]){
+  &capsword_key_override,
+  &dot_key_override,
+  &nine_key_override,
+  NULL
+};
+
+bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
+  const uint8_t layer = read_source_layers_cache(record->event.key);
+
+  // Add, even where auto-shifted by default
+  // For consistency with autoshift_press/release_user
+  
+  if (keycode == KC_DOT && layer == U_NUM)
+    return true;
+  
+  if (keycode == KC_9 && layer == U_NUM)
+    return true;
+
+  return false;
+}
+
+void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
+  const uint8_t layer = read_source_layers_cache(record->event.key);
+  // Beware - record->event.pressed may be false
+
+  if (keycode == KC_DOT && layer == U_NUM) {
+    register_code16((!shifted) ? KC_DOT : KC_LEFT_PAREN);
+    return;
+  }
+  
+  if (keycode == KC_9 && layer == U_NUM) {
+    register_code16((!shifted) ? KC_9 : U_USER);
+    return;
+  }
+
+  if (shifted)
+    add_weak_mods(MOD_BIT(KC_LSFT));
+  // & 0xFF gets the Tap key for Tap Holds, required when using Retro Shift
+  register_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
+}
+
+void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
+  const uint8_t layer = read_source_layers_cache(record->event.key);
+
+  if (keycode == KC_DOT && layer == U_NUM) {
+    unregister_code16((!shifted) ? KC_DOT : KC_LEFT_PAREN);
+    return;
+  }
+  
+  if (keycode == KC_9 && layer == U_NUM) {
+    unregister_code16((!shifted) ? KC_9 : U_USER);
+    return;
+  }
+
+  // & 0xFF gets the Tap key for Tap Holds, required when using Retro Shift
+  // The IS_RETRO check isn't really necessary here, always using
+  // keycode & 0xFF would be fine.
+  unregister_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
+  // Clearing mods is handled by caller
 }
 
 
