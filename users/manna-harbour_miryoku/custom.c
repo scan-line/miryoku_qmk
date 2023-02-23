@@ -83,7 +83,8 @@ void show_value(uint16_t keycode, uint16_t value, bool detent) {
 typedef union {
   uint32_t raw;
   struct {
-    // For mac mode look for ctl-gui-swap
+    // Set if in linux mode
+    // See also ctl-gui-swap for mac mode / windows mode
     bool os_mode_linux :1;
   };
 } user_config_t;
@@ -115,19 +116,19 @@ bool key_override_tap(bool key_down, void *context) {
 
 // Customized ko_make_with_layers
 // Removes auto-repeat on keypress
-#define user_make_with_layers(trigger_mods_, trigger_key, replacement_key, layer_mask)      \
-    ((const key_override_t){                                                                \
-        .trigger_mods                           = (trigger_mods_),                          \
-        .layers                                 = (layer_mask),                             \
-        .suppressed_mods                        = (trigger_mods_),                          \
-        .options                                = ko_options_default,                       \
-        .negative_mod_mask                      = 0,                                        \
-        .custom_action                          = key_override_tap,                         \
-        .context                                = (void*)(intptr_t)replacement_key,         \
-        .trigger                                = (trigger_key),                            \
-        .replacement                            = (KC_NO),                                  \
-        .enabled                                = NULL                                      \
-    })
+#define user_make_with_layers(trigger_mods_, trigger_key, replacement_key, layer_mask)  \
+  ((const key_override_t){                                    \
+    .trigger_mods       = (trigger_mods_),                    \
+    .layers             = (layer_mask),                       \
+    .suppressed_mods    = (trigger_mods_),                    \
+    .options            = ko_options_default,                 \
+    .negative_mod_mask  = 0,                                  \
+    .custom_action      = key_override_tap,                   \
+    .context            = (void*)(intptr_t)replacement_key,   \
+    .trigger            = (trigger_key),                      \
+    .replacement        = (KC_NO),                            \
+    .enabled            = NULL                                \
+  })
 
 const key_override_t dot_key_override = user_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM );
 const key_override_t nine_key_override = user_make_with_layers(MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM );
@@ -265,11 +266,11 @@ const uint16_t PROGMEM os_mac_keycodes[] = { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V),
 bool process_clipcode(clip_t clip, keyrecord_t *record) {
   // Windows keycodes are translated
   if (os_mode == OS_MODE_WIN) {
-    uint16_t keycode = os_win_keycodes[clip];
-    uint8_t mods = QK_MODS_GET_MODS(keycode);
+    const uint16_t keycode = os_win_keycodes[clip];
+    const uint8_t mods = QK_MODS_GET_MODS(keycode);
     if (record->event.pressed) {
       register_weak_mods(mods);
-      // Add delay for Windows Remote Desktop
+      // Delay between mods and key down for Windows Remote Desktop
       wait_ms(TAP_CODE_DELAY);
       register_code(keycode);
     } else {
@@ -281,10 +282,11 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
   
   // Mac keycodes are translated
   if (os_mode == OS_MODE_MAC) {
+    const uint16_t keycode = os_win_keycodes[clip];
     if (record->event.pressed)
-      register_code16(os_mac_keycodes[clip]);
+      register_code16(keycode);
     else
-      unregister_code16(os_mac_keycodes[clip]);
+      unregister_code16(keycode);
     return false;
   }
   
@@ -306,15 +308,15 @@ const char* layer_name(uint8_t layer) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-  uint8_t layer = get_highest_layer(state|default_layer_state);
+  const uint8_t layer = get_highest_layer(state|default_layer_state);
   show_layer(layer);
   return state;
 }
 
 layer_state_t default_layer_state_set_user(layer_state_t state) {
-  uint8_t default_layer = get_highest_layer(state);
+  const uint8_t default_layer = get_highest_layer(state);
   show_default_layer(default_layer);
-  uint8_t layer = get_highest_layer(state|layer_state);
+  const uint8_t layer = get_highest_layer(state|layer_state);
   show_layer(layer);
   return state;
 }
@@ -360,14 +362,14 @@ bool process_rgb_mode(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
   
-  uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
+  const uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
   if (!shifted)
     rgb_matrix_step();
   else
     rgb_matrix_step_reverse();
   
-  uint8_t mode = rgb_matrix_get_mode();
-  bool detent = (mode == RGB_MATRIX_DEFAULT_MODE);
+  const uint8_t mode = rgb_matrix_get_mode();
+  const bool detent = (mode == RGB_MATRIX_DEFAULT_MODE);
   show_value(RGB_MOD, mode, detent);
   return false;
 }
@@ -376,14 +378,14 @@ bool process_rgb_hue(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
   
-  uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
+  const uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
   if (!shifted)
     rgb_matrix_increase_hue();
   else
     rgb_matrix_decrease_hue();
   
-  uint8_t hue = rgb_matrix_get_hue();
-  bool detent = (hue == RGB_MATRIX_DEFAULT_HUE);
+  const uint8_t hue = rgb_matrix_get_hue();
+  const bool detent = (hue == RGB_MATRIX_DEFAULT_HUE);
   show_value(RGB_HUI, hue, detent);
   return false;
 }
@@ -392,14 +394,14 @@ bool process_rgb_sat(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
   
-  uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
+  const uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
   if (!shifted)
     rgb_matrix_increase_sat();
   else
     rgb_matrix_decrease_sat();
   
-  uint8_t sat = rgb_matrix_get_sat();
-  bool detent = slider_on_detent(sat, RGB_MATRIX_DEFAULT_SAT, RGB_MATRIX_SAT_STEP);
+  const uint8_t sat = rgb_matrix_get_sat();
+  const bool detent = slider_on_detent(sat, RGB_MATRIX_DEFAULT_SAT, RGB_MATRIX_SAT_STEP);
   show_value(RGB_SAI, sat, detent);
   return false;
 }
@@ -408,14 +410,14 @@ bool process_rgb_val(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
   
-  uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
+  const uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
   if (!shifted)
     rgb_matrix_increase_val();
   else
     rgb_matrix_decrease_val();
   
-  uint8_t val = rgb_matrix_get_val();
-  bool detent = slider_on_detent(val, RGB_MATRIX_DEFAULT_VAL, RGB_MATRIX_VAL_STEP);
+  const uint8_t val = rgb_matrix_get_val();
+  const bool detent = slider_on_detent(val, RGB_MATRIX_DEFAULT_VAL, RGB_MATRIX_VAL_STEP);
   show_value(RGB_VAI, val, detent);
   return false;
 }
@@ -430,8 +432,8 @@ bool process_rgb_speed(keyrecord_t *record) {
   else
     rgb_matrix_decrease_speed();
   
-  uint8_t spd = rgb_matrix_get_speed();
-  bool detent = slider_on_detent(spd, RGB_MATRIX_DEFAULT_SPD, RGB_MATRIX_SPD_STEP);
+  const uint8_t spd = rgb_matrix_get_speed();
+  const bool detent = slider_on_detent(spd, RGB_MATRIX_DEFAULT_SPD, RGB_MATRIX_SPD_STEP);
   show_value(RGB_SPI, spd, detent);
   return false;
 }
