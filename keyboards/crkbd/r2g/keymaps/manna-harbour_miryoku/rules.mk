@@ -1,4 +1,5 @@
-# TODO - Copyright
+# Copyright 2023 Scan Line
+# https://github.com/scan-line
 
 RGB_MATRIX_ENABLE = yes
 
