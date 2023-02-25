@@ -518,14 +518,12 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
   // Extra delay on weaker ring and pinky fingers
   switch (keycode) {
-    // Colemak DH
+    // Colemak DH, Qwerty
     case LGUI_T(KC_A):
     case LGUI_T(KC_O):
+    case LGUI_T(KC_QUOT):
     case LALT_T(KC_R):
     case LALT_T(KC_I):
-    // Qwerty
-    case LGUI_T(KC_A):
-    case LGUI_T(KC_QUOT):
     case LALT_T(KC_S):
     case LALT_T(KC_L):
       return SLOW_TAPPING_TERM;
