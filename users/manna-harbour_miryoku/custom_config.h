@@ -75,11 +75,11 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Configure QMK
 
-// Miryoku config.h unconditionally resets plain TAPPING_TERM to 200
-#define TAPPING_TERM_PER_KEY
+// Beware - Miryoku config.h unconditionally resets TAPPING_TERM to 200
 // Per-key tapping terms
-#define FAST_TAPPING_TERM 230
-#define SLOW_TAPPING_TERM 300
+#define TAPPING_TERM_PER_KEY
+#define FAST_TAPPING_TERM (TAPPING_TERM + 30)
+#define SLOW_TAPPING_TERM (TAPPING_TERM + 100)
 
 // For windows remote desktop
 // especially cut/copy/paste and left/right parenthesis
