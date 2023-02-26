@@ -172,6 +172,42 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
 }
 
 
+// User key
+
+// UK pound macros
+#define OS_WIN_GBP  \
+  SS_DOWN(X_LALT)   \
+  SS_TAP(X_KP_0)    \
+  SS_TAP(X_KP_1)    \
+  SS_TAP(X_KP_6)    \
+  SS_TAP(X_KP_3)    \
+  SS_UP(X_LALT)
+#define OS_MAC_GBP SS_RALT("3")
+#define OS_LNX_GBP SS_LCTL("U") "00A3" SS_TAP(X_ENTER)
+
+bool process_user(bool key_down) {
+  if (!key_down)
+    return false;
+
+  // Send UK pound
+  // (no autorepeat)
+  switch (os_mode) {
+    case OS_MODE_WIN;
+      SEND_STRING_DELAY(OS_WIN_GBP, TAP_CODE_DELAY);
+      break;
+    case OS_MODE_MAC;
+      SEND_STRING_DELAY(OS_MAC_GBP, TAP_CODE_DELAY);
+      break;
+    case OS_MODE_LNX;
+      SEND_STRING_DELAY(OS_LNX_GBP, TAP_CODE_DELAY);
+      break;
+    default:
+      break;
+  }
+  return false;
+}
+
+
 // OS-specific clipboard and undo/redo
 
 typedef enum {
@@ -369,6 +405,8 @@ bool process_rgb_speed(keyrecord_t *record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    case U_USER:
+      return process_user(record->event.pressed);
     case U_WIN:
       return process_os_mode(OS_MODE_WIN, record);
     case U_MAC:
@@ -421,6 +459,12 @@ extern const key_override_t **key_overrides;
 
 bool key_override_tap(bool key_down, void *context) {
   uint16_t keycode = (intptr_t)context;
+  
+  if (keycode == U_USER) {
+    uint8_t mods = QK_MODS_GET_MODS(keycode);
+    set_weak_override_mods(mods);
+    return process_user(key_down);
+  }
 
   // Tap to prevent autorepeat
   if (key_down) {
@@ -482,7 +526,10 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
   }
   
   if (keycode == KC_9 && layer == U_NUM) {
-    register_code16((!shifted) ? KC_9 : U_USER);
+    if (!shifted)
+      register_code16(KC_9)
+    else
+      process_user(true);
     return;
   }
 
@@ -501,7 +548,10 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
   }
   
   if (keycode == KC_9 && layer == U_NUM) {
-    unregister_code16((!shifted) ? KC_9 : U_USER);
+    if (!shifted)
+      unregister_code16(KC_9);
+    else
+      process_user(false);
     return;
   }
 
