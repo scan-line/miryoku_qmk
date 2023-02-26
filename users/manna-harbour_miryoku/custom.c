@@ -196,9 +196,9 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
   SS_TAP(X_ENTER)
 
 void num_lock_on(void) {
-  const bool numlock = host_keyboard_led_state().num_lock;
-  if (!numlock)
-    tap_code(KC_NUMLOCK);
+  const bool num_lock = host_keyboard_led_state().num_lock;
+  if (!num_lock)
+    tap_code(KC_NUM_LOCK);
 }
 
 void register_userkey(void) {
@@ -206,7 +206,7 @@ void register_userkey(void) {
   // (no autorepeat)
   switch (os_mode) {
     case OS_MODE_WIN:
-      // Turn on numlock for numpad unicode entry
+      // Turn on num-lock for numpad unicode entry
       num_lock_on();
       SEND_STRING_DELAY(OS_WIN_GBP, TAP_CODE_DELAY);
       break;
