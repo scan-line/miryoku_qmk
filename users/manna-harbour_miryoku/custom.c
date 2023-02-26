@@ -189,7 +189,7 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
 #define OS_LNX_GBP  \
   SS_DOWN(X_LALT)   \
   SS_DOWN(X_LSFT)   \
-  SS_TAP("u")       \
+  "u"               \
   SS_UP(X_SHFT)     \
   SS_UP(X_LSFT)     \
   "00a3"            \
