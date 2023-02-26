@@ -195,20 +195,17 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
   "00a3"            \
   SS_TAP(X_ENTER)
 
-void num_lock_on(void) {
-  const bool num_lock = host_keyboard_led_state().num_lock;
-  if (!num_lock)
-    tap_code(KC_NUM_LOCK);
-}
-
 void register_userkey(void) {
   // Send UK pound
   // (no autorepeat)
   switch (os_mode) {
     case OS_MODE_WIN:
-      // Turn on num-lock for numpad unicode entry
-      num_lock_on();
-      SEND_STRING_DELAY(OS_WIN_GBP, TAP_CODE_DELAY);
+      // Numpad unicode entry requires num-lock on
+      // This is normally the default state
+      if (host_keyboard_led_state().num_lock)
+        SEND_STRING_DELAY(OS_WIN_GBP, TAP_CODE_DELAY);
+      else
+        SEND_STRING("?");
       break;
     case OS_MODE_MAC:
       SEND_STRING_DELAY(OS_MAC_GBP, TAP_CODE_DELAY);
