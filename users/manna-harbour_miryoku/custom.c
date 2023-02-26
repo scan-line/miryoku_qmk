@@ -194,6 +194,8 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
   SS_UP(X_LALT)     \
   "00a3"            \
   SS_TAP(X_ENTER)
+#define OS_ERR_GBP  \
+  "?"
 
 void register_userkey(void) {
   // Send UK pound
@@ -202,20 +204,24 @@ void register_userkey(void) {
     case OS_MODE_WIN:
       // Numpad unicode entry requires num-lock on
       // This is normally the default state
-      if (host_keyboard_led_state().num_lock)
-        SEND_STRING_DELAY(OS_WIN_GBP, TAP_CODE_DELAY);
-      else
-        SEND_STRING("?");
-      break;
+      if (!host_keyboard_led_state().num_lock)
+        break;
+      SEND_STRING_DELAY(OS_WIN_GBP, TAP_CODE_DELAY);
+      return;
     case OS_MODE_MAC:
       SEND_STRING_DELAY(OS_MAC_GBP, TAP_CODE_DELAY);
-      break;
+      return;
     case OS_MODE_LNX:
+      // Linux requires a Ctrl-Shift-U
+      // Caps lock interferes
+      if (host_keyboard_led_state().caps_lock)
+        break;
       SEND_STRING_DELAY(OS_LNX_GBP, TAP_CODE_DELAY);
-      break;
+      return;
     default:
       break;
   }
+  SEND_STRING_DELAY(OS_ERR_GBP, TAP_CODE_DELAY);
 }
 
 void unregister_userkey(void) {
