@@ -185,7 +185,7 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
 #define OS_MAC_GBP SS_RALT("3")
 #define OS_LNX_GBP SS_LCTL("U") "00A3" SS_TAP(X_ENTER)
 
-void register_user() {
+void register_userkey() {
   // Send UK pound
   // (no autorepeat)
   switch (os_mode) {
@@ -203,20 +203,20 @@ void register_user() {
   }
 }
 
-void unregister_user() {
+void unregister_userkey() {
 }
 
-void tap_user() {
-  register_user();
+void tap_userkey() {
+  register_userkey();
   wait_ms(TAP_CODE_DELAY);
-  unregister_user();
+  unregister_userkey();
 }
 
-bool process_user(keyrecord_t *record) {
+bool process_userkey(keyrecord_t *record) {
   if (record->event.pressed)
-    register_user();
+    register_userkey();
   else
-    unregister_user();
+    unregister_userkey();
   return false;
 }
 
@@ -419,7 +419,7 @@ bool process_rgb_speed(keyrecord_t *record) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case U_USER:
-      return process_user(record);
+      return process_userkey(record);
     case U_WIN:
       return process_os_mode(OS_MODE_WIN, record);
     case U_MAC:
@@ -479,7 +479,7 @@ bool key_override_tap(bool key_down, void *context) {
     set_weak_override_mods(mods);
     
     if (keycode == U_USER)
-      tap_user();
+      tap_userkey();
     else
       tap_code(keycode);
   }
@@ -540,7 +540,7 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
     if (!shifted)
       register_code16(KC_9)
     else
-      register_user();
+      register_userkey();
     return;
   }
 
@@ -562,7 +562,7 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
     if (!shifted)
       unregister_code16(KC_9);
     else
-      unregister_user();
+      unregister_userkey();
     return;
   }
 
