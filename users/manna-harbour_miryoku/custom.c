@@ -208,7 +208,7 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
   
   // Mac keycodes are translated
   if (os_mode == OS_MODE_MAC) {
-    const uint16_t keycode = os_win_keycodes[clip];
+    const uint16_t keycode = os_mac_keycodes[clip];
     if (record->event.pressed)
       register_code16(keycode);
     else
