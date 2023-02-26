@@ -12,19 +12,17 @@
 // This header is included by both c and assembler source
 // and the assembly will fail
 // Steal some unused keycodes instead
-#define U_WIN PB_1
-#define U_MAC PB_2
-#define U_LNX PB_3
-#define U_RGB_TOG PB_4
-#define U_RGB_MOD PB_5
-#define U_RGB_HUI PB_6
-#define U_RGB_SAI PB_7
-#define U_RGB_VAI PB_8
-#define U_RGB_SPI PB_9
-#define U_AUD_TOG PB_10
-
-// Replace the duplicated left parenthesis
-#define U_USER KC_QUESTION
+#define U_USER PB_1
+#define U_WIN PB_2
+#define U_MAC PB_3
+#define U_LNX PB_4
+#define U_RGB_TOG PB_5
+#define U_RGB_MOD PB_6
+#define U_RGB_HUI PB_7
+#define U_RGB_SAI PB_8
+#define U_RGB_VAI PB_9
+#define U_RGB_SPI PB_10
+#define U_AUD_TOG PB_11
 
 
 // Layers
