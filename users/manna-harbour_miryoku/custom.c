@@ -460,17 +460,16 @@ extern const key_override_t **key_overrides;
 bool key_override_tap(bool key_down, void *context) {
   uint16_t keycode = (intptr_t)context;
   
-  if (keycode == U_USER) {
-    uint8_t mods = QK_MODS_GET_MODS(keycode);
-    set_weak_override_mods(mods);
-    return process_user(key_down);
-  }
-
   // Tap to prevent autorepeat
   if (key_down) {
     uint8_t mods = QK_MODS_GET_MODS(keycode);
     set_weak_override_mods(mods);
-    tap_code(keycode);
+    
+    if (keycode == U_USER) {
+      process_user(true);
+      process_user(false);
+    } else {
+      tap_code(keycode);
   }
   return false;
 }
