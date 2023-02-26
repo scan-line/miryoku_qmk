@@ -190,10 +190,8 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
   SS_DOWN(X_LALT)   \
   SS_DOWN(X_LSFT)   \
   "u"               \
-  SS_UP(X_SHFT)     \
   SS_UP(X_LSFT)     \
-  
-#define UNUSED      \
+  SS_UP(X_LALT)     \
   "00a3"            \
   SS_TAP(X_ENTER)
 
