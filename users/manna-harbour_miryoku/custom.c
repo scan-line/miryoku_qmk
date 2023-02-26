@@ -481,13 +481,12 @@ extern const key_override_t capsword_key_override;
 extern const key_override_t **key_overrides;
 
 bool key_override_tap(bool key_down, void *context) {
-  uint16_t keycode = (intptr_t)context;
-  
-  // Tap to prevent autorepeat
   if (key_down) {
-    uint8_t mods = QK_MODS_GET_MODS(keycode);
+    const uint16_t keycode = (intptr_t)context;
+    const uint8_t mods = QK_MODS_GET_MODS(keycode);
     set_weak_override_mods(mods);
     
+    // Tap to prevent autorepeat
     if (keycode == U_USER)
       tap_userkey();
     else
