@@ -189,13 +189,13 @@ void register_user() {
   // Send UK pound
   // (no autorepeat)
   switch (os_mode) {
-    case OS_MODE_WIN;
+    case OS_MODE_WIN:
       SEND_STRING_DELAY(OS_WIN_GBP, TAP_CODE_DELAY);
       break;
-    case OS_MODE_MAC;
+    case OS_MODE_MAC:
       SEND_STRING_DELAY(OS_MAC_GBP, TAP_CODE_DELAY);
       break;
-    case OS_MODE_LNX;
+    case OS_MODE_LNX:
       SEND_STRING_DELAY(OS_LNX_GBP, TAP_CODE_DELAY);
       break;
     default:
