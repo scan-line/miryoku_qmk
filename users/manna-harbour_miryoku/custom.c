@@ -208,6 +208,7 @@ void unregister_user() {
 
 void tap_user() {
   register_user();
+  wait_ms(TAP_CODE_DELAY);
   unregister_user();
 }
 
