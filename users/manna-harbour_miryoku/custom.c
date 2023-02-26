@@ -195,12 +195,6 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
   "00a3"            \
   SS_TAP(X_ENTER)
 
-#undef OS_MAC_GBP
-#define OS_MAC_GBP  \
-  SS_DOWN(X_A)      \
-  "3"               \
-  SS_UP(X_A)
-
 void register_userkey(void) {
   // Send UK pound
   // (no autorepeat)
