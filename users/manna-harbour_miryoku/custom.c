@@ -208,7 +208,7 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
   
   // Mac keycodes are translated
   if (os_mode == OS_MODE_MAC) {
-    const uint16_t keycode = os_win_keycodes[clip];
+    const uint16_t keycode = os_mac_keycodes[clip];
     if (record->event.pressed)
       register_code16(keycode);
     else
@@ -510,6 +510,26 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
   // keycode & 0xFF would be fine.
   unregister_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
   // Clearing mods is handled by caller
+}
+
+
+// Tapping term
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+  // Extra delay on weaker ring and pinky fingers
+  switch (keycode) {
+    // Colemak DH, Qwerty
+    case LGUI_T(KC_A):
+    case LGUI_T(KC_O):
+    case LGUI_T(KC_QUOT):
+    case LALT_T(KC_R):
+    case LALT_T(KC_I):
+    case LALT_T(KC_S):
+    case LALT_T(KC_L):
+      return SLOW_TAPPING_TERM;
+    default:
+      return FAST_TAPPING_TERM;
+  }
 }
 
 
