@@ -187,6 +187,9 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
   "3"               \
   SS_UP(X_RALT)
 #define OS_LNX_GBP  \
+  "todo"
+  
+#define UNUSED      \
   SS_DOWN(X_LALT)   \
   SS_DOWN(X_LSFT)   \
   "u"               \
