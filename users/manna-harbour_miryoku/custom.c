@@ -182,8 +182,18 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
   SS_TAP(X_KP_6)    \
   SS_TAP(X_KP_3)    \
   SS_UP(X_LALT)
-#define OS_MAC_GBP SS_RALT("3")
-#define OS_LNX_GBP SS_LCTL("U") "00A3" SS_TAP(X_ENTER)
+#define OS_MAC_GBP  \
+  SS_DOWN(X_RALT)   \
+  "3"               \
+  SS_UP(X_RALT)
+#define OS_LNX_GBP  \
+  SS_DOWN(X_LALT)   \
+  SS_DOWN(X_LSFT)   \
+  SS_TAP("u")       \
+  SS_UP(X_SHFT)     \
+  SS_UP(X_LSFT)     \
+  "00a3"            \
+  SS_TAP(X_ENTER)
 
 void register_userkey(void) {
   // Send UK pound
