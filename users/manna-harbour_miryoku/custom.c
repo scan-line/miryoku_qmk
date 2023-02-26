@@ -538,7 +538,7 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
   
   if (keycode == KC_9 && layer == U_NUM) {
     if (!shifted)
-      register_code16(KC_9)
+      register_code16(KC_9);
     else
       register_userkey();
     return;
