@@ -185,7 +185,7 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
 #define OS_MAC_GBP SS_RALT("3")
 #define OS_LNX_GBP SS_LCTL("U") "00A3" SS_TAP(X_ENTER)
 
-void register_userkey() {
+void register_userkey(void) {
   // Send UK pound
   // (no autorepeat)
   switch (os_mode) {
@@ -203,10 +203,10 @@ void register_userkey() {
   }
 }
 
-void unregister_userkey() {
+void unregister_userkey(void) {
 }
 
-void tap_userkey() {
+void tap_userkey(void) {
   register_userkey();
   wait_ms(TAP_CODE_DELAY);
   unregister_userkey();
