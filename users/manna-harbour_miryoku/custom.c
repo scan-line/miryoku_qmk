@@ -183,17 +183,11 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
   SS_TAP(X_KP_3)    \
   SS_UP(X_LALT)
 #define OS_MAC_GBP  \
-  SS_DOWN(X_RALT)   \
-  "3"               \
-  SS_UP(X_RALT)
+  SS_RALT("3")
 #define OS_LNX_GBP  \
-  SS_DOWN(X_LALT)   \
-  SS_DOWN(X_LSFT)   \
-  "u"               \
-  SS_UP(X_LSFT)     \
-  SS_UP(X_LALT)     \
+  SS_LALT("U")      \
   "00a3"            \
-  SS_TAP(X_SPACE)
+  " "
 #define OS_ERR_GBP  \
   "?"
 
