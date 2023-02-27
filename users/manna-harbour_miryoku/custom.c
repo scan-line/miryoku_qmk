@@ -193,7 +193,7 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
   SS_UP(X_LSFT)     \
   SS_UP(X_LALT)     \
   "00a3"            \
-  SS_TAP(X_ENTER)
+  SS_TAP(X_SPACE)
 #define OS_ERR_GBP  \
   "?"
 
