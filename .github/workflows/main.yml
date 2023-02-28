@@ -49,6 +49,8 @@ jobs:
         custom_config: ${{ fromJSON(inputs.custom_config) }}
         merge: ${{ fromJSON(inputs.merge) }}
     steps:
+      - name: Disable safe.directory check
+        run: git config --global --add safe.directory '*'
       - name: Checkout
         uses: actions/checkout@v3
       - name: Merge branches
