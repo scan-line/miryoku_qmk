@@ -253,6 +253,7 @@ const uint16_t PROGMEM os_mac_keycodes[] = { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V),
 bool process_clipcode(clip_t clip, keyrecord_t *record) {
   // Windows keycodes are translated
   if (os_mode == OS_MODE_WIN) {
+    const uint16_t keycode = os_win_keycodes[clip];
     if (record->event.pressed)
       register_code16(keycode);
     else
