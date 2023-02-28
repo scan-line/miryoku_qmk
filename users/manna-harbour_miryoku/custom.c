@@ -257,8 +257,6 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
     const uint8_t mods = QK_MODS_GET_MODS(keycode);
     if (record->event.pressed) {
       register_weak_mods(mods);
-      // Delay between mods and key down for Windows Remote Desktop
-      wait_ms(TAP_CODE_DELAY);
       register_code(keycode);
     } else {
       unregister_code(keycode);
@@ -584,6 +582,19 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
   // keycode & 0xFF would be fine.
   unregister_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
   // Clearing mods is handled by caller
+}
+
+
+// Windows Remote Desktop
+
+void register_weak_mods(uint8_t mods) {
+  if (mods) {
+    add_weak_mods(mods);
+    send_keyboard_report();
+    // Delay between mods and key down for Windows Remote Desktop
+    // Workaround for intermittent missing mods in full-screen
+    wait_ms(TAP_CODE_DELAY);
+  }
 }
 
 
