@@ -177,10 +177,7 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
 // UK pound macros
 #define OS_WIN_GBP  \
   SS_DOWN(X_LALT)   \
-  SS_TAP(X_KP_0)    \
-  SS_TAP(X_KP_1)    \
-  SS_TAP(X_KP_6)    \
-  SS_TAP(X_KP_3)    \
+  SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_6) SS_TAP(X_KP_3) \
   SS_UP(X_LALT)
 #define OS_MAC_GBP  \
   SS_LALT("3")
