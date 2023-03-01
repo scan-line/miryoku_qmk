@@ -588,7 +588,7 @@ void register_weak_mods(uint8_t mods) {
     add_weak_mods(mods);
     send_keyboard_report();
     // Delay between mods and key down for Windows Remote Desktop
-    // Workaround for intermittent missing mods in full-screen
+    // Workaround for intermittent missing mods when full-screen
     wait_ms(TAP_CODE_DELAY);
   }
 }
