@@ -585,7 +585,7 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
 
 void register_weak_mods(uint8_t mods) {
   if (mods) {
-    add_weak_mods_with_delay(mods);
+    add_weak_mods(mods);
     send_keyboard_report();
     // Delay between mods and key down for Windows Remote Desktop
     // Workaround for intermittent missing mods in full-screen
