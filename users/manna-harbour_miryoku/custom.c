@@ -552,7 +552,7 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
   }
 
   if (shifted)
-    add_weak_mods(MOD_BIT(KC_LSFT));
+    register_weak_mods(MOD_BIT(KC_LSFT));
   // & 0xFF gets the Tap key for Tap Holds, required when using Retro Shift
   register_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
 }
@@ -585,7 +585,7 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
 
 void register_weak_mods(uint8_t mods) {
   if (mods) {
-    add_weak_mods(mods);
+    add_weak_mods_with_delay(mods);
     send_keyboard_report();
     // Delay between mods and key down for Windows Remote Desktop
     // Workaround for intermittent missing mods in full-screen
