@@ -174,38 +174,27 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
 
 // User key
 
-const char* PROGMEM userkey_strings[CLIP_END] = {
-  [OS_MODE_WIN] =
-    SS_DOWN(X_LALT)
+const char* PROGMEM userkey_strings[] = {
+  [OS_MODE_WIN] = SS_DOWN(X_LALT)
     SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_6) SS_TAP(X_KP_3)
     SS_UP(X_LALT),
-  [OS_MODE_MAC] =
-    SS_LALT("3"),
-  [OS_MODE_LNX] =
-    SS_LALT("U")
-    "00a3"
-    " ",
+  [OS_MODE_MAC] = SS_LALT("3"),
+  [OS_MODE_LNX] = SS_LALT("U") "00a3" " ",
 };
-
-const char* userkey_error = "?";
 
 void register_userkey(void) {
   switch (os_mode) {
     case OS_MODE_WIN:
       // Numpad unicode entry requires num-lock on
       // This is normally the default state
-      if (!host_keyboard_led_state().num_lock) {
-        SEND_STRING_DELAY(userkey_error, TAP_CODE_DELAY);
+      if (!host_keyboard_led_state().num_lock)
         return;
-      }
       break;
     case OS_MODE_LNX:
       // Linux requires a Ctrl-Shift-U
       // Caps lock interferes
-      if (host_keyboard_led_state().caps_lock) {
-        SEND_STRING_DELAY(userkey_error, TAP_CODE_DELAY);
+      if (host_keyboard_led_state().caps_lock)
         return;
-      }
       break;
     case OS_MODE_MAC:
     default:
