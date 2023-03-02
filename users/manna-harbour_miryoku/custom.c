@@ -555,6 +555,7 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
 }
 
 
+#if 0
 // Windows Remote Desktop
 
 void register_weak_mods(uint8_t mods) {
@@ -566,6 +567,7 @@ void register_weak_mods(uint8_t mods) {
     wait_ms(WEAK_MODS_DELAY);
   }
 }
+#endif
 
 
 // Tapping term
