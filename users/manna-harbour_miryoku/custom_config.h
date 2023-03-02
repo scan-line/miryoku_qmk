@@ -79,7 +79,9 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #define FAST_TAPPING_TERM (TAPPING_TERM + 30)
 #define SLOW_TAPPING_TERM (TAPPING_TERM + 100)
 
+#if 0
 // For windows remote desktop
 // especially cut/copy/paste and left/right parenthesis
 #define TAP_CODE_DELAY 100
 #define WEAK_MODS_DELAY TAP_CODE_DELAY
+#endif
