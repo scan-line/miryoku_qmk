@@ -255,7 +255,8 @@ bool process_clipcode(clip_t clip, keyrecord_t *record) {
   if (record->event.pressed)
     register_code16(keycode);
   else
-    unregister_code16(keycode);  
+    unregister_code16(keycode);
+  return false;
 }
 
 
