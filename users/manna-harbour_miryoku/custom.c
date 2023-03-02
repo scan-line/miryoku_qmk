@@ -244,35 +244,18 @@ typedef enum {
   CLIP_END,
 } clip_t;
 
-// Windows os keycodes
-const uint16_t PROGMEM os_win_keycodes[] = { LCTL(KC_X), LCTL(KC_C), LCTL(KC_V), LCTL(KC_Z), LCTL(KC_Y), };
-// Mac os keycodes
-const uint16_t PROGMEM os_mac_keycodes[] = { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_Z), SCMD(KC_Z), };
-// Linux os keycodes are left as-is
+const uint16_t PROGMEM clipcodes[][CLIP_END] = {
+  [OS_MODE_WIN] = { LCTL(KC_X), LCTL(KC_C), LCTL(KC_V), LCTL(KC_Z), LCTL(KC_Y), },
+  [OS_MODE_MAC] = { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_Z), SCMD(KC_Z), },
+  [OS_MODE_LNX] = { U_CUT, U_CPY, U_PST, U_UND, U_RDO, },
+}
 
 bool process_clipcode(clip_t clip, keyrecord_t *record) {
-  // Windows keycodes are translated
-  if (os_mode == OS_MODE_WIN) {
-    const uint16_t keycode = os_win_keycodes[clip];
-    if (record->event.pressed)
-      register_code16(keycode);
-    else
-      unregister_code16(keycode);
-    return false;
-  }
-  
-  // Mac keycodes are translated
-  if (os_mode == OS_MODE_MAC) {
-    const uint16_t keycode = os_mac_keycodes[clip];
-    if (record->event.pressed)
-      register_code16(keycode);
-    else
-      unregister_code16(keycode);
-    return false;
-  }
-  
-  // Linux keycodes are passed through as-is
-  return true;
+  const uint16_t keycode = clipcodes[os_mode][clip];
+  if (record->event.pressed)
+    register_code16(keycode);
+  else
+    unregister_code16(keycode);  
 }
 
 
