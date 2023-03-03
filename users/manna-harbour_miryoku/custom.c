@@ -172,6 +172,57 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
 }
 
 
+// User key
+
+const char* PROGMEM userkey_strings[] = {
+  [OS_MODE_WIN] = SS_DOWN(X_LALT)
+    SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_6) SS_TAP(X_KP_3)
+    SS_UP(X_LALT),
+  [OS_MODE_MAC] = SS_LALT("3"),
+  [OS_MODE_LNX] = SS_LALT("U") "00a3" " ",
+};
+
+void register_userkey(void) {
+  switch (os_mode) {
+    case OS_MODE_WIN:
+      // Numpad unicode entry requires num-lock on
+      // This is normally the default state
+      if (!host_keyboard_led_state().num_lock)
+        return;
+      break;
+    case OS_MODE_LNX:
+      // Linux requires a Ctrl-Shift-U
+      // Caps lock interferes
+      if (host_keyboard_led_state().caps_lock)
+        return;
+      break;
+    case OS_MODE_MAC:
+    default:
+      break;
+  }
+
+  const char* userkey_string = userkey_strings[os_mode];
+  SEND_STRING_DELAY(userkey_string, TAP_CODE_DELAY);
+}
+
+void unregister_userkey(void) {
+}
+
+void tap_userkey(void) {
+  register_userkey();
+  wait_ms(TAP_CODE_DELAY);
+  unregister_userkey();
+}
+
+bool process_userkey(keyrecord_t *record) {
+  if (record->event.pressed)
+    register_userkey();
+  else
+    unregister_userkey();
+  return false;
+}
+
+
 // OS-specific clipboard and undo/redo
 
 typedef enum {
@@ -183,41 +234,19 @@ typedef enum {
   CLIP_END,
 } clip_t;
 
-// Windows os keycodes
-const uint16_t PROGMEM os_win_keycodes[] = { LCTL(KC_X), LCTL(KC_C), LCTL(KC_V), LCTL(KC_Z), LCTL(KC_Y), };
-// Mac os keycodes
-const uint16_t PROGMEM os_mac_keycodes[] = { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_Z), SCMD(KC_Z), };
-// Linux os keycodes are left as-is
+const uint16_t PROGMEM clipcodes[][CLIP_END] = {
+  [OS_MODE_WIN] = { LCTL(KC_X), LCTL(KC_C), LCTL(KC_V), LCTL(KC_Z), LCTL(KC_Y), },
+  [OS_MODE_MAC] = { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_Z), SCMD(KC_Z), },
+  [OS_MODE_LNX] = { U_CUT, U_CPY, U_PST, U_UND, U_RDO, },
+};
 
 bool process_clipcode(clip_t clip, keyrecord_t *record) {
-  // Windows keycodes are translated
-  if (os_mode == OS_MODE_WIN) {
-    const uint16_t keycode = os_win_keycodes[clip];
-    const uint8_t mods = QK_MODS_GET_MODS(keycode);
-    if (record->event.pressed) {
-      register_weak_mods(mods);
-      // Delay between mods and key down for Windows Remote Desktop
-      wait_ms(TAP_CODE_DELAY);
-      register_code(keycode);
-    } else {
-      unregister_code(keycode);
-      unregister_weak_mods(mods);
-    }
-    return false;
-  }
-  
-  // Mac keycodes are translated
-  if (os_mode == OS_MODE_MAC) {
-    const uint16_t keycode = os_mac_keycodes[clip];
-    if (record->event.pressed)
-      register_code16(keycode);
-    else
-      unregister_code16(keycode);
-    return false;
-  }
-  
-  // Linux keycodes are passed through as-is
-  return true;
+  const uint16_t keycode = clipcodes[os_mode][clip];
+  if (record->event.pressed)
+    register_code16(keycode);
+  else
+    unregister_code16(keycode);
+  return false;
 }
 
 
@@ -369,6 +398,8 @@ bool process_rgb_speed(keyrecord_t *record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    case U_USER:
+      return process_userkey(record);
     case U_WIN:
       return process_os_mode(OS_MODE_WIN, record);
     case U_MAC:
@@ -420,13 +451,18 @@ extern const key_override_t capsword_key_override;
 extern const key_override_t **key_overrides;
 
 bool key_override_tap(bool key_down, void *context) {
-  uint16_t keycode = (intptr_t)context;
-
-  // Tap to prevent autorepeat
   if (key_down) {
-    uint8_t mods = QK_MODS_GET_MODS(keycode);
-    set_weak_override_mods(mods);
-    tap_code(keycode);
+    const uint16_t keycode = (intptr_t)context;
+    
+    // Tap to prevent autorepeat
+    if (keycode == U_USER) {
+      set_weak_override_mods(0);
+      tap_userkey();
+    } else {
+      const uint8_t mods = QK_MODS_GET_MODS(keycode);
+      set_weak_override_mods(mods);
+      tap_code(keycode);
+    }
   }
   return false;
 }
@@ -482,12 +518,15 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
   }
   
   if (keycode == KC_9 && layer == U_NUM) {
-    register_code16((!shifted) ? KC_9 : U_USER);
+    if (!shifted)
+      register_code16(KC_9);
+    else
+      register_userkey();
     return;
   }
 
   if (shifted)
-    add_weak_mods(MOD_BIT(KC_LSFT));
+    register_weak_mods(MOD_BIT(KC_LSFT));
   // & 0xFF gets the Tap key for Tap Holds, required when using Retro Shift
   register_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
 }
@@ -501,7 +540,10 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
   }
   
   if (keycode == KC_9 && layer == U_NUM) {
-    unregister_code16((!shifted) ? KC_9 : U_USER);
+    if (!shifted)
+      unregister_code16(KC_9);
+    else
+      unregister_userkey();
     return;
   }
 
@@ -511,6 +553,21 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
   unregister_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
   // Clearing mods is handled by caller
 }
+
+
+// Windows Remote Desktop
+
+#ifdef WEAK_MODS_DELAY
+void register_weak_mods(uint8_t mods) {
+  if (mods) {
+    add_weak_mods(mods);
+    send_keyboard_report();
+    // Delay between mods and key down for Windows Remote Desktop
+    // Workaround for intermittent missing mods when full-screen
+    wait_ms(WEAK_MODS_DELAY);
+  }
+}
+#endif
 
 
 // Tapping term
