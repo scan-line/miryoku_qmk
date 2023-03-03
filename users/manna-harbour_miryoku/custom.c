@@ -555,9 +555,9 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
 }
 
 
-#if 0
 // Windows Remote Desktop
 
+#ifdef WEAK_MODS_DELAY
 void register_weak_mods(uint8_t mods) {
   if (mods) {
     add_weak_mods(mods);
