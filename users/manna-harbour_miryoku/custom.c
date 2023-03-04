@@ -521,6 +521,9 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
   register_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
 }
 
+// Custom release not required because we tap, rather than press/release
+// void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record) { ... }
+
 
 // Windows Remote Desktop
 
