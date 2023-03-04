@@ -442,12 +442,16 @@ uint16_t shift_override(uint16_t keycode, keyrecord_t *record) {
 
   // Matching override?
   const uint8_t layer = read_source_layers_cache(record->event.key);
-  for (const shift_override_t* override = shift_overrides; override; ++override) {
+  for (uint8_t i=0; ; ++i) {
+    const key_override_t* const override = shift_overrides[i];
+    if (!override)
+      break;
+
     // Trigger match?
     if (keycode != override->trigger)
       continue;
     // Layer match?
-    if ((layer & override->layer) == 0)
+    if ((layer & override->layers) == 0)
       continue;
     // Found replacement
     return override->replacement;
@@ -610,9 +614,6 @@ void eeconfig_init_user(void) {
 }
 
 void keyboard_post_init_user(void) {
-  // Patch key overrides with our extended list
-  key_overrides = custom_key_overrides;
-  
   // Restore user state
   user_config.raw = eeconfig_read_user();
   os_mode = os_mode_get();
