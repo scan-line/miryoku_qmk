@@ -185,7 +185,7 @@ void register_userkey(void) {
       SEND_STRING_DELAY(
         SS_DOWN(X_LALT)
         SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_6) SS_TAP(X_KP_3)
-        SS_UP(X_LALT,
+        SS_UP(X_LALT),
         TAP_CODE_DELAY);
       return;
     case OS_MODE_MAC:
