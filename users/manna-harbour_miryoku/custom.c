@@ -417,11 +417,11 @@ typedef struct {
   layer_state_t layers;
 } shift_override_t;
 
-#define make_shift_override(trigger, replacement, layers) \
+#define make_shift_override(TRIGGER, REPLACEMENT, LAYERS) \
   ((const shift_override_t){        \
-    .trigger = (trigger),           \
-    .replacement = (replacement),   \
-    .layers = (layers)              \
+    .trigger = (TRIGGER),           \
+    .replacement = (REPLACEMENT),   \
+    .layers = (LAYERS)              \
   })
 
 const shift_override_t caps_word_override = make_shift_override(CW_TOGG, KC_CAPS, LAYER_MASK_NAV);
