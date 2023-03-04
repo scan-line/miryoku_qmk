@@ -174,43 +174,41 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
 
 // User key
 
-const char* const PROGMEM userkey_strings[] = {
-  [OS_MODE_WIN] = SS_DOWN(X_LALT)
-    SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_6) SS_TAP(X_KP_3)
-    SS_UP(X_LALT),
-  [OS_MODE_MAC] = SS_LALT("3"),
-  [OS_MODE_LNX] = SS_LALT("U") "00a3" " ",
-};
-const uint16_t userkey_error = KC_QUESTION;
-
 void register_userkey(void) {
   // Check platform preconditions for sending unicode-ish
-  bool precondition = false;
   switch (os_mode) {
     case OS_MODE_WIN:
       // Numpad unicode entry requires num-lock on
       // (Usually the default state)
-      precondition = host_keyboard_led_state().num_lock;
-      break;
+      if (!host_keyboard_led_state().num_lock)
+        break;
+      SEND_STRING_DELAY(
+        SS_DOWN(X_LALT)
+        SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_6) SS_TAP(X_KP_3)
+        SS_UP(X_LALT,
+        TAP_CODE_DELAY);
+      return;
     case OS_MODE_MAC:
       // No preconditions
-      precondition = true;
-      break;
+      SEND_STRING_DELAY(SS_LALT("3"), TAP_CODE_DELAY);
+      return;
     case OS_MODE_LNX:
-      // Linux requires a Ctrl-Shift-U
+      // Linux unicode entry requires a Ctrl-Shift-U
       // Caps lock interferes
-      precondition = !host_keyboard_led_state().caps_lock;
-      break;
+      if (host_keyboard_led_state().caps_lock)
+          break;
+      SEND_STRING_DELAY(
+        SS_LALT("U")
+        "00a3"
+        " ",
+        TAP_CODE_DELAY);
+      return;
     default:
       break;
   }
 
-  if (precondition) {
-    const char* const userkey_string = userkey_strings[os_mode];
-    SEND_STRING_DELAY(userkey_string, TAP_CODE_DELAY);
-  } else {
-    tap_code16(userkey_error);
-  }
+  // Show preconditions not met
+  tap_code16(KC_QUESTION);
 }
 
 void unregister_userkey(void) {
