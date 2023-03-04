@@ -403,55 +403,6 @@ bool process_rgb_speed(keyrecord_t *record) {
 #endif
 
 
-// Key processing
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (!process_record_shift_override(keycode, record))
-    return false;
-
-  switch (keycode) {
-    case U_USER:
-      return process_code16_plus(keycode, record);
-    case U_WIN:
-      return process_os_mode(OS_MODE_WIN, record);
-    case U_MAC:
-      return process_os_mode(OS_MODE_MAC, record);
-    case U_LNX:
-      return process_os_mode(OS_MODE_LNX, record);
-    case U_CUT:
-      return process_clipcode(CLIP_CUT, record);
-    case U_CPY:
-      return process_clipcode(CLIP_CPY, record);
-    case U_PST:
-      return process_clipcode(CLIP_PST, record);
-    case U_UND:
-      return process_clipcode(CLIP_UND, record);
-    case U_RDO:
-      return process_clipcode(CLIP_RDO, record);
-#ifdef RGB_MATRIX_ENABLE
-    case U_RGB_TOG:
-      return process_rgb_toggle(record);
-    case U_RGB_MOD:
-      return process_rgb_mode(record);
-    case U_RGB_HUI:
-      return process_rgb_hue(record);
-    case U_RGB_SAI:
-      return process_rgb_sat(record);
-    case U_RGB_VAI:
-      return process_rgb_val(record);
-    case U_RGB_SPI:
-      return process_rgb_speed(record);
-#endif
-#ifdef AUDIO_ENABLE
-    case U_AUD_TOG:
-      return process_audio_toggle(record);
-#endif
-    default:
-      return true;
-  }
-}
-
-
 // Shift and Auto Shift overrides
 
 // Adapted from Pascal Getreuer's compact custom-shift implementation
@@ -572,6 +523,55 @@ void register_weak_mods(uint8_t mods) {
   }
 }
 #endif
+
+
+// Key processing
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (!process_record_shift_override(keycode, record))
+    return false;
+
+  switch (keycode) {
+    case U_USER:
+      return process_code16_plus(keycode, record);
+    case U_WIN:
+      return process_os_mode(OS_MODE_WIN, record);
+    case U_MAC:
+      return process_os_mode(OS_MODE_MAC, record);
+    case U_LNX:
+      return process_os_mode(OS_MODE_LNX, record);
+    case U_CUT:
+      return process_clipcode(CLIP_CUT, record);
+    case U_CPY:
+      return process_clipcode(CLIP_CPY, record);
+    case U_PST:
+      return process_clipcode(CLIP_PST, record);
+    case U_UND:
+      return process_clipcode(CLIP_UND, record);
+    case U_RDO:
+      return process_clipcode(CLIP_RDO, record);
+#ifdef RGB_MATRIX_ENABLE
+    case U_RGB_TOG:
+      return process_rgb_toggle(record);
+    case U_RGB_MOD:
+      return process_rgb_mode(record);
+    case U_RGB_HUI:
+      return process_rgb_hue(record);
+    case U_RGB_SAI:
+      return process_rgb_sat(record);
+    case U_RGB_VAI:
+      return process_rgb_val(record);
+    case U_RGB_SPI:
+      return process_rgb_speed(record);
+#endif
+#ifdef AUDIO_ENABLE
+    case U_AUD_TOG:
+      return process_audio_toggle(record);
+#endif
+    default:
+      return true;
+  }
+}
 
 
 // Tapping term
