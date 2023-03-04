@@ -470,7 +470,7 @@ uint16_t shift_override(uint16_t keycode, keyrecord_t *record) {
 // Oneshot no-ops
 #ifdef NO_ACTION_ONESHOT
 #  define get_oneshot_mods() 0
-#  define del_oneshot_mods(mask) (void)
+#  define del_oneshot_mods(mask) (void)0
 #endif
 
 bool process_record_shift_override(uint16_t keycode, keyrecord_t* record) {
