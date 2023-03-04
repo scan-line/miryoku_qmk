@@ -75,7 +75,7 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Preprocess key overrides to compact no-ops in manna-harbour_miryoku.c
 #define key_override_t char
-#define ko_make_basic(mask, keycode1, keycode2) '+'
+#define ko_make_basic(MASK, TRIGGER, REPLACEMENT) '+'
 
 
 // Configure QMK
