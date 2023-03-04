@@ -174,7 +174,7 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
 
 // User key
 
-const char* PROGMEM userkey_strings[] = {
+const char* const PROGMEM userkey_strings[] = {
   [OS_MODE_WIN] = SS_DOWN(X_LALT)
     SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_6) SS_TAP(X_KP_3)
     SS_UP(X_LALT),
@@ -201,7 +201,7 @@ void register_userkey(void) {
       break;
   }
 
-  const char* userkey_string = userkey_strings[os_mode];
+  const char* const userkey_string = userkey_strings[os_mode];
   SEND_STRING_DELAY(userkey_string, TAP_CODE_DELAY);
 }
 
@@ -427,7 +427,7 @@ typedef struct {
 const shift_override_t caps_word_override = make_shift_override(CW_TOGG, KC_CAPS, LAYER_MASK_NAV);
 const shift_override_t dot_key_override = make_shift_override(KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
 const shift_override_t nine_key_override = make_shift_override(KC_9, U_USER, LAYER_MASK_NUM);
-const shift_override_t* shift_overrides[] = {
+const shift_override_t* const shift_overrides[] = {
   &caps_word_override,
   &dot_key_override,
   &nine_key_override,
@@ -443,7 +443,7 @@ uint16_t shift_override(uint16_t keycode, keyrecord_t *record) {
   // Matching override?
   const uint8_t layer = read_source_layers_cache(record->event.key);
   for (uint8_t i=0; ; ++i) {
-    const key_override_t* const override = shift_overrides[i];
+    const shift_override_t* const override = shift_overrides[i];
     if (!override)
       break;
 
