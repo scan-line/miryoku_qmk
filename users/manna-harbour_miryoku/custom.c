@@ -454,6 +454,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // Shift and Auto Shift overrides
 
+// Adapted from Pascal Getreuer's compact custom-shift implementation
+// https://getreuer.info/posts/keyboards/custom-shift-keys/index.html
+
 #define LAYER_MASK_NAV (1 << U_NAV)
 #define LAYER_MASK_NUM (1 << U_NUM)
 
