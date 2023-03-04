@@ -449,7 +449,7 @@ uint16_t shift_override(uint16_t keycode, keyrecord_t *record) {
     return true;
 
   // Matching override?
-  const uint8_t layer = read_source_layers_cache(record->event.key);
+  const uint8_t layer = 1 << read_source_layers_cache(record->event.key);
   for (uint8_t i=0; ; ++i) {
     const shift_override_t* const override = shift_overrides[i];
     if (!override)
