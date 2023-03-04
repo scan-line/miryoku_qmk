@@ -174,52 +174,67 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
 
 // User key
 
-const char* PROGMEM userkey_strings[] = {
-  [OS_MODE_WIN] = SS_DOWN(X_LALT)
-    SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_6) SS_TAP(X_KP_3)
-    SS_UP(X_LALT),
-  [OS_MODE_MAC] = SS_LALT("3"),
-  [OS_MODE_LNX] = SS_LALT("U") "00a3" " ",
-};
-
 void register_userkey(void) {
+  // Check platform preconditions for sending unicode-ish
   switch (os_mode) {
     case OS_MODE_WIN:
       // Numpad unicode entry requires num-lock on
-      // This is normally the default state
+      // (Usually the default state)
       if (!host_keyboard_led_state().num_lock)
-        return;
-      break;
+        break;
+      SEND_STRING_DELAY(
+        SS_DOWN(X_LALT)
+        SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_6) SS_TAP(X_KP_3)
+        SS_UP(X_LALT),
+        TAP_CODE_DELAY);
+      return;
+    case OS_MODE_MAC:
+      // No preconditions
+      SEND_STRING_DELAY(SS_LALT("3"), TAP_CODE_DELAY);
+      return;
     case OS_MODE_LNX:
-      // Linux requires a Ctrl-Shift-U
+      // Linux unicode entry requires a Ctrl-Shift-U
       // Caps lock interferes
       if (host_keyboard_led_state().caps_lock)
-        return;
-      break;
-    case OS_MODE_MAC:
+          break;
+      SEND_STRING_DELAY(
+        SS_LALT("U")
+        "00a3"
+        " ",
+        TAP_CODE_DELAY);
+      return;
     default:
       break;
   }
 
-  const char* userkey_string = userkey_strings[os_mode];
-  SEND_STRING_DELAY(userkey_string, TAP_CODE_DELAY);
+  // Show preconditions not met
+  tap_code16(KC_QUESTION);
 }
 
 void unregister_userkey(void) {
 }
 
-void tap_userkey(void) {
-  register_userkey();
-  wait_ms(TAP_CODE_DELAY);
-  unregister_userkey();
+void tap_code16_plus(uint16_t keycode) {
+  if (keycode == U_USER) {
+    register_userkey();
+    wait_ms(TAP_CODE_DELAY);
+    unregister_userkey();
+  } else {
+    tap_code16(keycode);
+  }
 }
 
-bool process_userkey(keyrecord_t *record) {
-  if (record->event.pressed)
-    register_userkey();
-  else
-    unregister_userkey();
-  return false;
+bool process_code16_plus(uint16_t keycode, keyrecord_t *record) {
+  if (keycode == U_USER) {
+    if (record->event.pressed)
+      register_userkey();
+    else
+      unregister_userkey();
+    return false;
+  } else {
+    // Let qmk handle the key
+    return true;
+  }
 }
 
 
@@ -394,12 +409,144 @@ bool process_rgb_speed(keyrecord_t *record) {
 #endif
 
 
+// Shift and Auto Shift overrides
+
+// Adapted from Pascal Getreuer's compact custom-shift implementation
+// https://getreuer.info/posts/keyboards/custom-shift-keys/index.html
+
+#define LAYER_MASK_NAV (1 << U_NAV)
+#define LAYER_MASK_NUM (1 << U_NUM)
+
+typedef struct {
+  uint16_t trigger;
+  uint16_t replacement;
+  layer_state_t layers;
+} shift_override_t;
+
+#define make_shift_override(TRIGGER, REPLACEMENT, LAYERS) \
+  ((const shift_override_t){        \
+    .trigger = (TRIGGER),           \
+    .replacement = (REPLACEMENT),   \
+    .layers = (LAYERS)              \
+  })
+
+const shift_override_t caps_word_override = make_shift_override(CW_TOGG, KC_CAPS, LAYER_MASK_NAV);
+const shift_override_t dot_key_override = make_shift_override(KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
+const shift_override_t nine_key_override = make_shift_override(KC_9, U_USER, LAYER_MASK_NUM);
+const shift_override_t* const shift_overrides[] = {
+  &caps_word_override,
+  &dot_key_override,
+  &nine_key_override,
+  NULL
+};
+
+uint16_t shift_override(uint16_t keycode, keyrecord_t *record) {
+  // For tap-hold keys, wait for the tap-hold decision
+  const bool tap_hold = IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode);
+  if (tap_hold && record->tap.count == 0)
+    return true;
+
+  // Matching override?
+  const uint8_t layer = 1 << read_source_layers_cache(record->event.key);
+  for (uint8_t i=0; ; ++i) {
+    const shift_override_t* const override = shift_overrides[i];
+    if (!override)
+      break;
+
+    // Trigger match?
+    if (keycode != override->trigger)
+      continue;
+    // Layer match?
+    if ((layer & override->layers) == 0)
+      continue;
+    // Found replacement
+    return override->replacement;
+  }
+
+  // No override
+  return KC_TRANSPARENT;
+}
+
+// Oneshot no-ops
+#ifdef NO_ACTION_ONESHOT
+#  define get_oneshot_mods() 0
+#  define del_oneshot_mods(mask) (void)0
+#endif
+
+bool process_record_shift_override(uint16_t keycode, keyrecord_t* record) {
+  // Overrides are tapped - nothing to unregister
+  if (!record->event.pressed)
+    return true;
+
+  // Shift?
+  const uint8_t real_mods = get_mods();
+  const uint8_t mods = real_mods | get_weak_mods() | get_oneshot_mods();
+  if ((mods & MOD_MASK_SHIFT) == 0)
+    return true;
+
+  // Replace?
+  const uint16_t replacement = shift_override(keycode, record);
+  if (replacement == KC_TRANSPARENT)
+    return true;
+  
+  // Tap to be consistent with no-override behaviour
+  del_weak_mods(MOD_MASK_SHIFT);
+  del_oneshot_mods(MOD_MASK_SHIFT);
+  unregister_mods(MOD_MASK_SHIFT);
+  tap_code16_plus(replacement);
+  set_mods(real_mods);
+  return false;
+}
+
+bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
+  const uint16_t replacement = shift_override(keycode, record);
+  return replacement != KC_TRANSPARENT;
+}
+
+void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
+  // Beware - record->event.pressed may be false
+
+  const uint16_t replacement = shift_override(keycode, record);
+  if (replacement != KC_TRANSPARENT) {
+    // Tap to be consistent with no-override behaviour
+    tap_code16_plus(shifted ? replacement : keycode);
+    return;
+  }
+
+  if (shifted)
+    register_weak_mods(MOD_BIT(KC_LSFT));
+  // & 0xFF gets the Tap key for Tap Holds, required when using Retro Shift
+  register_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
+}
+
+// Custom release not required because we tap, rather than press/release
+// void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record) { ... }
+
+
+// Windows Remote Desktop
+
+#ifdef WEAK_MODS_DELAY
+void register_weak_mods(uint8_t mods) {
+  if (mods) {
+    add_weak_mods(mods);
+    send_keyboard_report();
+    // Delay between mods and key down for Windows Remote Desktop
+    // Workaround for intermittent missing mods when full-screen
+    wait_ms(WEAK_MODS_DELAY);
+  }
+}
+#endif
+
+
 // Key processing
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (!process_record_shift_override(keycode, record))
+    return false;
+
   switch (keycode) {
     case U_USER:
-      return process_userkey(record);
+      return process_code16_plus(keycode, record);
     case U_WIN:
       return process_os_mode(OS_MODE_WIN, record);
     case U_MAC:
@@ -440,136 +587,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-// Shift and Auto Shift overrides
-
-#define LAYER_MASK_NUM (1 << U_NUM)
-
-// Defined in action_util.c
-extern void set_weak_override_mods(uint8_t mods);
-// Defined in manna-harbour_miryoku.c
-extern const key_override_t capsword_key_override;
-extern const key_override_t **key_overrides;
-
-bool key_override_tap(bool key_down, void *context) {
-  if (key_down) {
-    const uint16_t keycode = (intptr_t)context;
-    
-    // Tap to prevent autorepeat
-    if (keycode == U_USER) {
-      set_weak_override_mods(0);
-      tap_userkey();
-    } else {
-      const uint8_t mods = QK_MODS_GET_MODS(keycode);
-      set_weak_override_mods(mods);
-      tap_code(keycode);
-    }
-  }
-  return false;
-}
-
-// Customized ko_make_with_layers
-// Removes auto-repeat on keypress
-#define user_ko_make(trigger_mods_, trigger_key, replacement_key, layer_mask)  \
-  ((const key_override_t){                                    \
-    .trigger_mods       = (trigger_mods_),                    \
-    .layers             = (layer_mask),                       \
-    .suppressed_mods    = (trigger_mods_),                    \
-    .options            = ko_options_default,                 \
-    .negative_mod_mask  = 0,                                  \
-    .custom_action      = key_override_tap,                   \
-    .context            = (void*)(intptr_t)replacement_key,   \
-    .trigger            = (trigger_key),                      \
-    .replacement        = (KC_NO),                            \
-    .enabled            = NULL                                \
-  })
-
-const key_override_t dot_key_override = user_ko_make(MOD_MASK_SHIFT, KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM );
-const key_override_t nine_key_override = user_ko_make(MOD_MASK_SHIFT, KC_9, U_USER, LAYER_MASK_NUM );
-
-const key_override_t **custom_key_overrides = (const key_override_t *[]){
-  &capsword_key_override,
-  &dot_key_override,
-  &nine_key_override,
-  NULL
-};
-
-bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
-  const uint8_t layer = read_source_layers_cache(record->event.key);
-
-  // Add, even where auto-shifted by default
-  // For consistency with autoshift_press/release_user
-  
-  if (keycode == KC_DOT && layer == U_NUM)
-    return true;
-  
-  if (keycode == KC_9 && layer == U_NUM)
-    return true;
-
-  return false;
-}
-
-void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
-  const uint8_t layer = read_source_layers_cache(record->event.key);
-  // Beware - record->event.pressed may be false
-
-  if (keycode == KC_DOT && layer == U_NUM) {
-    register_code16((!shifted) ? KC_DOT : KC_LEFT_PAREN);
-    return;
-  }
-  
-  if (keycode == KC_9 && layer == U_NUM) {
-    if (!shifted)
-      register_code16(KC_9);
-    else
-      register_userkey();
-    return;
-  }
-
-  if (shifted)
-    register_weak_mods(MOD_BIT(KC_LSFT));
-  // & 0xFF gets the Tap key for Tap Holds, required when using Retro Shift
-  register_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
-}
-
-void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
-  const uint8_t layer = read_source_layers_cache(record->event.key);
-
-  if (keycode == KC_DOT && layer == U_NUM) {
-    unregister_code16((!shifted) ? KC_DOT : KC_LEFT_PAREN);
-    return;
-  }
-  
-  if (keycode == KC_9 && layer == U_NUM) {
-    if (!shifted)
-      unregister_code16(KC_9);
-    else
-      unregister_userkey();
-    return;
-  }
-
-  // & 0xFF gets the Tap key for Tap Holds, required when using Retro Shift
-  // The IS_RETRO check isn't really necessary here, always using
-  // keycode & 0xFF would be fine.
-  unregister_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
-  // Clearing mods is handled by caller
-}
-
-
-// Windows Remote Desktop
-
-#ifdef WEAK_MODS_DELAY
-void register_weak_mods(uint8_t mods) {
-  if (mods) {
-    add_weak_mods(mods);
-    send_keyboard_report();
-    // Delay between mods and key down for Windows Remote Desktop
-    // Workaround for intermittent missing mods when full-screen
-    wait_ms(WEAK_MODS_DELAY);
-  }
-}
-#endif
-
-
 // Tapping term
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
@@ -606,9 +623,6 @@ void eeconfig_init_user(void) {
 }
 
 void keyboard_post_init_user(void) {
-  // Patch key overrides with our extended list
-  key_overrides = custom_key_overrides;
-  
   // Restore user state
   user_config.raw = eeconfig_read_user();
   os_mode = os_mode_get();

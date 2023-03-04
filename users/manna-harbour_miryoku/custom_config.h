@@ -71,6 +71,13 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #endif
 
 
+// Custom key-override implementation
+
+// Preprocess key overrides to compact no-ops in manna-harbour_miryoku.c
+#define key_override_t char
+#define ko_make_basic(MASK, TRIGGER, REPLACEMENT) '+'
+
+
 // Configure QMK
 
 // Beware - Miryoku config.h unconditionally resets TAPPING_TERM to 200
