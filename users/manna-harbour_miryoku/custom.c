@@ -128,7 +128,6 @@ typedef enum {
   OS_MODE_WIN,
   OS_MODE_MAC,
   OS_MODE_LNX,
-  OS_MODE_END,
 } os_mode_t;
 
 os_mode_t os_mode = OS_MODE_WIN;
@@ -250,9 +249,10 @@ typedef enum {
   CLIP_PST,
   CLIP_UND,
   CLIP_RDO,
+  CLIP_END,
 } clip_t;
 
-const uint16_t PROGMEM clipcodes[][OS_MODE_END] = {
+const uint16_t PROGMEM clipcodes[][CLIP_END] = {
   [OS_MODE_WIN] = { LCTL(KC_X), LCTL(KC_C), LCTL(KC_V), LCTL(KC_Z), LCTL(KC_Y), },
   [OS_MODE_MAC] = { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_Z), SCMD(KC_Z), },
   [OS_MODE_LNX] = { U_CUT, U_CPY, U_PST, U_UND, U_RDO, },
