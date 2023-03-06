@@ -204,7 +204,7 @@ const char* userkey_string(void) {
       // Caps lock interferes
       if (host_keyboard_led_state().caps_lock)
         return userkey_warn;
-      else:
+      else
         return userkey_lnx;
     default:
       return userkey_warn;
