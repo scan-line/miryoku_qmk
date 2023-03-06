@@ -441,12 +441,12 @@ const shift_override_t* const shift_overrides[] = {
 };
 
 uint16_t shift_override(uint16_t keycode, keyrecord_t *record) {
-  // For tap-hold keys, wait for the tap-hold decision
+  // For tap-hold keys, skip holds and match taps
   const bool tap_hold = IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode);
   if (tap_hold && record->tap.count == 0)
     return true;
 
-  // Matching override?
+  // Look for matching override
   const uint8_t layer = 1 << read_source_layers_cache(record->event.key);
   for (uint8_t i=0; ; ++i) {
     const shift_override_t* const override = shift_overrides[i];
