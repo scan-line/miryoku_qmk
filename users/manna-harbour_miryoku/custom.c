@@ -187,7 +187,7 @@ const char* const PROGMEM userkey_lnx =
 const char* const PROGMEM userkey_warn =
   "?";
 
-char* userkey_string() {
+const char* userkey_string(void) {
   switch (os_mode) {
     case OS_MODE_WIN:
       // Numpad unicode entry requires num-lock on
