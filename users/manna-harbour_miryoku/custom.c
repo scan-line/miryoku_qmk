@@ -128,6 +128,7 @@ typedef enum {
   OS_MODE_WIN,
   OS_MODE_MAC,
   OS_MODE_LNX,
+  OS_MODE_END,
 } os_mode_t;
 
 os_mode_t os_mode = OS_MODE_WIN;
@@ -174,6 +175,18 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
 
 // User key
 
+const char* const PROGMEM userkey_win =
+  SS_DOWN(X_LALT)
+  SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_6) SS_TAP(X_KP_3)
+  SS_UP(X_LALT);
+const char* const PROGMEM userkey_mac =
+  SS_LALT("3");
+const char* const PROGMEM userkey_lnx =
+  SS_LALT("U")
+  "00a3"
+const char* const PROGMEM userkey_error =
+  "?";
+
 void register_userkey(void) {
   // Check platform preconditions for sending unicode-ish
   switch (os_mode) {
@@ -182,33 +195,25 @@ void register_userkey(void) {
       // (Usually the default state)
       if (!host_keyboard_led_state().num_lock)
         break;
-      SEND_STRING_DELAY(
-        SS_DOWN(X_LALT)
-        SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_6) SS_TAP(X_KP_3)
-        SS_UP(X_LALT),
-        TAP_CODE_DELAY);
+      send_string_delay(userkey_win, TAP_CODE_DELAY);
       return;
     case OS_MODE_MAC:
       // No preconditions
-      SEND_STRING_DELAY(SS_LALT("3"), TAP_CODE_DELAY);
+      send_string_delay(userkey_mac, TAP_CODE_DELAY);
       return;
     case OS_MODE_LNX:
       // Linux unicode entry requires a Ctrl-Shift-U
       // Caps lock interferes
       if (host_keyboard_led_state().caps_lock)
           break;
-      SEND_STRING_DELAY(
-        SS_LALT("U")
-        "00a3"
-        " ",
-        TAP_CODE_DELAY);
+      send_string_delay(userkey_lnx TAP_CODE_DELAY);
       return;
     default:
       break;
   }
 
   // Show preconditions not met
-  tap_code16(KC_QUESTION);
+  send_string_delay(userkey_error TAP_CODE_DELAY);
 }
 
 void unregister_userkey(void) {
@@ -246,10 +251,9 @@ typedef enum {
   CLIP_PST,
   CLIP_UND,
   CLIP_RDO,
-  CLIP_END,
 } clip_t;
 
-const uint16_t PROGMEM clipcodes[][CLIP_END] = {
+const uint16_t PROGMEM clipcodes[][OS_MODE_END] = {
   [OS_MODE_WIN] = { LCTL(KC_X), LCTL(KC_C), LCTL(KC_V), LCTL(KC_Z), LCTL(KC_Y), },
   [OS_MODE_MAC] = { LCMD(KC_X), LCMD(KC_C), LCMD(KC_V), LCMD(KC_Z), SCMD(KC_Z), },
   [OS_MODE_LNX] = { U_CUT, U_CPY, U_PST, U_UND, U_RDO, },
