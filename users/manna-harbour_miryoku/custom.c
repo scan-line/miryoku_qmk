@@ -212,7 +212,7 @@ const char* userkey_string(void) {
 }
 
 void register_userkey(void) {
-  send_string_delay(userkey_string(), TAP_CODE_DELAY);
+  send_string_with_delay_P(userkey_string(), TAP_CODE_DELAY);
 }
 
 void unregister_userkey(void) {
