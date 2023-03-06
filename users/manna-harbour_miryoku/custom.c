@@ -184,36 +184,35 @@ const char* const PROGMEM userkey_mac =
 const char* const PROGMEM userkey_lnx =
   SS_LALT("U")
   "00a3"
-const char* const PROGMEM userkey_error =
+const char* const PROGMEM userkey_warn =
   "?";
 
-void register_userkey(void) {
-  // Check platform preconditions for sending unicode-ish
+char* userkey_string() {
   switch (os_mode) {
     case OS_MODE_WIN:
       // Numpad unicode entry requires num-lock on
       // (Usually the default state)
-      if (!host_keyboard_led_state().num_lock)
-        break;
-      send_string_delay(userkey_win, TAP_CODE_DELAY);
-      return;
+      if (host_keyboard_led_state().num_lock)
+        return userkey_win;
+      else
+        return userkey_warn;
     case OS_MODE_MAC:
       // No preconditions
-      send_string_delay(userkey_mac, TAP_CODE_DELAY);
-      return;
+      return userkey_mac;
     case OS_MODE_LNX:
       // Linux unicode entry requires a Ctrl-Shift-U
       // Caps lock interferes
       if (host_keyboard_led_state().caps_lock)
-          break;
-      send_string_delay(userkey_lnx TAP_CODE_DELAY);
-      return;
+        return userkey_warn;
+      else:
+        return userkey_lnx;
     default:
-      break;
+      return userkey_warn;
   }
+}
 
-  // Show preconditions not met
-  send_string_delay(userkey_error TAP_CODE_DELAY);
+void register_userkey(void) {
+  send_string_delay(userkey_string(), TAP_CODE_DELAY);
 }
 
 void unregister_userkey(void) {
