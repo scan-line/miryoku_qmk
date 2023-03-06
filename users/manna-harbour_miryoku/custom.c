@@ -182,7 +182,8 @@ const char* const PROGMEM userkey_mac =
   SS_LALT("3");
 const char* const PROGMEM userkey_lnx =
   SS_LALT("U")
-  "00a3";
+  "00a3"
+  " ";
 const char* const PROGMEM userkey_warn =
   "?";
 
