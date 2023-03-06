@@ -201,10 +201,10 @@ const char* userkey_string(void) {
     case OS_MODE_LNX:
       // Linux unicode entry requires a Ctrl-Shift-U
       // Caps lock interferes
-      if (host_keyboard_led_state().caps_lock)
-        return userkey_warn;
-      else
+      if (!host_keyboard_led_state().caps_lock)
         return userkey_lnx;
+      else
+        return userkey_warn;
     default:
       return userkey_warn;
   }
