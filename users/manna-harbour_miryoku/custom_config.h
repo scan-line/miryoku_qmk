@@ -92,7 +92,7 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Compact replacements for manna-harbour_miryoku.c
 typedef struct {
-  uint8_t count;
+  char count;
 } qk_tap_dance_state_t;
 
 
