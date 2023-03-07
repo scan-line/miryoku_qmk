@@ -88,7 +88,7 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Preprocess tap dance to user keycode
 #undef TD
-#define TD(KEYCODE) mykeycodehere
+#define TD(KEYCODE) KEYCODE
 
 // Compact replacements for manna-harbour_miryoku.c
 #define qk_tap_dance_action_t char
