@@ -105,11 +105,8 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Compact replacements for manna-harbour_miryoku.c
 #define qk_tap_dance_action_t char
+#define qk_tap_dance_state_t tap_t
 #define ACTION_TAP_DANCE_FN(FUNCTION) '+'
-
-typedef struct {
-  unsigned char count;
-} qk_tap_dance_state_t;
 
 
 // Custom key-override implementation
