@@ -23,7 +23,7 @@
 #define U_RGB_VAI PB_9
 #define U_RGB_SPI PB_10
 #define U_AUD_TOG PB_11
-#define U_TD_BOOT bootbuttonhere
+#define U_TD_BOOT PB_12
 #if 0
 #define U_TD_U_BASE PB_13
 #define U_TD_U_EXTRA PB_14
