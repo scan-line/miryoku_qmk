@@ -23,18 +23,18 @@
 #define U_RGB_VAI PB_9
 #define U_RGB_SPI PB_10
 #define U_AUD_TOG PB_11
-#define U_TD_BOOT PB_12
+#define TD(U_TD_BOOT) PB_12
 #if 0
-#define U_TD_U_BASE PB_13
-#define U_TD_U_EXTRA PB_14
-#define U_TD_U_TAP PB_15
-#define U_TD_U_BUTTON PB_16
-#define U_TD_U_NAV PB_17
-#define U_TD_U_MOUSE PB_18
-#define U_TD_U_MEDIA PB_19
-#define U_TD_U_NUM PB_20
-#define U_TD_U_SYM PB_21
-#define U_TD_U_FUN PB_22
+#define TD(U_TD_U_BASE) PB_13
+#define TD(U_TD_U_EXTRA) PB_14
+#define TD(U_TD_U_TAP) PB_15
+#define TD(U_TD_U_BUTTON) PB_16
+#define TD(U_TD_U_NAV) PB_17
+#define TD(U_TD_U_MOUSE) PB_18
+#define TD(U_TD_U_MEDIA) PB_19
+#define TD(U_TD_U_NUM) PB_20
+#define TD(U_TD_U_SYM) PB_21
+#define TD(U_TD_U_FUN) PB_22
 #endif
 
 
@@ -88,7 +88,7 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Preprocess tap dance to user keycode
 #undef TD
-#define TD(KEYCODE) KEYCODE
+#define TD(INDEX) U_##INDEX
 
 // Compact replacements for manna-harbour_miryoku.c
 #define qk_tap_dance_action_t char
