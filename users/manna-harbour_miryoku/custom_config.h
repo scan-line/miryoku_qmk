@@ -12,10 +12,12 @@
 // This header is included by both c and assembler source
 // and the assembly will fail
 // Steal some unused keycodes instead
+
 #define U_USER PB_1
 #define U_WIN PB_2
 #define U_MAC PB_3
 #define U_LNX PB_4
+
 #define U_RGB_TOG PB_5
 #define U_RGB_MOD PB_6
 #define U_RGB_HUI PB_7
@@ -24,17 +26,17 @@
 #define U_RGB_SPI PB_10
 #define U_AUD_TOG PB_11
 
-#define U_TDU_TD_BOOT PB_12
-#define U_TDU_TD_U_BASE PB_13
-#define U_TDU_TD_U_EXTRA PB_14
-#define U_TDU_TD_U_TAP PB_15
-#define U_TDU_TD_U_BUTTON PB_16
-#define U_TDU_TD_U_NAV PB_17
-#define U_TDU_TD_U_MOUSE PB_18
-#define U_TDU_TD_U_MEDIA PB_19
-#define U_TDU_TD_U_NUM PB_20
-#define U_TDU_TD_U_SYM PB_21
-#define U_TDU_TD_U_FUN PB_22
+#define U_BOOT PB_12
+#define U_LOCK_BASE PB_13
+#define U_LOCK_EXTRA PB_14
+#define U_LOCK_TAP PB_15
+#define U_LOCK_BUTTON PB_16
+#define U_LOCK_NAV PB_17
+#define U_LOCK_MOUSE PB_18
+#define U_LOCK_MEDIA PB_19
+#define U_LOCK_NUM PB_20
+#define U_LOCK_SYM PB_21
+#define U_LOCK_FUN PB_22
 
 
 // Layers
@@ -88,6 +90,18 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 // Preprocess tap dance to user keycode
 #undef TD
 #define TD(INDEX) U_TD##INDEX
+
+#define U_TDU_TD_BOOT U_BOOT
+#define U_TDU_TD_U_BASE U_LOCK_BASE
+#define U_TDU_TD_U_EXTRA U_LOCK_EXTRA
+#define U_TDU_TD_U_TAP U_LOCK_TAP
+#define U_TDU_TD_U_BUTTON U_LOCK_BUTTON
+#define U_TDU_TD_U_NAV U_LOCK_NAV
+#define U_TDU_TD_U_MOUSE U_LOCK_MOUSE
+#define U_TDU_TD_U_MEDIA U_LOCK_MEDIA
+#define U_TDU_TD_U_NUM U_LOCK_NUM
+#define U_TDU_TD_U_SYM U_LOCK_SYM
+#define U_TDU_TD_U_FUN U_LOCK_FUN
 
 // Compact replacements for manna-harbour_miryoku.c
 #define qk_tap_dance_action_t char
