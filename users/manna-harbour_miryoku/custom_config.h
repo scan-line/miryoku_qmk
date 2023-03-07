@@ -23,7 +23,7 @@
 #define U_RGB_VAI PB_9
 #define U_RGB_SPI PB_10
 #define U_AUD_TOG PB_11
-#define TD(U_TD_BOOT) PB_12
+#define U_U_TD_BOOT PB_12
 #if 0
 #define TD(U_TD_U_BASE) PB_13
 #define TD(U_TD_U_EXTRA) PB_14
