@@ -23,7 +23,8 @@
 #define U_RGB_VAI PB_9
 #define U_RGB_SPI PB_10
 #define U_AUD_TOG PB_11
-#define U_TD_BOOT PB_12
+#define U_TD_BOOT bootbuttonhere
+#if 0
 #define U_TD_U_BASE PB_13
 #define U_TD_U_EXTRA PB_14
 #define U_TD_U_TAP PB_15
@@ -34,6 +35,8 @@
 #define U_TD_U_NUM PB_20
 #define U_TD_U_SYM PB_21
 #define U_TD_U_FUN PB_22
+#endif
+
 
 // Layers
 
