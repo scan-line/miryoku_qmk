@@ -91,8 +91,11 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #define TD(KEYCODE) mykeycodehere
 
 // Compact replacements for manna-harbour_miryoku.c
+#define qk_tap_dance_action_t char
+#define ACTION_TAP_DANCE_FN '+'
+
 typedef struct {
-  char count;
+  unsigned char count;
 } qk_tap_dance_state_t;
 
 
