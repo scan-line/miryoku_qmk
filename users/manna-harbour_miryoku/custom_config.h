@@ -90,10 +90,15 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #undef TD
 #define TD(KEYCODE) mykeycodehere
 
+// Compact replacements for manna-harbour_miryoku.c
+typedef struct {
+  uint8_t count;
+} qk_tap_dance_state_t
+
 
 // Custom key-override implementation
 
-// Preprocess key overrides to compact no-ops in manna-harbour_miryoku.c
+// Compact replacements for manna-harbour_miryoku.c
 #define key_override_t char
 #define ko_make_basic(MASK, TRIGGER, REPLACEMENT) '+'
 
