@@ -85,7 +85,7 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Preprocess tap dance to user keycode
 #undef TD
-#define TD(KEYCODE) KEYCODE
+#define TD(KEYCODE) mykeycodehere
 
 
 // Custom key-override implementation
