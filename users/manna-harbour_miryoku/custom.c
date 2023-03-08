@@ -605,16 +605,16 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
       return SLOW_TAPPING_TERM;
     // Double taps
     case TD(U_TD_BOOT):
-    case TD(U_TD_BASE):
-    case TD(U_TD_EXTRA):
-    case TD(U_TD_TAP):
-    case TD(U_TD_BUTTON):
-    case TD(U_TD_NAV):
-    case TD(U_TD_MOUSE):
-    case TD(U_TD_MEDIA):
-    case TD(U_TD_NUM):
-    case TD(U_TD_SYM):
-    case TD(U_TD_FUN):
+    case TD(U_TD_U_BASE):
+    case TD(U_TD_U_EXTRA):
+    case TD(U_TD_U_TAP):
+    case TD(U_TD_U_BUTTON):
+    case TD(U_TD_U_NAV):
+    case TD(U_TD_U_MOUSE):
+    case TD(U_TD_U_MEDIA):
+    case TD(U_TD_U_NUM):
+    case TD(U_TD_U_SYM):
+    case TD(U_TD_U_FUN):
       return DOUBLE_TAPPING_TERM;
   }
 }
