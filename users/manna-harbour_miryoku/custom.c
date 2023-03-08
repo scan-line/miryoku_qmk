@@ -18,6 +18,17 @@
 #endif
 
 
+// Miryoku definitions
+
+// Duplicated from manna-harbour_miryoku.c
+enum {
+    U_TD_BOOT,
+#define MIRYOKU_X(LAYER, STRING) U_TD_U_##LAYER,
+MIRYOKU_LAYER_LIST
+#undef MIRYOKU_X
+};
+
+
 // Persistent user state
 
 typedef union {
@@ -174,41 +185,45 @@ bool process_os_mode(os_mode_t mode, keyrecord_t *record) {
 
 // User key
 
-void register_userkey(void) {
-  // Check platform preconditions for sending unicode-ish
+const char* const PROGMEM userkey_win =
+  SS_LALT(
+    SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_6) SS_TAP(X_KP_3)
+  );
+const char* const PROGMEM userkey_mac =
+  SS_LALT("3");
+const char* const PROGMEM userkey_lnx =
+  SS_LALT("U")
+  "00a3"
+  " ";
+const char* const PROGMEM userkey_warn =
+  "?";
+
+const char* userkey_string(void) {
   switch (os_mode) {
     case OS_MODE_WIN:
       // Numpad unicode entry requires num-lock on
       // (Usually the default state)
-      if (!host_keyboard_led_state().num_lock)
-        break;
-      SEND_STRING_DELAY(
-        SS_DOWN(X_LALT)
-        SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_6) SS_TAP(X_KP_3)
-        SS_UP(X_LALT),
-        TAP_CODE_DELAY);
-      return;
+      if (host_keyboard_led_state().num_lock)
+        return userkey_win;
+      else
+        return userkey_warn;
     case OS_MODE_MAC:
       // No preconditions
-      SEND_STRING_DELAY(SS_LALT("3"), TAP_CODE_DELAY);
-      return;
+      return userkey_mac;
     case OS_MODE_LNX:
       // Linux unicode entry requires a Ctrl-Shift-U
       // Caps lock interferes
-      if (host_keyboard_led_state().caps_lock)
-          break;
-      SEND_STRING_DELAY(
-        SS_LALT("U")
-        "00a3"
-        " ",
-        TAP_CODE_DELAY);
-      return;
+      if (!host_keyboard_led_state().caps_lock)
+        return userkey_lnx;
+      else
+        return userkey_warn;
     default:
-      break;
+      return userkey_warn;
   }
+}
 
-  // Show preconditions not met
-  tap_code16(KC_QUESTION);
+void register_userkey(void) {
+  send_string_with_delay_P(userkey_string(), TAP_CODE_DELAY);
 }
 
 void unregister_userkey(void) {
@@ -441,12 +456,12 @@ const shift_override_t* const shift_overrides[] = {
 };
 
 uint16_t shift_override(uint16_t keycode, keyrecord_t *record) {
-  // For tap-hold keys, wait for the tap-hold decision
+  // For tap-hold keys, skip holds and match taps
   const bool tap_hold = IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode);
   if (tap_hold && record->tap.count == 0)
     return true;
 
-  // Matching override?
+  // Look for matching override
   const uint8_t layer = 1 << read_source_layers_cache(record->event.key);
   for (uint8_t i=0; ; ++i) {
     const shift_override_t* const override = shift_overrides[i];
@@ -523,21 +538,6 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
 // void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record) { ... }
 
 
-// Windows Remote Desktop
-
-#ifdef WEAK_MODS_DELAY
-void register_weak_mods(uint8_t mods) {
-  if (mods) {
-    add_weak_mods(mods);
-    send_keyboard_report();
-    // Delay between mods and key down for Windows Remote Desktop
-    // Workaround for intermittent missing mods when full-screen
-    wait_ms(WEAK_MODS_DELAY);
-  }
-}
-#endif
-
-
 // Key processing
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -592,6 +592,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
   // Extra delay on weaker ring and pinky fingers
   switch (keycode) {
+    default:
+      return FAST_TAPPING_TERM;
     // Colemak DH, Qwerty
     case LGUI_T(KC_A):
     case LGUI_T(KC_O):
@@ -601,8 +603,19 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     case LALT_T(KC_S):
     case LALT_T(KC_L):
       return SLOW_TAPPING_TERM;
-    default:
-      return FAST_TAPPING_TERM;
+    // Double taps
+    case TD(U_TD_BOOT):
+    case TD(U_TD_U_BASE):
+    case TD(U_TD_U_EXTRA):
+    case TD(U_TD_U_TAP):
+    case TD(U_TD_U_BUTTON):
+    case TD(U_TD_U_NAV):
+    case TD(U_TD_U_MOUSE):
+    case TD(U_TD_U_MEDIA):
+    case TD(U_TD_U_NUM):
+    case TD(U_TD_U_SYM):
+    case TD(U_TD_U_FUN):
+      return DOUBLE_TAPPING_TERM;
   }
 }
 
