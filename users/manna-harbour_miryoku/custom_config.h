@@ -87,21 +87,9 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Custom tap-dance implementation
 
-// Preprocess tap dance to user keycode
-#undef TD
-#define TD(INDEX) U_TD##INDEX
-
-#define U_TDU_TD_BOOT U_BOOT
-#define U_TDU_TD_U_BASE U_LOCK_BASE
-#define U_TDU_TD_U_EXTRA U_LOCK_EXTRA
-#define U_TDU_TD_U_TAP U_LOCK_TAP
-#define U_TDU_TD_U_BUTTON U_LOCK_BUTTON
-#define U_TDU_TD_U_NAV U_LOCK_NAV
-#define U_TDU_TD_U_MOUSE U_LOCK_MOUSE
-#define U_TDU_TD_U_MEDIA U_LOCK_MEDIA
-#define U_TDU_TD_U_NUM U_LOCK_NUM
-#define U_TDU_TD_U_SYM U_LOCK_SYM
-#define U_TDU_TD_U_FUN U_LOCK_FUN
+// Keep tap-dance keycodes
+#define TD(N) (QK_TAP_DANCE | TD_INDEX(N))
+#define TD_INDEX(CODE) ((CODE)&0xFF)
 
 // Compact replacements for manna-harbour_miryoku.c
 #define qk_tap_dance_action_t char
