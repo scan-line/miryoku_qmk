@@ -85,3 +85,4 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #define TAPPING_TERM_PER_KEY
 #define FAST_TAPPING_TERM (TAPPING_TERM + 30)
 #define SLOW_TAPPING_TERM (TAPPING_TERM + 100)
+#define DOUBLE_TAPPING_TERM (TAPPING_TERM + 200)
