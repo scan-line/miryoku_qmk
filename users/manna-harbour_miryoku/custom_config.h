@@ -26,18 +26,6 @@
 #define U_RGB_SPI PB_10
 #define U_AUD_TOG PB_11
 
-#define U_BOOT PB_12
-#define U_LOCK_BASE PB_13
-#define U_LOCK_EXTRA PB_14
-#define U_LOCK_TAP PB_15
-#define U_LOCK_BUTTON PB_16
-#define U_LOCK_NAV PB_17
-#define U_LOCK_MOUSE PB_18
-#define U_LOCK_MEDIA PB_19
-#define U_LOCK_NUM PB_20
-#define U_LOCK_SYM PB_21
-#define U_LOCK_FUN PB_22
-
 
 // Layers
 
