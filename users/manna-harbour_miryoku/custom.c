@@ -18,6 +18,17 @@
 #endif
 
 
+// Miryoku definitions
+
+// Duplicated from manna-harbour_miryoku.c
+enum {
+    U_TD_BOOT,
+#define MIRYOKU_X(LAYER, STRING) U_TD_U_##LAYER,
+MIRYOKU_LAYER_LIST
+#undef MIRYOKU_X
+};
+
+
 // Persistent user state
 
 typedef union {
