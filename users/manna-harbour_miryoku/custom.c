@@ -581,6 +581,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
   // Extra delay on weaker ring and pinky fingers
   switch (keycode) {
+    default:
+      return FAST_TAPPING_TERM;
     // Colemak DH, Qwerty
     case LGUI_T(KC_A):
     case LGUI_T(KC_O):
@@ -590,8 +592,19 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     case LALT_T(KC_S):
     case LALT_T(KC_L):
       return SLOW_TAPPING_TERM;
-    default:
-      return FAST_TAPPING_TERM;
+    // Double taps
+    case TD(U_TD_BOOT):
+    case TD(U_TD_BASE):
+    case TD(U_TD_EXTRA):
+    case TD(U_TD_TAP):
+    case TD(U_TD_BUTTON):
+    case TD(U_TD_NAV):
+    case TD(U_TD_MOUSE):
+    case TD(U_TD_MEDIA):
+    case TD(U_TD_NUM):
+    case TD(U_TD_SYM):
+    case TD(U_TD_FUN):
+      return DOUBLE_TAPPING_TERM;
   }
 }
 
