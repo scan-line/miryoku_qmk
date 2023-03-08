@@ -75,6 +75,10 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Custom tap-dance implementation
 
+#ifdef QMK_KEYBOARD_H
+typedef void (*my_function_t)(void*, void*);
+#endif
+
 // Keep tap-dance keycodes
 #define TD(N) (QK_TAP_DANCE | TD_INDEX(N))
 #define TD_INDEX(CODE) ((CODE)&0xFF)
