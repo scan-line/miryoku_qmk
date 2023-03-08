@@ -1,7 +1,5 @@
 # Copyright 2021 Manna Harbour
 # https://github.com/manna-harbour/miryoku
-# Copyright 2023 Scan Line
-# https://github.com/scan-line
 
 name: 'Main'
 on:
@@ -51,8 +49,6 @@ jobs:
         custom_config: ${{ fromJSON(inputs.custom_config) }}
         merge: ${{ fromJSON(inputs.merge) }}
     steps:
-      - name: Disable safe.directory check
-        run: git config --global --add safe.directory '*'
       - name: Checkout
         uses: actions/checkout@v3
       - name: Merge branches
@@ -76,7 +72,9 @@ jobs:
             git status
           done
       - name: Submodules
-        run: make git-submodule
+        run: |
+          git config --global --add safe.directory '*'
+          make git-submodule
       - name: Process inputs
         id: inputs
         run: |
