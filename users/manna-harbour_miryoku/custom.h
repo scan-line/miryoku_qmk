@@ -43,3 +43,21 @@ typedef struct {
 #define key_override_t shift_override_t
 #define ko_make_basic(MASK, TRIGGER, REPLACEMENT) \
   make_shift_override(TRIGGER, REPLACEMENT, ~0)
+
+
+// Custom tap-dance implementation
+
+#define DT(N) (QK_TAP_DANCE | DT_INDEX(N))
+#define DT_INDEX(CODE) ((CODE)&0xFF)
+
+typedef struct {
+  uint8_t count;
+} double_tap_state_t;
+
+typedef void (*double_tap_action_t)(double_tap_state_t *state, void *unused);
+
+#define TD(N) DT(N)
+#define TD_INDEX(CODE) DT_INDEX(CODE)
+#define qk_tap_dance_state_t double_tap_state_t
+#define qk_tap_dance_action_t double_tap_action_t
+#define ACTION_TAP_DANCE_FN(FUNCTION) FUNCTION
