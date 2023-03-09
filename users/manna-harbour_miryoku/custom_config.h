@@ -4,27 +4,6 @@
 // This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
-#ifndef __ASSEMBLER__
-
-#include <stdint.h>
-#include "action_layer.h"
-
-
-// Keycodes
-
-enum my_keycodes {
-  U_USER = SAFE_RANGE,
-  U_WIN,
-  U_MAC,
-  U_LNX,
-  U_RGB_TOG,
-  U_RGB_MOD,
-  U_RGB_HUI,
-  U_RGB_SAI,
-  U_RGB_VAI,
-  U_RGB_SPI,
-  U_AUD_TOG,
-};
 
 
 // Layers
@@ -73,52 +52,18 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #endif
 
 
-// Custom tap-dance implementation
-
-// Keep tap-dance keycodes
-#define TD(N) (QK_TAP_DANCE | TD_INDEX(N))
-#define TD_INDEX(CODE) ((CODE)&0xFF)
-
-typedef struct {
-  uint8_t count;
-} double_tap_state_t;
-
-typedef void (*double_tap_action_t)(double_tap_state_t *state, void *unused);
-
-// Inject into manna-harbour_miryoku.c
-#define qk_tap_dance_state_t double_tap_state_t
-#define qk_tap_dance_action_t double_tap_action_t
-#define ACTION_TAP_DANCE_FN(FUNCTION) FUNCTION
-
-
-// Custom key-override implementation
-
-typedef struct {
-  uint16_t trigger;
-  uint16_t replacement;
-  layer_state_t layers;
-} shift_override_t;
-
-#define make_shift_override(TRIGGER, REPLACEMENT, LAYERS) \
-  ((const shift_override_t){        \
-    .trigger = (TRIGGER),           \
-    .replacement = (REPLACEMENT),   \
-    .layers = (LAYERS)              \
-  })
-
-// Inject into manna-harbour_miryoku.c
-#define key_override_t shift_override_t
-#define ko_make_basic(MASK, TRIGGER, REPLACEMENT) \
-  make_shift_override(TRIGGER, REPLACEMENT, ~0)
-
-
 // Configure QMK
 
+// Tapping terms
 // Beware - Miryoku config.h unconditionally resets TAPPING_TERM to 200
-// Per-key tapping terms
 #define TAPPING_TERM_PER_KEY
 #define FAST_TAPPING_TERM (TAPPING_TERM + 30)
 #define SLOW_TAPPING_TERM (TAPPING_TERM + 100)
+#define DOUBLE_TAPPING_TERM (TAPPING_TERM + 200)
 
 
+// Inject custom implementations into manna-harbour_miryoku.c
+
+#ifndef __ASSEMBLER__
+#include "custom.h"
 #endif
