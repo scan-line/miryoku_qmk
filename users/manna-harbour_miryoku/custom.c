@@ -516,10 +516,107 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
 // void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record) { ... }
 
 
+// Double tap
+
+typedef struct {
+  uint16_t keycode;
+  uint16_t timer;
+} double_tap_t;
+
+
+static double_tap_t double_tap = {
+  .keycode = KC_NO,
+  .timer = 0,
+};
+
+
+bool is_double_tap(uint16_t keycode, keyrecord_t *record) {
+  if (record->event.pressed) {
+    // Double tap?
+    return (keycode == double_tap.keycode && !timer_expired(record->event.time, double_tap.timer));
+  } else {
+    return false;
+  }
+}
+
+
+void double_tap_start(uint16_t keycode, keyrecord_t *record) {
+  // Start timer
+  double_tap.keycode = keycode;
+  double_tap.timer = record->event.time + GET_TAPPING_TERM(keycode, record);
+}
+
+
+void double_tap_reset(void) {
+  // Stop timer
+  double_tap.keycode = KC_NO;
+}
+
+
+void double_tap_update(void) {
+  // Double-tap timer expired?
+  if (double_tap.keycode && timer_expired(timer_read(), double_tap.timer))
+    double_tap.keycode = KC_NO;
+}
+
+
+void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+  // Key has been handled - update state
+  if (is_double_tap(keycode, record) {
+    // Double tap - start over
+    double_tap_reset();
+  } else if (record->event.pressed) {
+    // Tap - start double-tap timer
+    double_tap_start(keycode, record);
+  }
+}
+
+
+void housekeeping_task_user(void) {
+  double_tap_update();
+}
+
+
+__attribute__((weak)) void suspend_power_down_custom(void) {
+}
+
+
+void suspend_power_down_user(void) {
+  // May be run multiple times on suspend
+  double_tap_reset();
+  suspend_power_down_custom();
+}
+
+
+__attribute__((weak)) void suspend_wakeup_init_custom(void) {
+}
+
+
+void suspend_wakeup_init_user(void) {
+  suspend_wakeup_init_custom();
+}
+
+
+bool process_record_double_tap(uint16_t keycode, keyrecord_t *record) {
+  if (!IS_QK_TAP_DANCE(keycode))
+    return true;
+  
+  if (is_double_tap(keycode, record)) {
+    const uint8_t index = TD_INDEX(keycode);
+    double_tap_action_t action = tap_dance_actions[index];
+    double_tap_state_t state = {.count = 2};
+    action(&state, NULL);
+  }
+  return false
+}
+
+
 // Key processing
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (!process_record_shift_override(keycode, record))
+    return false;
+  if (!process_record_double_tap(keycode, record))
     return false;
 
   switch (keycode) {
