@@ -43,7 +43,7 @@ typedef void (*double_tap_function_t)(double_tap_state_t *state, void *reserved)
 #define TD(N) DT(N)
 #define TD_INDEX(CODE) DT_INDEX(CODE)
 #define qk_tap_dance_state_t double_tap_state_t
-#define qk_tap_dance_action_t double_tap_action_t
+#define qk_tap_dance_action_t double_tap_function_t
 #define ACTION_TAP_DANCE_FN(FUNCTION) FUNCTION
 
 
