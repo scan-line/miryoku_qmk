@@ -421,20 +421,7 @@ bool process_rgb_speed(keyrecord_t *record) {
 #define LAYER_MASK_NAV (1 << U_NAV)
 #define LAYER_MASK_NUM (1 << U_NUM)
 
-typedef struct {
-  uint16_t trigger;
-  uint16_t replacement;
-  layer_state_t layers;
-} shift_override_t;
-
-#define make_shift_override(TRIGGER, REPLACEMENT, LAYERS) \
-  ((const shift_override_t){        \
-    .trigger = (TRIGGER),           \
-    .replacement = (REPLACEMENT),   \
-    .layers = (LAYERS)              \
-  })
-
-const shift_override_t caps_word_override = make_shift_override(CW_TOGG, KC_CAPS, LAYER_MASK_NAV);
+extern const shift_override_t caps_word_override;
 const shift_override_t dot_key_override = make_shift_override(KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
 const shift_override_t nine_key_override = make_shift_override(KC_9, U_USER, LAYER_MASK_NUM);
 const shift_override_t* const shift_overrides[] = {
