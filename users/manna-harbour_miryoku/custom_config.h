@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <stdint.h>
+
 
 // Keycodes
 
@@ -85,7 +87,7 @@ typedef struct {
   uint8_t count;
 } double_tap_state_t;
 
-typedef void (*double_tap_action_t)(qk_tap_dance_state_t *state, void *unused);
+typedef void (*double_tap_action_t)(double_tap_state_t *state, void *unused);
 
 // Replacements for manna-harbour_miryoku.c
 #define qk_tap_dance_state_t double_tap_state_t
