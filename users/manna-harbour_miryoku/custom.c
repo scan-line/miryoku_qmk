@@ -421,11 +421,13 @@ bool process_rgb_speed(keyrecord_t *record) {
 #define LAYER_MASK_NAV (1 << U_NAV)
 #define LAYER_MASK_NUM (1 << U_NUM)
 
-extern const shift_override_t caps_word_override;
+// Defined in manna-harbour_miryoku.c
+extern const shift_override_t capsword_key_override;
+
 const shift_override_t dot_key_override = make_shift_override(KC_DOT, KC_LEFT_PAREN, LAYER_MASK_NUM);
 const shift_override_t nine_key_override = make_shift_override(KC_9, U_USER, LAYER_MASK_NUM);
 const shift_override_t* const shift_overrides[] = {
-  &caps_word_override,
+  &capsword_key_override,
   &dot_key_override,
   &nine_key_override,
   NULL
