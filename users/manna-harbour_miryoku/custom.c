@@ -428,12 +428,10 @@ static double_tap_t double_tap = {
 
 
 bool is_double_tap(uint16_t keycode, keyrecord_t *record) {
-  if (record->event.pressed) {
-    // Double tap?
+  if (record->event.pressed)
     return (keycode == double_tap.keycode && !timer_expired(record->event.time, double_tap.timer));
-  } else {
+  else
     return false;
-  }
 }
 
 
@@ -444,14 +442,14 @@ void double_tap_start(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-void double_tap_reset(void) {
+void double_tap_stop(void) {
   // Stop timer
   double_tap.keycode = KC_NO;
 }
 
 
-void double_tap_update(void) {
-  // Double-tap timer expired?
+void double_tap_task(void) {
+  // Stop timer if expired
   if (double_tap.keycode && timer_expired(timer_read(), double_tap.timer))
     double_tap.keycode = KC_NO;
 }
@@ -459,18 +457,15 @@ void double_tap_update(void) {
 
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
   // Key has been handled - update state
-  if (is_double_tap(keycode, record)) {
-    // Double tap - start over
-    double_tap_reset();
-  } else if (record->event.pressed) {
-    // Tap - start double-tap timer
+  if (is_double_tap(keycode, record))
+    double_tap_stop();
+  else if (record->event.pressed)
     double_tap_start(keycode, record);
-  }
 }
 
 
 void housekeeping_task_user(void) {
-  double_tap_update();
+  double_tap_task();
 }
 
 
@@ -480,7 +475,7 @@ __attribute__((weak)) void suspend_power_down_custom(void) {
 
 void suspend_power_down_user(void) {
   // May be run multiple times on suspend
-  double_tap_reset();
+  double_tap_stop();
   suspend_power_down_custom();
 }
 
