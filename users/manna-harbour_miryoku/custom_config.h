@@ -4,18 +4,15 @@
 // This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
+#ifndef __ASSEMBLER__
 
 #include <stdint.h>
-
 #include "action_layer.h"
 
 
 // Keycodes
 
-// Defining an enum here (as recommended in qmk docs) does not work
-// This header is included by both c and assembler source
-// and the assembly will fail
-// Steal some unused keycodes instead
+// Steal some unused keycodes
 
 #define U_USER PB_1
 
@@ -80,8 +77,6 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Custom tap-dance implementation
 
-#ifndef __ASSEMBLER__
-
 // Keep tap-dance keycodes
 #define TD(N) (QK_TAP_DANCE | TD_INDEX(N))
 #define TD_INDEX(CODE) ((CODE)&0xFF)
@@ -97,12 +92,8 @@ typedef void (*double_tap_action_t)(double_tap_state_t *state, void *unused);
 #define qk_tap_dance_action_t double_tap_action_t
 #define ACTION_TAP_DANCE_FN(FUNCTION) FUNCTION
 
-#endif
-
 
 // Custom key-override implementation
-
-#ifndef __ASSEMBLER__
 
 typedef struct {
   uint16_t trigger;
@@ -122,8 +113,6 @@ typedef struct {
 #define ko_make_basic(MASK, TRIGGER, REPLACEMENT) \
   make_shift_override(TRIGGER, REPLACEMENT, ~0)
 
-#endif
-
 
 // Configure QMK
 
@@ -132,3 +121,6 @@ typedef struct {
 #define TAPPING_TERM_PER_KEY
 #define FAST_TAPPING_TERM (TAPPING_TERM + 30)
 #define SLOW_TAPPING_TERM (TAPPING_TERM + 100)
+
+
+#endif
