@@ -598,11 +598,11 @@ void suspend_wakeup_init_user(void) {
 
 
 bool process_record_double_tap(uint16_t keycode, keyrecord_t *record) {
-  if (!IS_QK_TAP_DANCE(keycode))
+  if (!IS_QK_DOUBLE_TAP(keycode))
     return true;
   
   if (is_double_tap(keycode, record)) {
-    const uint8_t index = TD_INDEX(keycode);
+    const uint8_t index = DT_INDEX(keycode);
     double_tap_action_t action = tap_dance_actions[index];
     double_tap_state_t state = {.count = 2};
     action(&state, NULL);
