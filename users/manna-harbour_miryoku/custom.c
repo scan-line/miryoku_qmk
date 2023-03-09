@@ -428,6 +428,8 @@ static double_tap_t double_tap = {
 
 
 bool is_double_tap(uint16_t keycode, keyrecord_t *record) {
+#if 0
+  SEND_STRING("is");
   if (record->event.pressed)
     SEND_STRING("-press");
   else
@@ -440,6 +442,8 @@ bool is_double_tap(uint16_t keycode, keyrecord_t *record) {
     SEND_STRING("-expired");
   else
     SEND_STRING("-notexpired");
+  SEND_STRING("\n");
+#endif
   if (record->event.pressed)
     return (keycode == double_tap.keycode && !timer_expired(record->event.time, double_tap.timer));
   else
@@ -449,7 +453,7 @@ bool is_double_tap(uint16_t keycode, keyrecord_t *record) {
 
 void double_tap_start(uint16_t keycode, keyrecord_t *record) {
   // Start timer
-  SEND_STRING("-start");
+  SEND_STRING("dt-start\n");
   double_tap.keycode = keycode;
   double_tap.timer = record->event.time + GET_TAPPING_TERM(keycode, record);
 }
@@ -457,15 +461,17 @@ void double_tap_start(uint16_t keycode, keyrecord_t *record) {
 
 void double_tap_stop(void) {
   // Stop timer
-  SEND_STRING("-stop");
+  SEND_STRING("dt-stop\n");
   double_tap.keycode = KC_NO;
 }
 
 
 void double_tap_task(void) {
+#if 0
   // Stop timer if expired
   if (double_tap.keycode && timer_expired(timer_read(), double_tap.timer))
     double_tap_stop();
+#endif
 }
 
 
@@ -519,6 +525,7 @@ bool process_record_double_tap(uint16_t keycode, keyrecord_t *record) {
     double_tap_state_t state = {.count = 2};
     action(&state, NULL);
   }
+  SEND_STRING("\n");
   return false;
 }
 
