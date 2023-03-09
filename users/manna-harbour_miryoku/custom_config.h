@@ -81,19 +81,43 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #define TD(N) (QK_TAP_DANCE | TD_INDEX(N))
 #define TD_INDEX(CODE) ((CODE)&0xFF)
 
-// Compact replacements for manna-harbour_miryoku.c
-typedef void (*my_function_t)(void*, void*);
-#define qk_tap_dance_action_t char
-#define qk_tap_dance_state_t tap_t
-#define ACTION_TAP_DANCE_FN(FUNCTION) '+'
+typedef struct {
+  uint8_t count;
+} double_tap_state_t;
+
+typedef void (*double_tap_action_t)(qk_tap_dance_state_t *state, void *unused);
+
+// Replacements for manna-harbour_miryoku.c
+#define qk_tap_dance_state_t double_tap_state_t
+#define qk_tap_dance_action_t double_tap_action_t
+#define ACTION_TAP_DANCE_FN(FUNCTION) FUNCTION
 
 #endif
 
+
 // Custom key-override implementation
 
-// Compact replacements for manna-harbour_miryoku.c
-#define key_override_t char
-#define ko_make_basic(MASK, TRIGGER, REPLACEMENT) '+'
+#ifndef __ASSEMBLER__
+
+typedef struct {
+  uint16_t trigger;
+  uint16_t replacement;
+  layer_state_t layers;
+} shift_override_t;
+
+#define make_shift_override(TRIGGER, REPLACEMENT, LAYERS) \
+  ((const shift_override_t){        \
+    .trigger = (TRIGGER),           \
+    .replacement = (REPLACEMENT),   \
+    .layers = (LAYERS)              \
+  })
+
+// Replacements for manna-harbour_miryoku.c
+#define key_override_t shift_override_t
+#define ko_make_basic(MASK, TRIGGER, REPLACEMENT) \
+  make_shift_override(TRIGGER, REPLACEMENT, ~0)
+
+#endif
 
 
 // Configure QMK
