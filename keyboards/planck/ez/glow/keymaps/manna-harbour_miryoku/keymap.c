@@ -99,14 +99,14 @@ void flash_led(const uint8_t* pattern) {
   token = defer_exec(FLASH_LED_TICK, flash_led_callback, NULL);
 }
 
-void suspend_power_down_user(void) {
+void suspend_power_down_custom(void) {
   // May be run multiple times on suspend
   led.suspended = true;
   planck_ez_left_led_off();
   planck_ez_right_led_off();
 }
 
-void suspend_wakeup_init_user(void) {
+void suspend_wakeup_init_custom(void) {
   led.suspended = false;
   if (led.left)
     planck_ez_left_led_on();
