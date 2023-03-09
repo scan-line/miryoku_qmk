@@ -508,7 +508,7 @@ bool process_record_double_tap(uint16_t keycode, keyrecord_t *record) {
     double_tap_state_t state = {.count = 2};
     action(&state, NULL);
   }
-  return false
+  return false;
 }
 
 
