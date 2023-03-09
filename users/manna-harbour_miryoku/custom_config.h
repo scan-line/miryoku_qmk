@@ -92,7 +92,7 @@ typedef struct {
 
 typedef void (*double_tap_action_t)(double_tap_state_t *state, void *unused);
 
-// Replacements for manna-harbour_miryoku.c
+// Inject into manna-harbour_miryoku.c
 #define qk_tap_dance_state_t double_tap_state_t
 #define qk_tap_dance_action_t double_tap_action_t
 #define ACTION_TAP_DANCE_FN(FUNCTION) FUNCTION
@@ -117,7 +117,7 @@ typedef struct {
     .layers = (LAYERS)              \
   })
 
-// Replacements for manna-harbour_miryoku.c
+// Inject into manna-harbour_miryoku.c
 #define key_override_t shift_override_t
 #define ko_make_basic(MASK, TRIGGER, REPLACEMENT) \
   make_shift_override(TRIGGER, REPLACEMENT, ~0)
