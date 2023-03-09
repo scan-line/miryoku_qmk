@@ -4,25 +4,26 @@
 // This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
+#ifndef __ASSEMBLER__
+
+#include <stdint.h>
 
 
 // Keycodes
 
-// Defining an enum here (as recommended in qmk docs) does not work
-// This header is included by both c and assembler source
-// and the assembly will fail
-// Steal some unused keycodes instead
-#define U_USER PB_1
-#define U_WIN PB_2
-#define U_MAC PB_3
-#define U_LNX PB_4
-#define U_RGB_TOG PB_5
-#define U_RGB_MOD PB_6
-#define U_RGB_HUI PB_7
-#define U_RGB_SAI PB_8
-#define U_RGB_VAI PB_9
-#define U_RGB_SPI PB_10
-#define U_AUD_TOG PB_11
+enum my_keycodes {
+  U_USER = SAFE_RANGE,
+  U_WIN,
+  U_MAC,
+  U_LNX,
+  U_RGB_TOG,
+  U_RGB_MOD,
+  U_RGB_HUI,
+  U_RGB_SAI,
+  U_RGB_VAI,
+  U_RGB_SPI,
+  U_AUD_TOG,
+};
 
 
 // Layers
@@ -73,9 +74,23 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 
 // Custom key-override implementation
 
-// Preprocess key overrides to compact no-ops in manna-harbour_miryoku.c
-#define key_override_t char
-#define ko_make_basic(MASK, TRIGGER, REPLACEMENT) '+'
+typedef struct {
+  uint16_t trigger;
+  uint16_t replacement;
+  layer_state_t layers;
+} shift_override_t;
+
+#define make_shift_override(TRIGGER, REPLACEMENT, LAYERS) \
+  ((const shift_override_t){        \
+    .trigger = (TRIGGER),           \
+    .replacement = (REPLACEMENT),   \
+    .layers = (LAYERS)              \
+  })
+
+// Inject into manna-harbour_miryoku.c
+#define key_override_t shift_override_t
+#define ko_make_basic(MASK, TRIGGER, REPLACEMENT) \
+  make_shift_override(TRIGGER, REPLACEMENT, ~0)
 
 
 // Configure QMK
@@ -86,3 +101,6 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #define FAST_TAPPING_TERM (TAPPING_TERM + 30)
 #define SLOW_TAPPING_TERM (TAPPING_TERM + 100)
 #define DOUBLE_TAPPING_TERM (TAPPING_TERM + 200)
+
+
+#endif
