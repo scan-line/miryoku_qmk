@@ -424,6 +424,92 @@ bool process_rgb_speed(keyrecord_t *record) {
 #endif
 
 
+// Double tap
+
+typedef struct {
+  uint16_t keycode;
+  uint16_t timer;
+} double_tap_t;
+
+
+static double_tap_t double_tap = {
+  .keycode = KC_NO,
+  .timer = 0,
+};
+
+
+bool is_double_tap(uint16_t keycode, keyrecord_t *record) {
+  if (record->event.pressed)
+    return (keycode == double_tap.keycode && !timer_expired(record->event.time, double_tap.timer));
+  else
+    return false;
+}
+
+
+void double_tap_start(uint16_t keycode, keyrecord_t *record) {
+  double_tap.keycode = keycode;
+  double_tap.timer = record->event.time + GET_TAPPING_TERM(keycode, record);
+}
+
+
+void double_tap_stop(void) {
+  double_tap.keycode = KC_NO;
+}
+
+
+void double_tap_task(void) {
+  if (double_tap.keycode && timer_expired(timer_read(), double_tap.timer))
+    double_tap_stop();
+}
+
+
+void housekeeping_task_user(void) {
+  double_tap_task();
+}
+
+
+__attribute__((weak)) void suspend_power_down_custom(void) {
+}
+
+
+void suspend_power_down_user(void) {
+  // May be run multiple times on suspend
+  double_tap_stop();
+  suspend_power_down_custom();
+}
+
+
+__attribute__((weak)) void suspend_wakeup_init_custom(void) {
+}
+
+
+void suspend_wakeup_init_user(void) {
+  suspend_wakeup_init_custom();
+}
+
+
+// Defined in manna-harbour_miryoku.c
+extern qk_tap_dance_action_t tap_dance_actions[];
+
+
+bool process_record_double_tap(uint16_t keycode, keyrecord_t *record) {
+  if (!IS_QK_DOUBLE_TAP(keycode))
+    return true;
+  
+  if (is_double_tap(keycode, record)) {
+    double_tap_stop();
+    // Call registered function with a count of 2
+    const uint8_t index = DT_INDEX(keycode);
+    double_tap_function_t function = tap_dance_actions[index];
+    double_tap_state_t state = {.count = 2};
+    function(&state, NULL);
+  } else {
+    double_tap_start(keycode, record);
+  }
+  return false;
+}
+
+
 // Shift and Auto Shift overrides
 
 // Adapted from Pascal Getreuer's compact custom-shift implementation
@@ -530,6 +616,8 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
 // Key processing
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (!process_record_double_tap(keycode, record))
+    return false;
   if (!process_record_shift_override(keycode, record))
     return false;
 
