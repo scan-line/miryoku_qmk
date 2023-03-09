@@ -428,22 +428,6 @@ static double_tap_t double_tap = {
 
 
 bool is_double_tap(uint16_t keycode, keyrecord_t *record) {
-#if 0
-  SEND_STRING("is");
-  if (record->event.pressed)
-    SEND_STRING("-press");
-  else
-    SEND_STRING("-release");
-  if (keycode == double_tap.keycode)
-    SEND_STRING("-key");
-  else
-    SEND_STRING("-notkey");
-  if (timer_expired(record->event.time, double_tap.timer))
-    SEND_STRING("-expired");
-  else
-    SEND_STRING("-notexpired");
-  SEND_STRING("\n");
-#endif
   if (record->event.pressed)
     return (keycode == double_tap.keycode && !timer_expired(record->event.time, double_tap.timer));
   else
@@ -467,20 +451,9 @@ void double_tap_stop(void) {
 
 
 void double_tap_task(void) {
-#if 0
   // Stop timer if expired
   if (double_tap.keycode && timer_expired(timer_read(), double_tap.timer))
     double_tap_stop();
-#endif
-}
-
-
-void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
-  // Key has been handled - update state
-  if (is_double_tap(keycode, record))
-    double_tap_stop();
-  else if (record->event.pressed)
-    double_tap_start(keycode, record);
 }
 
 
@@ -517,15 +490,16 @@ bool process_record_double_tap(uint16_t keycode, keyrecord_t *record) {
   if (!IS_QK_DOUBLE_TAP(keycode))
     return true;
   
-  SEND_STRING("dt");
   if (is_double_tap(keycode, record)) {
-    SEND_STRING("2");
+    SEND_STRING("dt-fire\n");
+    double_tap_stop();
     const uint8_t index = DT_INDEX(keycode);
     double_tap_action_t action = tap_dance_actions[index];
     double_tap_state_t state = {.count = 2};
     action(&state, NULL);
+  } else {
+    double_tap_start(keycode, record);
   }
-  SEND_STRING("\n");
   return false;
 }
 
