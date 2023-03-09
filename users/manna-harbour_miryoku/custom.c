@@ -459,7 +459,7 @@ void double_tap_update(void) {
 
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
   // Key has been handled - update state
-  if (is_double_tap(keycode, record) {
+  if (is_double_tap(keycode, record)) {
     // Double tap - start over
     double_tap_reset();
   } else if (record->event.pressed) {
@@ -492,6 +492,10 @@ __attribute__((weak)) void suspend_wakeup_init_custom(void) {
 void suspend_wakeup_init_user(void) {
   suspend_wakeup_init_custom();
 }
+
+
+// Defined in manna-harbour_miryoku.c
+extern qk_tap_dance_action_t tap_dance_actions[];
 
 
 bool process_record_double_tap(uint16_t keycode, keyrecord_t *record) {
