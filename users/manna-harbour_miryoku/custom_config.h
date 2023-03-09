@@ -6,25 +6,6 @@
 #pragma once
 
 
-// Keycodes
-
-// Defining an enum here (as recommended in qmk docs) does not work
-// This header is included by both c and assembler source
-// and the assembly will fail
-// Steal some unused keycodes instead
-#define U_USER PB_1
-#define U_WIN PB_2
-#define U_MAC PB_3
-#define U_LNX PB_4
-#define U_RGB_TOG PB_5
-#define U_RGB_MOD PB_6
-#define U_RGB_HUI PB_7
-#define U_RGB_SAI PB_8
-#define U_RGB_VAI PB_9
-#define U_RGB_SPI PB_10
-#define U_AUD_TOG PB_11
-
-
 // Layers
 
 #define MIRYOKU_LAYER_MEDIA \
@@ -71,18 +52,18 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #endif
 
 
-// Custom key-override implementation
-
-// Preprocess key overrides to compact no-ops in manna-harbour_miryoku.c
-#define key_override_t char
-#define ko_make_basic(MASK, TRIGGER, REPLACEMENT) '+'
-
-
 // Configure QMK
 
+// Tapping terms
 // Beware - Miryoku config.h unconditionally resets TAPPING_TERM to 200
-// Per-key tapping terms
 #define TAPPING_TERM_PER_KEY
 #define FAST_TAPPING_TERM (TAPPING_TERM + 30)
 #define SLOW_TAPPING_TERM (TAPPING_TERM + 100)
 #define DOUBLE_TAPPING_TERM (TAPPING_TERM + 200)
+
+
+// Inject custom implementations into manna-harbour_miryoku.c
+
+#ifndef __ASSEMBLER__
+#include "custom.h"
+#endif
