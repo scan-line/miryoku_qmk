@@ -436,22 +436,17 @@ bool is_double_tap(uint16_t keycode, keyrecord_t *record) {
 
 
 void double_tap_start(uint16_t keycode, keyrecord_t *record) {
-  // Start timer
-  SEND_STRING("dt-start\n");
   double_tap.keycode = keycode;
   double_tap.timer = record->event.time + GET_TAPPING_TERM(keycode, record);
 }
 
 
 void double_tap_stop(void) {
-  // Stop timer
-  SEND_STRING("dt-stop\n");
   double_tap.keycode = KC_NO;
 }
 
 
 void double_tap_task(void) {
-  // Stop timer if expired
   if (double_tap.keycode && timer_expired(timer_read(), double_tap.timer))
     double_tap_stop();
 }
@@ -491,12 +486,12 @@ bool process_record_double_tap(uint16_t keycode, keyrecord_t *record) {
     return true;
   
   if (is_double_tap(keycode, record)) {
-    SEND_STRING("dt-fire\n");
     double_tap_stop();
+    // Call registered function with a count of 2
     const uint8_t index = DT_INDEX(keycode);
-    double_tap_action_t action = tap_dance_actions[index];
+    double_tap_function_t function = tap_dance_actions[index];
     double_tap_state_t state = {.count = 2};
-    action(&state, NULL);
+    function(&state, NULL);
   } else {
     double_tap_start(keycode, record);
   }
