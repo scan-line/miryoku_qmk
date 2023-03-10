@@ -40,11 +40,15 @@ typedef struct {
 
 typedef void (*double_tap_function_t)(double_tap_state_t *state, void *reserved);
 
+extern double_tap_function_t double_taps[];
+
+
 #define TD(N) DT(N)
 #define TD_INDEX(CODE) DT_INDEX(CODE)
+#define ACTION_TAP_DANCE_FN(FUNCTION) FUNCTION
 #define qk_tap_dance_state_t double_tap_state_t
 #define qk_tap_dance_action_t double_tap_function_t
-#define ACTION_TAP_DANCE_FN(FUNCTION) FUNCTION
+#define tap_dance_actions double_taps
 
 
 // Custom key-override implementation
@@ -61,6 +65,9 @@ typedef struct {
     .replacement = (REPLACEMENT),   \
     .layers = (LAYERS)              \
   })
+
+extern const shift_override_t* const shift_overrides[];
+
 
 #define key_override_t shift_override_t
 #define ko_make_basic(MASK, TRIGGER, REPLACEMENT) \

@@ -488,10 +488,6 @@ void suspend_wakeup_init_user(void) {
 }
 
 
-// Defined in manna-harbour_miryoku.c
-extern qk_tap_dance_action_t tap_dance_actions[];
-
-
 bool process_record_double_tap(uint16_t keycode, keyrecord_t *record) {
   if (!IS_QK_DOUBLE_TAP(keycode))
     return true;
@@ -500,7 +496,7 @@ bool process_record_double_tap(uint16_t keycode, keyrecord_t *record) {
     double_tap_stop();
     // Call registered function with a count of 2
     const uint8_t index = DT_INDEX(keycode);
-    double_tap_function_t function = tap_dance_actions[index];
+    double_tap_function_t function = double_taps[index];
     double_tap_state_t state = {.count = 2};
     function(&state, NULL);
   } else {
