@@ -32,12 +32,12 @@ bool SLOWDROPS(effect_params_t* params) {
   if (!params->init) {
     if (timer_expired32(g_rgb_timer, timer)) {
       timer = g_rgb_timer + tick;
-      raindrops_set_color(random8() % RGB_MATRIX_LED_COUNT, params);
+      slowdrops_set_color(random8() % RGB_MATRIX_LED_COUNT, params);
     }
   } else {
     timer = g_rgb_timer + tick;
     for (int i = led_min; i < led_max; i++)
-      raindrops_set_color(i, params);
+      slowdrops_set_color(i, params);
   }
   return rgb_matrix_check_finished_leds(led_max);
 }
