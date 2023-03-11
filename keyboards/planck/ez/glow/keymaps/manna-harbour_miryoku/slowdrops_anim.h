@@ -11,7 +11,7 @@ RGB_MATRIX_EFFECT(SLOWDROPS)
 
 static void slowdrops_set_color(int i, effect_params_t* params) {
   if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) return;
-  HSV hsv = {0, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v};
+  HSV hsv = {0, rgb_matrix_config.hsv.s, rgb_matrix_coenfig.hsv.v};
 
   // Take the shortest path between hues
   int16_t deltaH = ((rgb_matrix_config.hsv.h + 180) % 360 - rgb_matrix_config.hsv.h) / 4;
@@ -19,7 +19,7 @@ static void slowdrops_set_color(int i, effect_params_t* params) {
     deltaH -= 256;
   else if (deltaH < -127)
     deltaH += 256;
-]
+
   hsv.h   = rgb_matrix_config.hsv.h + (deltaH * (random8() & 0x03));
   RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
   rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
@@ -27,13 +27,17 @@ static void slowdrops_set_color(int i, effect_params_t* params) {
 
 bool SLOWDROPS(effect_params_t* params) {
   RGB_MATRIX_USE_LIMITS(led_min, led_max);
+  static uint32_t timer = 0;
+  const uint32_t tick = 5*rgb_matrix_config.speed + 32
   if (!params->init) {
-    // Change one LED every tick, make sure speed is not 0
-    if (scale16by8(g_rgb_timer, qadd8(rgb_matrix_config.speed, 16)) % 10 == 0)
-      slowdrops_set_color(random8() % RGB_MATRIX_LED_COUNT, params);
+    if (timer_expired32(g_rgb_timer, timer)) {
+      timer = g_rgb_timer + tick;
+      raindrops_set_color(random8() % RGB_MATRIX_LED_COUNT, params);
+    }
   } else {
+    timer = g_rgb_timer + tick;
     for (int i = led_min; i < led_max; i++)
-      slowdrops_set_color(i, params);
+      raindrops_set_color(i, params);
   }
   return rgb_matrix_check_finished_leds(led_max);
 }
