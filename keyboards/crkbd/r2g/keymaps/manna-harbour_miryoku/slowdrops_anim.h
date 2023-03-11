@@ -27,15 +27,19 @@ static void slowdrops_set_color(int i, effect_params_t* params) {
 
 bool SLOWDROPS(effect_params_t* params) {
   RGB_MATRIX_USE_LIMITS(led_min, led_max);
-  static uint32_t timer = 0;
-  const uint32_t tick = 600;
+  
+  static uint32_t wait_timer = 0;
+  inline uint32_t interval(void) {
+    return 3000 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16);
+  }
+
   if (!params->init) {
-    if (timer_expired32(g_rgb_timer, timer)) {
-      timer = g_rgb_timer + tick;
+    if (timer_expired32(g_rgb_timer, wait_timer)) {
+      wait_timer = g_rgb_timer + interval();
       slowdrops_set_color(random8() % RGB_MATRIX_LED_COUNT, params);
     }
   } else {
-    timer = g_rgb_timer + tick;
+    wait_timer = g_rgb_timer + interval();
     for (int i = led_min; i < led_max; i++)
       slowdrops_set_color(i, params);
   }
