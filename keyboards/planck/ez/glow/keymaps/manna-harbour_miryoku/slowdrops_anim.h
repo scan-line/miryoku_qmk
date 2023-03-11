@@ -28,8 +28,7 @@ static void slowdrops_set_color(int i, effect_params_t* params) {
 bool SLOWDROPS(effect_params_t* params) {
   RGB_MATRIX_USE_LIMITS(led_min, led_max);
   static uint32_t timer = 0;
-  const uint16_t delay = UINT_MAX - rgb_matrix_config.speed;
-  const uint16_t tick = 33 + (3*delay)/2;
+  const uint32_t tick = 333;
   if (!params->init) {
     if (timer_expired32(g_rgb_timer, timer)) {
       timer = g_rgb_timer + tick;
