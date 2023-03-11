@@ -12,7 +12,6 @@
 #define ENABLE_RGB_MATRIX_MULTISPLASH
 
 // Order determines enum order
-
 #include "raindrops_anim.h"
 #include "gradient_up_down_anim.h"
 #include "gradient_left_right_anim.h"
@@ -26,3 +25,16 @@
 #include "solid_reactive_nexus.h"
 #include "splash_anim.h"
 #include "typing_heatmap_anim.h"
+
+#undef ENABLE_RGB_MATRIX_SOLID_COLOR
+#undef ENABLE_RGB_MATRIX_ALPHAS_MODS
+#undef ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN
+#undef ENABLE_RGB_MATRIX_GRADIENT_LEFT_RIGHT
+#undef ENABLE_RGB_MATRIX_RAINDROPS
+#undef ENABLE_RGB_MATRIX_HUE_BREATHING
+#undef ENABLE_RGB_MATRIX_PIXEL_RAIN
+#undef ENABLE_RGB_MATRIX_PIXEL_FLOW
+#undef ENABLE_RGB_MATRIX_TYPING_HEATMAP
+#undef ENABLE_RGB_MATRIX_SOLID_REACTIVE_MULTIWIDE
+#undef ENABLE_RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
+#undef ENABLE_RGB_MATRIX_MULTISPLASH
