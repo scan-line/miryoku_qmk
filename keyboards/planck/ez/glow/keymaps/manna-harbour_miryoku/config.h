@@ -31,7 +31,10 @@ KC_NO, KC_NO, K32,   K33,   K34,      KC_NO,     K35,   K36,   K37,   KC_NO, KC_
 #define RGB_MATRIX_VAL_STEP 16
 #define RGB_MATRIX_SPD_STEP 16
 
-// Disable all effects, then enable a subset
+// Enable rgb_matrix_kb.inc
+#define RGB_MATRIX_CUSTOM_KB
+
+// Disable rgb_matrix.inc
 
 #undef ENABLE_RGB_MATRIX_SOLID_COLOR
 #undef ENABLE_RGB_MATRIX_ALPHAS_MODS
@@ -77,9 +80,6 @@ KC_NO, KC_NO, K32,   K33,   K34,      KC_NO,     K35,   K36,   K37,   KC_NO, KC_
 #undef ENABLE_RGB_MATRIX_MULTISPLASH
 #undef ENABLE_RGB_MATRIX_SOLID_SPLASH
 #undef ENABLE_RGB_MATRIX_SOLID_MULTISPLASH
-
-// The order is fixed
-// See rgb_matrix_effects.inc
 
 #define ENABLE_RGB_MATRIX_SOLID_COLOR
 #define ENABLE_RGB_MATRIX_ALPHAS_MODS
