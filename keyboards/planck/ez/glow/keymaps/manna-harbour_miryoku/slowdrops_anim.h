@@ -11,7 +11,7 @@ RGB_MATRIX_EFFECT(SLOWDROPS)
 
 static void slowdrops_set_color(int i, effect_params_t* params) {
   if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) return;
-  HSV hsv = {0, rgb_matrix_config.hsv.s, rgb_matrix_coenfig.hsv.v};
+  HSV hsv = {0, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v};
 
   // Take the shortest path between hues
   int16_t deltaH = ((rgb_matrix_config.hsv.h + 180) % 360 - rgb_matrix_config.hsv.h) / 4;
