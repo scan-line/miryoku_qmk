@@ -34,7 +34,7 @@ KC_NO, KC_NO, K32,   K33,   K34,      KC_NO,     K35,   K36,   K37,   KC_NO, KC_
 // Enable rgb_matrix_kb.inc
 #define RGB_MATRIX_CUSTOM_KB
 
-// Disable rgb_matrix.inc
+// Disable all quantum effects
 #undef ENABLE_RGB_MATRIX_SOLID_COLOR
 #undef ENABLE_RGB_MATRIX_ALPHAS_MODS
 #undef ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN
