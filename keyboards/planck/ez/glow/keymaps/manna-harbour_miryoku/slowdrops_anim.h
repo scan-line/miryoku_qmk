@@ -3,41 +3,40 @@
 
 // This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#ifdef ENABLE_RGB_MATRIX_RAINDROPS
-RGB_MATRIX_EFFECT(RAINDROPS)
-#    ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+// Lightly adapted from raindrops_anim.h
 
-static void raindrops_set_color(int i, effect_params_t* params) {
-    if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) return;
-    HSV hsv = {0, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v};
+#ifdef ENABLE_RGB_MATRIX_SLOWDROPS
+RGB_MATRIX_EFFECT(SLOWDROPS)
+#ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
-    // Take the shortest path between hues
-    int16_t deltaH = ((rgb_matrix_config.hsv.h + 180) % 360 - rgb_matrix_config.hsv.h) / 4;
-    if (deltaH > 127) {
-        deltaH -= 256;
-    } else if (deltaH < -127) {
-        deltaH += 256;
-    }
+static void slowdrops_set_color(int i, effect_params_t* params) {
+  if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) return;
+  HSV hsv = {0, rgb_matrix_config.hsv.s, rgb_matrix_config.hsv.v};
 
-    hsv.h   = rgb_matrix_config.hsv.h + (deltaH * (random8() & 0x03));
-    RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
-    rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+  // Take the shortest path between hues
+  int16_t deltaH = ((rgb_matrix_config.hsv.h + 180) % 360 - rgb_matrix_config.hsv.h) / 4;
+  if (deltaH > 127)
+    deltaH -= 256;
+  else if (deltaH < -127)
+    deltaH += 256;
+]
+  hsv.h   = rgb_matrix_config.hsv.h + (deltaH * (random8() & 0x03));
+  RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
+  rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
 }
 
-bool RAINDROPS(effect_params_t* params) {
-    RGB_MATRIX_USE_LIMITS(led_min, led_max);
-    if (!params->init) {
-        // Change one LED every tick, make sure speed is not 0
-        if (scale16by8(g_rgb_timer, qadd8(rgb_matrix_config.speed, 16)) % 10 == 0) {
-            raindrops_set_color(random8() % RGB_MATRIX_LED_COUNT, params);
-        }
-    } else {
-        for (int i = led_min; i < led_max; i++) {
-            raindrops_set_color(i, params);
-        }
-    }
-    return rgb_matrix_check_finished_leds(led_max);
+bool SLOWDROPS(effect_params_t* params) {
+  RGB_MATRIX_USE_LIMITS(led_min, led_max);
+  if (!params->init) {
+    // Change one LED every tick, make sure speed is not 0
+    if (scale16by8(g_rgb_timer, qadd8(rgb_matrix_config.speed, 16)) % 10 == 0)
+      slowdrops_set_color(random8() % RGB_MATRIX_LED_COUNT, params);
+  } else {
+    for (int i = led_min; i < led_max; i++)
+      slowdrops_set_color(i, params);
+  }
+  return rgb_matrix_check_finished_leds(led_max);
 }
 
-#    endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-#endif     // ENABLE_RGB_MATRIX_RAINDROPS
+#endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#endif // ENABLE_RGB_MATRIX_SLOWDROPS
