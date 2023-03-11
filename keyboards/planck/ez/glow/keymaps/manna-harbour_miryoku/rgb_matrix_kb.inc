@@ -11,16 +11,17 @@
 #define ENABLE_RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
 #define ENABLE_RGB_MATRIX_MULTISPLASH
 
-// Order determines enum order
+// Off is enum 0
+// Solid color is enum 1
+// Include order defines remaining enum order
 #include "raindrops_anim.h"
+#include "alpha_mods_anim.h"
 #include "gradient_up_down_anim.h"
 #include "gradient_left_right_anim.h"
 #include "hue_breathing_anim.h"
 #include "hue_wave_anim.h"
 #include "pixel_rain_anim.h"
 #include "pixel_flow_anim.h"
-#include "solid_color_anim.h"
-#include "alpha_mods_anim.h"
 #include "solid_reactive_wide.h"
 #include "solid_reactive_nexus.h"
 #include "splash_anim.h"
