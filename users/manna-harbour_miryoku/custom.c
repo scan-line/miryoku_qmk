@@ -17,6 +17,12 @@
 #  define RGB_MATRIX_MAXIMUM_BRIGHTNESS UINT8_MAX
 #endif
 
+// Oneshot no-ops
+#ifdef NO_ACTION_ONESHOT
+#  define get_oneshot_mods() 0
+#  define del_oneshot_mods(mask) (void)0
+#endif
+
 
 // Miryoku definitions
 
@@ -345,7 +351,8 @@ bool process_rgb_mode(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
   
-  const uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
+  const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+  const uint8_t shifted = mods & MOD_MASK_SHIFT;
   if (!shifted)
     rgb_matrix_step();
   else
@@ -361,7 +368,8 @@ bool process_rgb_hue(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
   
-  const uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
+  const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+  const uint8_t shifted = mods & MOD_MASK_SHIFT;
   if (!shifted)
     rgb_matrix_increase_hue();
   else
@@ -377,7 +385,8 @@ bool process_rgb_sat(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
   
-  const uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
+  const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+  const uint8_t shifted = mods & MOD_MASK_SHIFT;
   if (!shifted)
     rgb_matrix_increase_sat();
   else
@@ -393,7 +402,8 @@ bool process_rgb_val(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
   
-  const uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
+  const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+  const uint8_t shifted = mods & MOD_MASK_SHIFT;
   if (!shifted)
     rgb_matrix_increase_val();
   else
@@ -409,7 +419,8 @@ bool process_rgb_speed(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
   
-  uint8_t shifted = get_mods() & MOD_MASK_SHIFT;
+  const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+  uint8_t shifted = mods & MOD_MASK_SHIFT;
   if (!shifted)
     rgb_matrix_increase_speed();
   else
@@ -552,12 +563,6 @@ uint16_t shift_override(uint16_t keycode, keyrecord_t *record) {
   // No override
   return KC_TRANSPARENT;
 }
-
-// Oneshot no-ops
-#ifdef NO_ACTION_ONESHOT
-#  define get_oneshot_mods() 0
-#  define del_oneshot_mods(mask) (void)0
-#endif
 
 bool process_record_shift_override(uint16_t keycode, keyrecord_t* record) {
   // Overrides are tapped - nothing to unregister
