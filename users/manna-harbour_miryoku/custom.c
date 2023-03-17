@@ -298,7 +298,7 @@ bool process_audio_toggle(keyrecord_t *record) {
   const uint8_t shifted = mods & MOD_MASK_SHIFT;
   if (shifted) {
     // Audio off
-    // Turn audio on to get audio feedback
+    // Temporarily enable audio for feedback
     audio_on();
   }
   
@@ -343,6 +343,14 @@ bool slider_on_detent(uint8_t i, uint8_t detent, int8_t step) {
 bool process_rgb_toggle(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
+  
+  const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+  const uint8_t shifted = mods & MOD_MASK_SHIFT;
+  if (shifted) {
+    // Rgb off
+    // Temporarily enable rgb matrix for feedback
+    rgb_matrix_enable();
+  }
   
   // Show toggle in the on state
   if (rgb_matrix_is_enabled()) {
