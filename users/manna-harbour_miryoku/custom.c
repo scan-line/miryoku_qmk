@@ -294,6 +294,14 @@ bool process_audio_toggle(keyrecord_t *record) {
   if (!record->event.pressed)
     return false;
   
+  const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+  const uint8_t shifted = mods & MOD_MASK_SHIFT;
+  if (shifted) {
+    // Audio off
+    // Turn audio on to get audio feedback
+    audio_on();
+  }
+  
   // Show toggle in the on state
   if (audio_is_on()) {
       show_toggle(QK_AUDIO_TOGGLE, false);
