@@ -8,6 +8,14 @@
 #include "manna-harbour_miryoku.h"
 
 
+// Qmk definitions
+
+// Oneshot no-ops
+#ifdef NO_ACTION_ONESHOT
+#  define get_oneshot_mods() 0
+#endif
+
+
 // Luna, keyboard pet
 // https://github.com/HellSingCoder/qmk_firmware/blob/master/keyboards/sofle/keymaps/helltm/keymap.c
 
@@ -25,7 +33,6 @@ uint32_t anim_timer = 0;
 // Current frame
 uint8_t current_frame = 0;
 // Status variables
-bool isSneaking = false;
 bool isJumping  = false;
 bool showedJump = true;
 
@@ -127,6 +134,8 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
     // Current status
     const int current_wpm = get_current_wpm();
     const led_t led_state = host_keyboard_led_state();
+    const bool isSneaking = (mods | get_weak_mods() | get_oneshot_mods()) & (MOD_MASK_CTRL | MOD_MASK_GUI);
+
     if (led_state.caps_lock || is_caps_word_on()) {
       oled_write_raw_P(bark[current_frame], ANIM_SIZE);
     } else if (isSneaking) {
@@ -159,14 +168,6 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
 
 void process_record_luna(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case KC_LCTL:
-    case KC_RCTL:
-      if (record->event.pressed) {
-        isSneaking = true;
-      } else {
-        isSneaking = false;
-      }
-      break;
     case KC_SPC:
       if (record->event.pressed) {
         isJumping  = true;
