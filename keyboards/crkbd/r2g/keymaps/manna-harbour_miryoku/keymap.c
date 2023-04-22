@@ -188,10 +188,10 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 #ifdef OLED_ENABLE
 
 void oled_task_left(void) {
+  render_luna(0, 13);
 }
 
 void oled_task_right(void) {
-  render_luna(0, 13);
 }
 
 bool oled_task_kb(void) {
