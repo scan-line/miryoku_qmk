@@ -117,7 +117,7 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
   // Animation
   void animate_luna(void) {
     // Clear
-    if (isJumping && !showedJump) {
+    if (isJumping || !showedJump) {
       oled_set_cursor(LUNA_X, LUNA_Y + 2);
       oled_write("     ", false);
       oled_set_cursor(LUNA_X, LUNA_Y - 1);
@@ -180,8 +180,7 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
         isJumping  = true;
         showedJump = false;
       } else {
-        // Synthesised taps are short.
-        // Let luna jump and clear state.        
+        isJumping  = false;
       }
       break;
     default:
