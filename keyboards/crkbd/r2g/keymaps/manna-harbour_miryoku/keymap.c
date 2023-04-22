@@ -167,9 +167,9 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
 }
 
 void process_record_luna(uint16_t keycode, keyrecord_t *record) {
-  // if (IS_QK_LAYER_TAP(keycode) && record->tap.count > 0) {
-  //   keycode = QK_LAYER_TAP_GET_TAP_KEYCODE(keycode);
-  // }
+  if (IS_QK_LAYER_TAP(keycode) && record->tap.count > 0) {
+    keycode = QK_LAYER_TAP_GET_TAP_KEYCODE(keycode);
+  }
 
   switch (keycode) {
     case KC_SPC:
@@ -178,7 +178,7 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
         isJumping  = true;
         showedJump = false;
       } else {
-        isJumping = false;
+        // isJumping = false;
       }
       break;
     default:
