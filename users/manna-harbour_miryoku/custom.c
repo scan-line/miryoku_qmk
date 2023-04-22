@@ -259,7 +259,7 @@ bool process_code16_plus(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-// OS-specific clipboard and undo/redo
+// Clipboard and undo/redo
 
 typedef enum {
   CLIP_CUT,
@@ -277,7 +277,7 @@ const uint16_t PROGMEM clipcodes[][CLIP_END] = {
 };
 
 bool process_clipcode(clip_t clip, keyrecord_t *record) {
-  const uint16_t keycode = clipcodes[os_mode][clip];
+  const uint16_t keycode = pgm_read_word(&clipcodes[os_mode][clip]);
   if (record->event.pressed)
     register_code16(keycode);
   else
