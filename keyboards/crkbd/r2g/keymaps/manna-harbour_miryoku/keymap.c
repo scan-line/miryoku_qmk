@@ -8,10 +8,10 @@
 #include "manna-harbour_miryoku.h"
 
 
-#ifdef OLED_ENABLE
-
-// Keyboard pet
+// Luna, keyboard pet
 // https://github.com/HellSingCoder/qmk_firmware/blob/master/keyboards/sofle/keymaps/helltm/keymap.c
+
+#ifdef OLED_ENABLE
 
 // Settings
 #define MIN_WALK_SPEED 10  // wpm
@@ -179,8 +179,12 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
       break
   }
 
+#endif // OLED_ENABLE
+
 
 // Oled
+
+#ifdef OLED_ENABLE
 
 void oled_task_left() {
   render_luna(0, 13);
