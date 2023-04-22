@@ -110,7 +110,7 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
   // Animation
   void animate_luna(void) {
     // Clear
-    if (isJumping || !showedJump) {
+    if (isJumping && !showedJump) {
       oled_set_cursor(LUNA_X, LUNA_Y + 2);
       oled_write("     ", false);
       oled_set_cursor(LUNA_X, LUNA_Y - 1);
