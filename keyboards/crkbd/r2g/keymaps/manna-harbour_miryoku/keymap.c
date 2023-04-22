@@ -188,10 +188,10 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 #ifdef OLED_ENABLE
 
 void oled_task_left(void) {
-  render_luna(0, 13);
 }
 
 void oled_task_right(void) {
+  render_luna(0, 13);
 }
 
 bool oled_task_kb(void) {
@@ -215,7 +215,7 @@ oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
   if (is_keyboard_master()) {
     return OLED_ROTATION_270;
   } else {
-    return OLED_ROTATION_270;
+    return OLED_ROTATION_90;
   }
 }
 
