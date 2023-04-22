@@ -173,7 +173,6 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 
   switch (keycode) {
     case KC_SPC:
-    case LT(U_NAV, KC_SPC):
       if (record->event.pressed) {
         isJumping  = true;
         showedJump = false;
