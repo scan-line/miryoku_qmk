@@ -87,7 +87,6 @@ led_config_t g_led_config = { {
 
 #endif
 
-#if 0
 #ifdef OLED_ENABLE
 
 oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
@@ -238,5 +237,3 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
   return process_record_user(keycode, record);
 }
 #endif // OLED_ENABLE
-#endif
-
