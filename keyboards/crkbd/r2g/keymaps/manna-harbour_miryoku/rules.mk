@@ -2,6 +2,7 @@
 # https://github.com/scan-line
 
 RGB_MATRIX_ENABLE = yes
+WPM_ENABLE = yes
 
 CONSOLE_ENABLE = no
 COMMAND_ENABLE = no
