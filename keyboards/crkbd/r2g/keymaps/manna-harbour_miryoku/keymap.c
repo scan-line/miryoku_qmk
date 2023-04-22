@@ -126,8 +126,8 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
 
     // Current status
     const int current_wpm = get_current_wpm();
-    const led_usb_state = host_keyboard_led_state();
-    if (led_usb_state.caps_lock|| is_caps_word_on()) {
+    const led_t led_state = host_keyboard_led_state();
+    if (led_state.caps_lock || is_caps_word_on()) {
       oled_write_raw_P(bark[current_frame], ANIM_SIZE);
     } else if (isSneaking) {
       oled_write_raw_P(sneak[current_frame], ANIM_SIZE);
