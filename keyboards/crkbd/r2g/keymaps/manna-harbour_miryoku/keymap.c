@@ -178,6 +178,7 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
     default:
       break;
   }
+}
 
 #endif // OLED_ENABLE
 
