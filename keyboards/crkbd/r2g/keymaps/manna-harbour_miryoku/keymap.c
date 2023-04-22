@@ -134,7 +134,7 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
     // Current status
     const int current_wpm = get_current_wpm();
     const led_t led_state = host_keyboard_led_state();
-    const bool isSneaking = (mods | get_weak_mods() | get_oneshot_mods()) & (MOD_MASK_CTRL | MOD_MASK_GUI);
+    const bool isSneaking = (get_mods() | get_weak_mods() | get_oneshot_mods()) & (MOD_MASK_CTRL | MOD_MASK_GUI);
 
     if (led_state.caps_lock || is_caps_word_on()) {
       oled_write_raw_P(bark[current_frame], ANIM_SIZE);
