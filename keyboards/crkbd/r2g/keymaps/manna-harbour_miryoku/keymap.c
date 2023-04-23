@@ -255,8 +255,8 @@ void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
 // Oled
 
 void oled_task_left(void) {
-  // oled_write_P(PSTR("Layer: "), false);
-  render_luna(0, 13);
+  oled_write_P(PSTR("Corne"), false);
+  render_luna(0, 6);
 }
 
 void oled_task_right(void) {
