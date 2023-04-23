@@ -188,7 +188,7 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 // Feedback
 
 #define MESSAGE_DURATION 2000  // ms
-const char default_message[] PROGMEM = "...";
+const char default_message[] PROGMEM = "";
 const char* message = default_message;
 uint32_t message_timer = 0;
 
@@ -241,8 +241,8 @@ void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
 // Oled
 
 void oled_task_left(void) {
-  render_message(2, 1);
-  render_luna(1, 6);
+  render_message(1, 1);
+  render_luna(0, 6);
 }
 
 void oled_task_right(void) {
