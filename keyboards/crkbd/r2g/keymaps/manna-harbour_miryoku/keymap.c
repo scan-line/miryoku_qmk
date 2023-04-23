@@ -187,86 +187,51 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 
 // Feedback
 
-#if 1
-
 const char default_message[] PROGMEM = "";
 const char* message = default_message;
+
+set_message(const char* str) {
+  message = str;
+}
 
 void show_mode_custom(uint16_t keycode) {
   switch (keycode) {
     case U_WIN:
-      message = PSTR("Win");
+      set_message(PSTR("Win"));
       break;
     case U_MAC:
-      message = PSTR("Mac");
+      set_message(PSTR("Mac"));
       break;
     case U_LNX:
-      message = PSTR("Lnx");
+      set_message(PSTR("Lnx"));
       break;
     default:
       break;
   }
-}
-
-void show_layer_custom(uint8_t layer) {
-  switch (layer) {
-    case U_BASE:
-    case U_EXTRA:
-    case U_TAP:
-      break;
-    case U_NAV:
-    case U_MOUSE:
-    case U_MEDIA:
-      break;
-    case U_NUM:
-    case U_SYM:
-    case U_FUN:
-      break;
-    case U_BUTTON:
-      break;
-    default:
-      break;
-    }
 }
 
 void show_default_layer_custom(uint8_t layer) {
+  set_message(PSTR("Lock");
 }
 
 void show_toggle_custom(uint16_t keycode, bool value) {
-  switch (keycode) {
-    case QK_AUDIO_TOGGLE:
-      break;
-    case RGB_TOG:
-      break;
-    default:
-      break;
-  }
+  if (value)
+    set_message(PSTR("On"));
+  else
+    set_message(PSTR("Off"));
 }
 
 void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
-  switch (keycode) {
-    case RGB_MOD:
-      break;
-    case RGB_HUI:
-      break;
-    case RGB_SAI:
-      break;
-    case RGB_VAI:
-      break;
-    case RGB_SPI:
-      break;
-    default:
-      break;
-  }
+  if (detent)
+    set_message(PSTR("="));
 }
-
-#endif
 
 
 // Oled
 
 void oled_task_left(void) {
-  // oled_write_P(PSTR("Corne"), false);
+  oled_set_cursor(0, 1);
+  oled_write_P(message, false);
   render_luna(0, 6);
 }
 
