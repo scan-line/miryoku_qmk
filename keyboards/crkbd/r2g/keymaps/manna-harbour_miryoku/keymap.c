@@ -262,10 +262,10 @@ void render_miryoku_logo(int x, int y) {
 void oled_task_left(void) {
   render_message(1, 1);
   render_luna(0, 6);
-  render_miryoku_logo(0, 13);
 }
 
 void oled_task_right(void) {
+  render_miryoku_logo(0, 6);
 }
 
 bool oled_task_kb(void) {
