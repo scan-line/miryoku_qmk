@@ -211,19 +211,19 @@ void show_mode_custom(uint16_t keycode) {
 }
 
 void show_default_layer_custom(uint8_t layer) {
-  set_message(PSTR("Lock");
+  set_message(PSTR("-x-"));
 }
 
 void show_toggle_custom(uint16_t keycode, bool value) {
   if (value)
-    set_message(PSTR("On"));
+    set_message(PSTR("[x]"));
   else
-    set_message(PSTR("Off"));
+    set_message(PSTR("[ ]"));
 }
 
 void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
   if (detent)
-    set_message(PSTR("="));
+    set_message(PSTR("-=-"));
 }
 
 
