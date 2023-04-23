@@ -189,13 +189,19 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 
 #if 1
 
+const char* default_message = PSTR("");
+const char* message = default_message;
+
 void show_mode_custom(uint16_t keycode) {
   switch (keycode) {
     case U_WIN:
+      message = PSTR("Win");
       break;
     case U_MAC:
+      message = PSTR("Mac");
       break;
     case U_LNX:
+      message = PSTR("Lnx");
       break;
     default:
       break;
@@ -260,7 +266,7 @@ void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
 // Oled
 
 void oled_task_left(void) {
-  oled_write_P(PSTR("Corne"), false);
+  // oled_write_P(PSTR("Corne"), false);
   render_luna(0, 6);
 }
 
