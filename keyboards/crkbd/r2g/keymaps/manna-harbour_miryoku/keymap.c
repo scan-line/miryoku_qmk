@@ -217,6 +217,7 @@ void show_mode_custom(uint16_t keycode) {
       set_message(PSTR("Lnx"));
       break;
     default:
+      set_message(default_message);
       break;
   }
 }
@@ -235,6 +236,8 @@ void show_toggle_custom(uint16_t keycode, bool value) {
 void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
   if (detent)
     set_message(PSTR("-=-"));
+  else
+    set_message(default_message);
 }
 
 
