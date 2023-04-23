@@ -34,7 +34,7 @@ uint8_t current_frame = 0;
 bool isJumping  = false;
 bool showJump = false;
 
-static void render_luna(int LUNA_X, int LUNA_Y) {
+static void render_luna(int x, int y) {
   // Frames 32x22px
   // Sit
   static const char PROGMEM sit[2][ANIM_SIZE] = {
@@ -116,14 +116,14 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
   void animate_luna(void) {
     // Clear
     if (isJumping || showJump) {
-      oled_set_cursor(LUNA_X, LUNA_Y + 2);
+      oled_set_cursor(x, y + 2);
       oled_write("     ", false);
-      oled_set_cursor(LUNA_X, LUNA_Y - 1);
+      oled_set_cursor(x, y - 1);
       showJump = false;
     } else {
-      oled_set_cursor(LUNA_X, LUNA_Y - 1);
+      oled_set_cursor(x, y - 1);
       oled_write("     ", false);
-      oled_set_cursor(LUNA_X, LUNA_Y);
+      oled_set_cursor(x, y);
     }
 
     // Switch frame
@@ -187,11 +187,22 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 
 // Feedback
 
-const char default_message[] PROGMEM = "";
+#define MESSAGE_DURATION 2000  // ms
+const char default_message[] PROGMEM = "...";
 const char* message = default_message;
+uint32_t message_timer = 0;
 
 void set_message(const char* str) {
+  message_timer = timer_read32();
   message = str;
+}
+
+void render_message(int x, int y) {
+  if (timer_elapsed32(message_timer) > MESSAGE_DURATION)
+    set_message(default_message);
+  
+  oled_set_cursor(x, y);
+  oled_write_P(message, false);
 }
 
 void show_mode_custom(uint16_t keycode) {
@@ -230,8 +241,7 @@ void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
 // Oled
 
 void oled_task_left(void) {
-  oled_set_cursor(2, 1);
-  oled_write_P(message, false);
+  render_message(2, 1);
   render_luna(1, 6);
 }
 
