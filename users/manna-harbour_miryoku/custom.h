@@ -28,11 +28,6 @@ enum my_keycodes {
 };
 
 
-// Layers
-
-const char* layer_name(uint8_t layer);
-
-
 // Custom double-tap implementation
 
 #define DT(N) (QK_TAP_DANCE | DT_INDEX(N))
