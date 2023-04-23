@@ -253,7 +253,7 @@ static const char PROGMEM miryoku_logo[] = {
 
 void render_miryoku_logo(int x, int y) {
   oled_set_cursor(x, y);
-  oled_write_raw_P(sneak[miryoku_logo, sizeof(miryoku_logo));
+  oled_write_raw_P(miryoku_logo, sizeof(miryoku_logo));
 }
 
 
