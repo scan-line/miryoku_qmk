@@ -114,16 +114,6 @@ void show_value(uint16_t keycode, uint16_t value, bool detent) {
 
 // Layers
 
-const char* layer_name(uint8_t layer) {
-  switch(layer) {
-#   define MIRYOKU_X(LAYER, STRING) case U_##LAYER: return STRING;
-      MIRYOKU_LAYER_LIST
-#   undef MIRYOKU_X
-    default:
-      return "Unknown";
-  }
-}
-
 layer_state_t layer_state_set_user(layer_state_t state) {
   const uint8_t layer = get_highest_layer(state|default_layer_state);
   show_layer(layer);
