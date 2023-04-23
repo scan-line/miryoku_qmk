@@ -212,7 +212,8 @@ void show_mode_custom(uint16_t keycode) {
 }
 
 void show_default_layer_custom(uint8_t layer) {
-  todo;
+  const char* layer = layer_name(layer);
+  snprintf(message, sizeof(message), "Lock layer: %s", layer);
 }
 
 void show_toggle_custom(uint16_t keycode, bool value) {
