@@ -191,15 +191,81 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 #endif // OLED_ENABLE
 
 
+// Feedback
+
+static char message[25] = "Welcome";
+
+void show_mode_custom(uint16_t keycode) {
+  switch (keycode) {
+    case U_WIN:
+      snprintf(message, sizeof(message), "OS: Windows")
+      break;
+    case U_MAC:
+      snprintf(message, sizeof(message), "OS: Mac")
+      break;
+    case U_LNX:
+      snprintf(message, sizeof(message), "OS: Linux")
+      break;
+    default:
+      break;
+  }
+}
+
+void show_default_layer_custom(uint8_t layer) {
+  todo;
+}
+
+void show_toggle_custom(uint16_t keycode, bool value) {
+  const char* status = (value) ? "on" : "off";
+  switch (keycode) {
+    case QK_AUDIO_TOGGLE:
+      snprintf(message, sizeof(message), "Audio: %s", status);
+      break;
+    case RGB_TOG:
+      snprintf(message, sizeof(message), "Rgb: %s", status);
+      break;
+    default:
+      break;
+  }
+}
+
+void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
+  const char* status = (detent) ? "=" : " "
+  switch (keycode) {
+    case RGB_MOD:
+      snprintf(message, sizeof(message), "Rgb mode: %d %s", value, status);
+      break;
+    case RGB_HUI:
+      snprintf(message, sizeof(message), "Rgb hue: %d %s", value, status);
+      break;
+    case RGB_SAI:
+      snprintf(message, sizeof(message), "Rgb sat: %d %s", value, status);
+      break;
+    case RGB_VAI:
+      snprintf(message, sizeof(message), "Rgb val: %d %s", value, status);
+      break;
+    case RGB_SPI:
+      snprintf(message, sizeof(message), "Rgb speed: %d %s", value, status);
+      break;
+    default:
+      break;
+  }
+}
+
+
 // Oled
 
 #ifdef OLED_ENABLE
 
 void oled_task_left(void) {
-  render_luna(0, 13);
+  const char* layer = layer_name(get_highest_layer(layer_state));
+  oled_write_P(PSTR("Layer: "), false);
+  oled_write_ln(layer, false);
+  oled_write_ln(message, false);
 }
 
 void oled_task_right(void) {
+  render_luna(0, 13);
 }
 
 bool oled_task_kb(void) {
@@ -221,7 +287,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 
 oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
   if (is_keyboard_master()) {
-    return OLED_ROTATION_270;
+    return OLED_ROTATION_0;
   } else {
     return OLED_ROTATION_270;
   }
