@@ -232,7 +232,7 @@ void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
 void oled_task_left(void) {
   oled_set_cursor(2, 1);
   oled_write_P(message, false);
-  render_luna(0, 6);
+  render_luna(1, 6);
 }
 
 void oled_task_right(void) {
