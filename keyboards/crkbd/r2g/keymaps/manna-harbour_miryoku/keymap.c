@@ -257,7 +257,7 @@ void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
 #ifdef OLED_ENABLE
 
 void oled_task_left(void) {
-  const char* name = layer_name(get_highest_layer(layer_state));
+  const char* name = layer_name(get_highest_layer(layer_state|default_layer_state));
   oled_write_P(PSTR("Layer: "), false);
   oled_write_ln(name, false);
   oled_write_ln(message, false);
