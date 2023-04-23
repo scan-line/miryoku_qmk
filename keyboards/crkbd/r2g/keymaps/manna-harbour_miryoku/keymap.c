@@ -34,7 +34,7 @@ uint32_t anim_timer = 0;
 uint8_t current_frame = 0;
 // Status variables
 bool isJumping  = false;
-bool showedJump = true;
+bool showJump = false;
 
 static void render_luna(int LUNA_X, int LUNA_Y) {
   // Frames 32x22px
@@ -117,11 +117,11 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
   // Animation
   void animate_luna(void) {
     // Clear
-    if (isJumping || !showedJump) {
+    if (isJumping || showJump) {
       oled_set_cursor(LUNA_X, LUNA_Y + 2);
       oled_write("     ", false);
       oled_set_cursor(LUNA_X, LUNA_Y - 1);
-      showedJump = true;
+      showJump = false;
     } else {
       oled_set_cursor(LUNA_X, LUNA_Y - 1);
       oled_write("     ", false);
@@ -178,7 +178,7 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
     case KC_SPC:
       if (record->event.pressed) {
         isJumping  = true;
-        showedJump = false;
+        showJump = true;
       } else {
         isJumping  = false;
       }
