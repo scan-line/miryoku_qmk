@@ -19,7 +19,7 @@
 // Luna, keyboard pet
 // https://github.com/HellSingCoder/qmk_firmware/blob/master/keyboards/sofle/keymaps/helltm/keymap.c
 
-#ifdef OLED_ENABLE
+#ifdef LUNA_ENABLE
 
 // Settings
 #define MIN_WALK_SPEED 10  // wpm
@@ -186,7 +186,7 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
   }
 }
 
-#endif // OLED_ENABLE
+#endif
 
 
 // Feedback
@@ -264,7 +264,9 @@ void oled_task_left(void) {
 }
 
 void oled_task_right(void) {
+#ifdef LUNA_ENABLE
   render_luna(0, 13);
+#endif
 }
 
 bool oled_task_kb(void) {
@@ -292,4 +294,4 @@ oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
   }
 }
 
-#endif // OLED_ENABLE
+#endif
