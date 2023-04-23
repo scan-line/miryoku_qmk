@@ -116,11 +116,11 @@ void show_value(uint16_t keycode, uint16_t value, bool detent) {
 
 const char* layer_name(uint8_t layer) {
   switch(layer) {
-#   define MIRYOKU_X(LAYER, STRING) case U_##LAYER: return PSTR(STRING);
+#   define MIRYOKU_X(LAYER, STRING) case U_##LAYER: return STRING;
       MIRYOKU_LAYER_LIST
 #   undef MIRYOKU_X
     default:
-      return PSTR("Unknown");
+      return "Unknown";
   }
 }
 
