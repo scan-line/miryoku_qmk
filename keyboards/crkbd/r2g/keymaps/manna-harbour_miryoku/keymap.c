@@ -19,8 +19,6 @@
 // Luna, keyboard pet
 // https://github.com/HellSingCoder/qmk_firmware/blob/master/keyboards/sofle/keymaps/helltm/keymap.c
 
-#ifdef LUNA_ENABLE
-
 // Settings
 #define MIN_WALK_SPEED 10  // wpm
 #define MIN_RUN_SPEED 40
@@ -186,12 +184,12 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
   }
 }
 
-#endif
-
 
 // Feedback
 
-static char message[25] = "Welcome";
+#if 0
+
+static char message[25] = "";
 
 void show_mode_custom(uint16_t keycode) {
   switch (keycode) {
@@ -251,22 +249,17 @@ void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
   }
 }
 
+#endif
+
 
 // Oled
 
-#ifdef OLED_ENABLE
-
 void oled_task_left(void) {
-  const char* name = layer_name(get_highest_layer(layer_state|default_layer_state));
-  oled_write_P(PSTR("Layer: "), false);
-  oled_write_ln(name, false);
-  oled_write_ln(message, false);
+  // oled_write_P(PSTR("Layer: "), false);
+  render_luna(0, 13);
 }
 
 void oled_task_right(void) {
-#ifdef LUNA_ENABLE
-  render_luna(0, 13);
-#endif
 }
 
 bool oled_task_kb(void) {
@@ -282,18 +275,10 @@ bool oled_task_kb(void) {
 }
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
-#ifdef LUNA_ENABLE
   process_record_luna(keycode, record);
-#endif
   return process_record_user(keycode, record);
 }
 
 oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
-  if (is_keyboard_master()) {
-    return OLED_ROTATION_0;
-  } else {
     return OLED_ROTATION_270;
-  }
 }
-
-#endif
