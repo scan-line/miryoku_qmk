@@ -190,7 +190,7 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 const char default_message[] PROGMEM = "";
 const char* message = default_message;
 
-set_message(const char* str) {
+void set_message(const char* str) {
   message = str;
 }
 
@@ -230,7 +230,7 @@ void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
 // Oled
 
 void oled_task_left(void) {
-  oled_set_cursor(0, 1);
+  oled_set_cursor(2, 1);
   oled_write_P(message, false);
   render_luna(0, 6);
 }
