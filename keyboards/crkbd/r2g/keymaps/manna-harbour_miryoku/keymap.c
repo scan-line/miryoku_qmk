@@ -189,7 +189,7 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 
 #if 1
 
-const char* default_message = PSTR("");
+const char default_message[] PROGMEM = "";
 const char* message = default_message;
 
 void show_mode_custom(uint16_t keycode) {
