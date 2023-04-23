@@ -167,11 +167,9 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
 }
 
 void process_record_luna(uint16_t keycode, keyrecord_t *record) {
+  // Space is also on LT(U_NAV,KC_SPC).
   if (IS_QK_LAYER_TAP(keycode) && record->tap.count > 0) {
     keycode = QK_LAYER_TAP_GET_TAP_KEYCODE(keycode);
-  }
-  if (IS_QK_MOD_TAP(keycode) && record->tap.count > 0) {
-    keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
   }
 
   switch (keycode) {
@@ -212,8 +210,8 @@ void show_mode_custom(uint16_t keycode) {
 }
 
 void show_default_layer_custom(uint8_t layer) {
-  const char* layer = layer_name(layer);
-  snprintf(message, sizeof(message), "Lock layer: %s", layer);
+  const char* name = layer_name(layer);
+  snprintf(message, sizeof(message), "Lock layer: %s", name);
 }
 
 void show_toggle_custom(uint16_t keycode, bool value) {
@@ -231,7 +229,7 @@ void show_toggle_custom(uint16_t keycode, bool value) {
 }
 
 void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
-  const char* status = (detent) ? "=" : " "
+  const char* status = (detent) ? "=" : "";
   switch (keycode) {
     case RGB_MOD:
       snprintf(message, sizeof(message), "Rgb mode: %d %s", value, status);
@@ -259,9 +257,9 @@ void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
 #ifdef OLED_ENABLE
 
 void oled_task_left(void) {
-  const char* layer = layer_name(get_highest_layer(layer_state));
+  const char* name = layer_name(get_highest_layer(layer_state));
   oled_write_P(PSTR("Layer: "), false);
-  oled_write_ln(layer, false);
+  oled_write_ln(name, false);
   oled_write_ln(message, false);
 }
 
