@@ -198,13 +198,13 @@ static char message[25] = "Welcome";
 void show_mode_custom(uint16_t keycode) {
   switch (keycode) {
     case U_WIN:
-      snprintf(message, sizeof(message), "OS: Windows")
+      snprintf(message, sizeof(message), "OS: Windows");
       break;
     case U_MAC:
-      snprintf(message, sizeof(message), "OS: Mac")
+      snprintf(message, sizeof(message), "OS: Mac");
       break;
     case U_LNX:
-      snprintf(message, sizeof(message), "OS: Linux")
+      snprintf(message, sizeof(message), "OS: Linux");
       break;
     default:
       break;
