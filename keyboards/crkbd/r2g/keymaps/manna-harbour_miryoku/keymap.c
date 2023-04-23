@@ -187,7 +187,7 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 
 // Feedback
 
-#if 0
+#if 1
 
 void show_mode_custom(uint16_t keycode) {
   switch (keycode) {
