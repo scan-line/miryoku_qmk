@@ -282,7 +282,9 @@ bool oled_task_kb(void) {
 }
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+#ifdef LUNA_ENABLE
   process_record_luna(keycode, record);
+#endif
   return process_record_user(keycode, record);
 }
 
