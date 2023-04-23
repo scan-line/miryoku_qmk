@@ -189,37 +189,48 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 
 #if 0
 
-static char message[25] = "";
-
 void show_mode_custom(uint16_t keycode) {
   switch (keycode) {
     case U_WIN:
-      snprintf(message, sizeof(message), "OS: Windows");
       break;
     case U_MAC:
-      snprintf(message, sizeof(message), "OS: Mac");
       break;
     case U_LNX:
-      snprintf(message, sizeof(message), "OS: Linux");
       break;
     default:
       break;
   }
 }
 
+void show_layer_custom(uint8_t layer) {
+  switch (layer) {
+    case U_BASE:
+    case U_EXTRA:
+    case U_TAP:
+      break;
+    case U_NAV:
+    case U_MOUSE:
+    case U_MEDIA:
+      break;
+    case U_NUM:
+    case U_SYM:
+    case U_FUN:
+      break;
+    case U_BUTTON:
+      break;
+    default:
+      break;
+    }
+}
+
 void show_default_layer_custom(uint8_t layer) {
-  const char* name = layer_name(layer);
-  snprintf(message, sizeof(message), "Lock layer: %s", name);
 }
 
 void show_toggle_custom(uint16_t keycode, bool value) {
-  const char* status = (value) ? "on" : "off";
   switch (keycode) {
     case QK_AUDIO_TOGGLE:
-      snprintf(message, sizeof(message), "Audio: %s", status);
       break;
     case RGB_TOG:
-      snprintf(message, sizeof(message), "Rgb: %s", status);
       break;
     default:
       break;
@@ -227,22 +238,16 @@ void show_toggle_custom(uint16_t keycode, bool value) {
 }
 
 void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
-  const char* status = (detent) ? "=" : "";
   switch (keycode) {
     case RGB_MOD:
-      snprintf(message, sizeof(message), "Rgb mode: %d %s", value, status);
       break;
     case RGB_HUI:
-      snprintf(message, sizeof(message), "Rgb hue: %d %s", value, status);
       break;
     case RGB_SAI:
-      snprintf(message, sizeof(message), "Rgb sat: %d %s", value, status);
       break;
     case RGB_VAI:
-      snprintf(message, sizeof(message), "Rgb val: %d %s", value, status);
       break;
     case RGB_SPI:
-      snprintf(message, sizeof(message), "Rgb speed: %d %s", value, status);
       break;
     default:
       break;
