@@ -193,13 +193,13 @@ const char* base_message = empty_message;
 const char* message = base_message;
 uint32_t message_timer = 0;
 
-void flash_message(const char* str) {
-  message_timer = timer_read32();
+void set_message(const char* str) {
+  base_message = str;
   message = str;
 }
 
-void set_message(const char* str) {
-  base_message = str;
+void flash_message(const char* str) {
+  message_timer = timer_read32();
   message = str;
 }
 
@@ -228,17 +228,15 @@ void show_mode_custom(uint16_t keycode) {
 }
 
 void show_default_layer_custom(uint8_t layer) {
+  set_message(empty_message);
   switch(layer) {
     case BASE:
-      set_message(empty_message);
       flash_message(PSTR("Cmk"));
       break;
     case EXTRA:
-      set_message(empty_message);
       flash_message(PSTR("Qty"));
       break;
     case TAP:
-      set_message(empty_message);
       flash_message(PSTR("Tap"));
       break;
     case BUTTON:
