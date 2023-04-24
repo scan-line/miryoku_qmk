@@ -276,9 +276,7 @@ bool oled_task_kb(void) {
     return false;
   }
   if (is_keyboard_left()) {
-    oled_set_brightness(128);
     oled_task_left();
-    oled_set_brightness(128);
   } else {
     oled_set_brightness(16);
     oled_task_right();
@@ -293,5 +291,9 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 }
 
 oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
+  if (is_keyboard_left()) {
+  } else {
+    oled_set_brightness(16);
+  }
   return OLED_ROTATION_270;
 }
