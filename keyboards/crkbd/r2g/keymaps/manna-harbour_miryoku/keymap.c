@@ -280,7 +280,6 @@ bool oled_task_kb(void) {
   } else {
     oled_set_brightness(16);
     oled_task_right();
-    // oled_set_brightness(16);
   }
   return false;
 }
