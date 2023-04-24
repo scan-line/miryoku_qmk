@@ -289,5 +289,10 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 }
 
 oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
-    return OLED_ROTATION_270;
+  if (is_keyboard_left()) {
+    oled_set_brightness(128);
+  } else {
+    oled_set_brightness(64);
+  }
+  return OLED_ROTATION_270;
 }
