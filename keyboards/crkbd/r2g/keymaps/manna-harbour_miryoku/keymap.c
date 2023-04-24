@@ -185,10 +185,11 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 
 // Feedback
 
-#define MESSAGE_DURATION 2000  // ms
 const char empty_message[] PROGMEM = "   ";
 const char* base_message = empty_message;
 const char* message = base_message;
+
+#define MESSAGE_DURATION 2000  // ms
 uint32_t message_timer = 0;
 
 void set_message(const char* str) {
@@ -227,7 +228,7 @@ void show_mode_custom(uint16_t keycode) {
 
 void show_default_layer_custom(uint8_t layer) {
   set_message(empty_message);
-  switch(layer) {
+  switch (layer) {
     case BASE:
       flash_message(PSTR("Cmk"));
       break;
@@ -274,7 +275,7 @@ void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
   if (detent)
     flash_message(PSTR("-=-"));
   else
-    flash_message(base_message);
+    set_message(base_message);
 }
 
 
