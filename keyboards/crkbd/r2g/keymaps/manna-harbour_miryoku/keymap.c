@@ -278,9 +278,9 @@ bool oled_task_kb(void) {
   if (is_keyboard_left()) {
     oled_task_left();
   } else {
-    oled_set_brightness(16);
+    // oled_set_brightness(16);
     oled_task_right();
-    oled_set_brightness(16);
+    // oled_set_brightness(16);
   }
   return false;
 }
