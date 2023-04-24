@@ -229,34 +229,34 @@ void show_mode_custom(uint16_t keycode) {
 void show_default_layer_custom(uint8_t layer) {
   set_message(empty_message);
   switch (layer) {
-    case BASE:
+    case U_BASE:
       flash_message(PSTR("Cmk"));
       break;
-    case EXTRA:
+    case U_EXTRA:
       flash_message(PSTR("Qty"));
       break;
-    case TAP:
+    case U_TAP:
       flash_message(PSTR("Tap"));
       break;
-    case BUTTON:
+    case U_BUTTON:
       set_message(PSTR("Btn"));
       break;
-    case NAV:
+    case U_NAV:
       set_message(PSTR("Nav"));
       break;
-    case MOUSE:
+    case U_MOUSE:
       set_message(PSTR("Mse"));
       break;
-    case MEDIA:
+    case U_MEDIA:
       set_message(PSTR("Med"));
       break;
-    case NUM:
+    case U_NUM:
       set_message(PSTR("Num"));
       break;
-    case SYM:
+    case U_SYM:
       set_message(PSTR("Sym"));
       break;
-    case FUN:
+    case U_FUN:
       set_message(PSTR("Fun"));
       break;
     default:
