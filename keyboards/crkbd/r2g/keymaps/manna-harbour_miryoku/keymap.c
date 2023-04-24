@@ -187,7 +187,7 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 
 const char empty_message[] PROGMEM = "   ";
 const char* base_message = empty_message;
-const char* message = base_message;
+const char* message = empty_message;
 
 #define MESSAGE_DURATION 2000  // ms
 uint32_t message_timer = 0;
