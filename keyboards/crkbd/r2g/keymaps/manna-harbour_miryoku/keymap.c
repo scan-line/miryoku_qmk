@@ -188,7 +188,8 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 // Feedback
 
 #define MESSAGE_DURATION 2000  // ms
-const char default_message[] PROGMEM = "   ";
+const char empty_message[] PROGMEM = "   ";
+const char* default_message = empty_message;
 const char* message = default_message;
 uint32_t message_timer = 0;
 
@@ -223,7 +224,41 @@ void show_mode_custom(uint16_t keycode) {
 }
 
 void show_default_layer_custom(uint8_t layer) {
-  set_message(PSTR("-x-"));
+  default_message = empty_message;
+  switch(layer) {
+    case BASE:
+      set_message(PSTR("Cmk"));
+      break;
+    case EXTRA:
+      set_message(PSTR("Qty"));
+      break;
+    case TAP:
+      set_message(PSTR("Tap"));
+      break;
+    case BUTTON:
+      set_message(PSTR("Btn"));
+      break;
+    case NAV:
+      set_message(PSTR("Nav"));
+      break;
+    case MOUSE:
+      set_message(PSTR("Mse"));
+      break;
+    case MEDIA:
+      set_message(PSTR("Med"));
+      break;
+    case NUM:
+      set_message(PSTR("Num"));
+      break;
+    case SYM:
+      set_message(PSTR("Sym"));
+      break;
+    case FUN:
+      set_message(PSTR("Fun"));
+      break;
+    default:
+      break;
+  }
 }
 
 void show_toggle_custom(uint16_t keycode, bool value) {
