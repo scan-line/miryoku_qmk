@@ -189,18 +189,23 @@ void process_record_luna(uint16_t keycode, keyrecord_t *record) {
 
 #define MESSAGE_DURATION 2000  // ms
 const char empty_message[] PROGMEM = "   ";
-const char* default_message = empty_message;
-const char* message = default_message;
+const char* base_message = empty_message;
+const char* message = base_message;
 uint32_t message_timer = 0;
 
-void set_message(const char* str) {
+void flash_message(const char* str) {
   message_timer = timer_read32();
   message = str;
 }
 
+void set_message(const char* str) {
+  base_message = str;
+  message = str;
+}
+
 void render_message(int x, int y) {
-  if (timer_elapsed32(message_timer) > MESSAGE_DURATION)
-    set_message(default_message);
+  if (message != base_message && timer_elapsed32(message_timer) > MESSAGE_DURATION)
+    message = base_message;
   
   oled_set_cursor(x, y);
   oled_write_P(message, false);
@@ -209,31 +214,32 @@ void render_message(int x, int y) {
 void show_mode_custom(uint16_t keycode) {
   switch (keycode) {
     case U_WIN:
-      set_message(PSTR("Win"));
+      flash_message(PSTR("Win"));
       break;
     case U_MAC:
-      set_message(PSTR("Mac"));
+      flash_message(PSTR("Mac"));
       break;
     case U_LNX:
-      set_message(PSTR("Lnx"));
+      flash_message(PSTR("Lnx"));
       break;
     default:
-      set_message(default_message);
       break;
   }
 }
 
 void show_default_layer_custom(uint8_t layer) {
-  default_message = empty_message;
   switch(layer) {
     case BASE:
-      set_message(PSTR("Cmk"));
+      set_message(empty_message);
+      flash_message(PSTR("Cmk"));
       break;
     case EXTRA:
-      set_message(PSTR("Qty"));
+      set_message(empty_message);
+      flash_message(PSTR("Qty"));
       break;
     case TAP:
-      set_message(PSTR("Tap"));
+      set_message(empty_message);
+      flash_message(PSTR("Tap"));
       break;
     case BUTTON:
       set_message(PSTR("Btn"));
@@ -263,16 +269,16 @@ void show_default_layer_custom(uint8_t layer) {
 
 void show_toggle_custom(uint16_t keycode, bool value) {
   if (value)
-    set_message(PSTR("[x]"));
+    flash_message(PSTR("[x]"));
   else
-    set_message(PSTR("[ ]"));
+    flash_message(PSTR("[ ]"));
 }
 
 void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
   if (detent)
-    set_message(PSTR("-=-"));
+    flash_message(PSTR("-=-"));
   else
-    set_message(default_message);
+    flash_message(base_message);
 }
 
 
