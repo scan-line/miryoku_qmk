@@ -268,7 +268,7 @@ void oled_task_left(void) {
 }
 
 void oled_task_right(void) {
-  render_miryoku_logo(0, 6);
+  render_miryoku_logo(0, 5);
 }
 
 bool oled_task_kb(void) {
