@@ -26,10 +26,6 @@
 #define ANIM_FRAME_DURATION 200  // ms
 #define ANIM_SIZE 96
 
-// Timers
-uint32_t anim_timer = 0;
-// Current frame
-uint8_t current_frame = 0;
 // Status variables
 bool isJumping  = false;
 bool showJump = false;
@@ -127,6 +123,7 @@ static void render_luna(int x, int y) {
     }
 
     // Switch frame
+    static uint8_t current_frame = 0;
     current_frame = (current_frame + 1) % 2;
 
     // Current status
@@ -158,6 +155,7 @@ static void render_luna(int x, int y) {
 #endif
 
   // Animation timer
+  static uint32_t anim_timer = 0;
   if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
     anim_timer = timer_read32();
     animate_luna();
