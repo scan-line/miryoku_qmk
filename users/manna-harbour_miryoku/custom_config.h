@@ -61,6 +61,9 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 #define SLOW_TAPPING_TERM (TAPPING_TERM + 100)
 #define DOUBLE_TAPPING_TERM (TAPPING_TERM + 200)
 
+// Caps Word
+#define CAPS_WORD_INVERT_ON_SHIFT
+
 
 // Inject custom implementations into manna-harbour_miryoku.c
 
