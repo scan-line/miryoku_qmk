@@ -523,6 +523,30 @@ bool process_record_double_tap(uint16_t keycode, keyrecord_t *record) {
 }
 
 
+// Caps word
+
+bool caps_word_press_user(uint16_t keycode) {
+  switch (keycode) {
+    // Continue Caps Word, with shift.
+    case KC_A ... KC_Z:
+        add_weak_mods(MOD_BIT(KC_LSFT));
+        return true;
+  
+    // Continue Caps Word, no shift.
+    case KC_1 ... KC_0:
+    case KC_BSPC:
+    case KC_DEL:
+    case KC_MINS:
+    case KC_UNDS:
+        return true;
+
+    // End Caps Word.
+    default:
+        return false;
+  }
+}
+
+
 // Shift and Auto Shift overrides
 
 // Adapted from Pascal Getreuer's compact custom-shift implementation
