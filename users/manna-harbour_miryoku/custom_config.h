@@ -57,7 +57,7 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 // Tapping terms
 // Beware - Miryoku config.h unconditionally resets TAPPING_TERM to 200
 #define TAPPING_TERM_PER_KEY
-#define FAST_TAPPING_TERM (TAPPING_TERM + 30)
+#define FAST_TAPPING_TERM (TAPPING_TERM)
 #define SLOW_TAPPING_TERM (TAPPING_TERM + 100)
 #define DOUBLE_TAPPING_TERM (TAPPING_TERM + 200)
 
