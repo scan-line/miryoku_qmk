@@ -64,6 +64,9 @@ U_NP,              U_NP,              KC_LPRN,           KC_RPRN,           KC_U
 // Caps Word
 #define CAPS_WORD_INVERT_ON_SHIFT
 
+// Mouse Keys
+#define MK_KINETIC_SPEED
+
 
 // Inject custom implementations into manna-harbour_miryoku.c
 
