@@ -30,6 +30,7 @@ KC_NO, KC_NO, K32,   K33,   K34,      KC_NO,     K35,   K36,   K37,   KC_NO, KC_
 #define RGB_MATRIX_SAT_STEP 16
 #define RGB_MATRIX_VAL_STEP 16
 #define RGB_MATRIX_SPD_STEP 16
+#define RGB_MATRIX_TIMEOUT 60000
 
 // Enable rgb_matrix_kb.inc
 #define RGB_MATRIX_CUSTOM_KB
