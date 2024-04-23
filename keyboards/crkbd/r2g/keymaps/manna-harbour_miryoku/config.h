@@ -30,7 +30,8 @@ KC_NO,  K20,  K21,  K22,  K23,  K24,         K25,  K26,  K27,  K28,  K29,  KC_NO
 #define RGB_MATRIX_SAT_STEP 16
 #define RGB_MATRIX_VAL_STEP 16
 #define RGB_MATRIX_SPD_STEP 16
-#define RGB_MATRIX_TIMEOUT 60000
+// Disable rgb matrix timeout for firmware size.
+// #define RGB_MATRIX_TIMEOUT 900000
 
 // Enable rgb_matrix_kb.inc
 #define RGB_MATRIX_CUSTOM_KB
