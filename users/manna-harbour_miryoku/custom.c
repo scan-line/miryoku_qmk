@@ -421,23 +421,6 @@ bool process_rgb_val(keyrecord_t *record) {
   return false;
 }
 
-bool process_rgb_speed(keyrecord_t *record) {
-  if (!record->event.pressed)
-    return false;
-  
-  const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
-  uint8_t shifted = mods & MOD_MASK_SHIFT;
-  if (!shifted)
-    rgb_matrix_increase_speed();
-  else
-    rgb_matrix_decrease_speed();
-  
-  const uint8_t spd = rgb_matrix_get_speed();
-  const bool detent = slider_on_detent(spd, RGB_MATRIX_DEFAULT_SPD, RGB_MATRIX_SPD_STEP);
-  show_value(RGB_SPI, spd, detent);
-  return false;
-}
-
 #endif
 
 
@@ -682,8 +665,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return process_rgb_sat(record);
     case U_RGB_VAI:
       return process_rgb_val(record);
-    case U_RGB_SPI:
-      return process_rgb_speed(record);
 #endif
 #ifdef AUDIO_ENABLE
     case U_AUD_TOG:
