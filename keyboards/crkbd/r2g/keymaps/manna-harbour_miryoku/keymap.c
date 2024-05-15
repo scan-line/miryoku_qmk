@@ -275,7 +275,7 @@ void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
   if (detent)
     flash_message(PSTR("-=-"));
   else
-    set_message(base_message);
+    flash_message(PSTR("- -"));
 }
 
 

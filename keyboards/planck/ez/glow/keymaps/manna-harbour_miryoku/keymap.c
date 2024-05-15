@@ -121,8 +121,8 @@ void suspend_wakeup_init_custom(void) {
 const uint8_t mode_flash[] = {10, 0};
 const uint8_t default_layer_flash[] = {1, 1, 1, 0};
 const uint8_t toggle_on_flash[] = {10, 0};
-const uint8_t toggle_off_flash[] = {0};
 const uint8_t detent_flash[] = {1, 0};
+const uint8_t cancel_flash[] = {0};
 
 void show_mode_custom(uint16_t keycode) {
   flash_led(mode_flash);
@@ -167,12 +167,14 @@ void show_toggle_custom(uint16_t keycode, bool value) {
   if (value)
     flash_led(toggle_on_flash);
   else
-    flash_led(toggle_off_flash);
+    flash_led(cancel_flash);
 }
 
 void show_value_custom(uint16_t keycode, uint16_t value, bool detent) {
   if (detent)
     flash_led(detent_flash);
+  else
+    flash_led(cancel_flash);
 }
 
 
